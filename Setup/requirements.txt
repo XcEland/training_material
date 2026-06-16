@@ -1,0 +1,16 @@
+pyodbc
+pandas
+numpy
+sqlalchemy
+python-dotenv
+openpyxl
+jupyterlab
+matplotlib
+seaborn
+scipy
+scikit-learn
+requests
+beautifulsoup4
+jinja2
+schedule
+pytest
