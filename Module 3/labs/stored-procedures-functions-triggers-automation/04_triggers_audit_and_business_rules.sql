@@ -6,6 +6,63 @@
 USE TrainingDB;
 GO
 
+-- Notes:
+-- A trigger runs automatically when a data change happens on a table.
+-- The inserted pseudo-table contains new values for INSERT and UPDATE.
+-- The deleted pseudo-table contains old values for UPDATE and DELETE.
+-- This file starts with a simple insert logging trigger, then moves to audit and business rules.
+
+-- 1. Basic trigger: log every staging insert.
+-- This is the simplest trigger pattern: after a row is inserted, write a log row.
+CREATE OR ALTER TRIGGER m3.trg_StagingRegulatorySubmissions_InsertLog
+ON m3.StagingRegulatorySubmissions
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO m3.AuditLog
+        (TableName, OperationType, PrimaryKeyValue, ColumnName, OldValue, NewValue)
+    SELECT
+        'm3.StagingRegulatorySubmissions',
+        'INSERT',
+        CAST(i.SubmissionID AS VARCHAR(50)),
+        'SubmissionID',
+        NULL,
+        CAST(i.SubmissionID AS NVARCHAR(4000))
+    FROM inserted AS i;
+END;
+GO
+
+-- 2. Demonstrate the basic insert logging trigger.
+-- The temporary row is removed after the log entry is created.
+INSERT INTO m3.StagingRegulatorySubmissions
+    (InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus, SubmittedAt)
+VALUES
+    ('AUDITDEMO', '2026-04-30', 'Audit Trigger Demo', 1000.00, 500.00, 12.0000, 105.0000, 'Received', SYSUTCDATETIME());
+GO
+
+SELECT TOP 5
+    AuditID,
+    TableName,
+    OperationType,
+    PrimaryKeyValue,
+    ColumnName,
+    OldValue,
+    NewValue,
+    ChangedAt
+FROM m3.AuditLog
+WHERE TableName = 'm3.StagingRegulatorySubmissions'
+ORDER BY AuditID DESC;
+GO
+
+DELETE FROM m3.StagingRegulatorySubmissions
+WHERE InstitutionCode = 'AUDITDEMO'
+  AND ReportType = 'Audit Trigger Demo';
+GO
+
+-- 3. Audit trigger for update and delete activity.
+-- This trigger records selected old and new values from RegulatorySubmissions.
 CREATE OR ALTER TRIGGER m3.trg_RegulatorySubmissions_Audit
 ON m3.RegulatorySubmissions
 AFTER UPDATE, DELETE
@@ -44,6 +101,8 @@ BEGIN
 END;
 GO
 
+-- 4. Business-rule trigger.
+-- This trigger blocks invalid financial values before they remain in the table.
 CREATE OR ALTER TRIGGER m3.trg_RegulatorySubmissions_BusinessRules
 ON m3.RegulatorySubmissions
 AFTER INSERT, UPDATE
@@ -72,7 +131,7 @@ BEGIN
 END;
 GO
 
--- Demonstrate audit trigger.
+-- 5. Demonstrate the audit trigger.
 UPDATE m3.RegulatorySubmissions
 SET SubmissionStatus = 'Validated'
 WHERE SubmissionID = 4;
@@ -92,7 +151,7 @@ FROM m3.AuditLog
 ORDER BY AuditID DESC;
 GO
 
--- Demonstrate business-rule trigger with a handled error.
+-- 6. Demonstrate business-rule trigger with a handled error.
 BEGIN TRY
     INSERT INTO m3.RegulatorySubmissions
         (InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus)
