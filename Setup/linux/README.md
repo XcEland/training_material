@@ -22,7 +22,7 @@ The Linux setup uses:
 The course folder should be organized like this:
 
 ```text
-IRES/
+Trainingcred Institute/
 │
 ├── Setup/
 │   ├── requirements.txt
@@ -60,7 +60,7 @@ IRES/
 The course uses **one Python virtual environment** for all modules:
 
 ```text
-IRES/.venv/
+Trainingcred Institute/.venv/
 ```
 
 ---
@@ -70,7 +70,7 @@ IRES/.venv/
 Open a terminal and go to the main course folder:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 ```
 
 Check that you are in the correct location:
@@ -82,7 +82,7 @@ pwd
 Expected result:
 
 ```text
-/home/your-username/Desktop/IRES
+/home/your-username/Desktop/Trainingcred Institute
 ```
 
 This is the root folder where the course virtual environment will be created.
@@ -197,7 +197,7 @@ docker run hello-world
 Go to the Linux setup folder:
 
 ```bash
-cd "$HOME/Desktop/IRES/Setup/linux"
+cd "$HOME/Desktop/Trainingcred Institute/Setup/linux"
 ```
 
 Open or create the Docker Compose file:
@@ -244,11 +244,12 @@ volumes:
 
 # 7. Start SQL Server
 
-From the folder containing `docker-compose.yml`, run:
+From the folder containing `docker-compose.yml`, run these commands to start SQL Server and confirm the container is running:
 
 ```bash
-cd "$HOME/Desktop/IRES/Setup/linux"
+cd "$HOME/Desktop/Trainingcred Institute/Setup/linux"
 docker compose up -d
+docker ps
 ```
 
 ## What this command does
@@ -259,11 +260,7 @@ docker compose up -d
 | `up`             | Creates and starts the services defined in `docker-compose.yml` |
 | `-d`             | Runs the container in the background                            |
 
-Check that SQL Server is running:
-
-```bash
-docker ps
-```
+The `docker ps` output should show the running SQL Server container.
 
 Expected result should include:
 
@@ -390,7 +387,7 @@ Linux ...
 Open the course folder in VS Code:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 code .
 ```
 
@@ -497,7 +494,7 @@ DBeaver can now be used to browse databases, tables, columns, and run SQL querie
 Go to the course root folder:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 ```
 
 Create the virtual environment:
@@ -545,7 +542,7 @@ Setup/requirements.txt
 Open it:
 
 ```bash
-code "$HOME/Desktop/IRES/Setup/requirements.txt"
+code "$HOME/Desktop/Trainingcred Institute/Setup/requirements.txt"
 ```
 
 Add:
@@ -572,7 +569,7 @@ pytest
 Install the packages:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 pip install -r Setup/requirements.txt
 ```
@@ -617,7 +614,7 @@ Setup/.env.example
 Open it:
 
 ```bash
-code "$HOME/Desktop/IRES/Setup/.env.example"
+code "$HOME/Desktop/Trainingcred Institute/Setup/.env.example"
 ```
 
 Add:
@@ -630,10 +627,10 @@ DB_PASSWORD=StrongPassw0rd!2026
 DB_DRIVER=ODBC Driver 18 for SQL Server
 ```
 
-Students should copy this file to the course root:
+Copy this file to the course root:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 cp Setup/.env.example .env
 ```
 
@@ -646,7 +643,7 @@ The real `.env` file should not be pushed to GitHub because it contains database
 Go to the course root:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 ```
 
 Create or open `.gitignore`:
@@ -688,7 +685,7 @@ __pycache__/
 Go to the course root:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 ```
 
 Open the Module 1 Lab 1 SQL file:
@@ -740,7 +737,7 @@ GO
 Run it from terminal:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 1/Labs/lab 1/01_create_trainingdb.sql"
 ```
 
@@ -814,7 +811,7 @@ except Exception as e:
 Run it:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 python "Module 1/Labs/lab 1/test_connection.py"
 ```
@@ -833,7 +830,7 @@ Excel report created: reports/customers_report.xlsx
 ## Start SQL Server
 
 ```bash
-cd "$HOME/Desktop/IRES/Setup/linux"
+cd "$HOME/Desktop/Trainingcred Institute/Setup/linux"
 docker compose up -d
 ```
 
@@ -842,7 +839,7 @@ Starts the SQL Server container in the background.
 ## Stop SQL Server
 
 ```bash
-cd "$HOME/Desktop/IRES/Setup/linux"
+cd "$HOME/Desktop/Trainingcred Institute/Setup/linux"
 docker compose down
 ```
 
@@ -891,7 +888,7 @@ Shows SQL Server startup and runtime logs.
 ## Remove SQL Server and delete data
 
 ```bash
-cd "$HOME/Desktop/IRES/Setup/linux"
+cd "$HOME/Desktop/Trainingcred Institute/Setup/linux"
 docker compose down -v
 ```
 
@@ -1052,7 +1049,7 @@ ModuleNotFoundError: No module named 'pyodbc'
 Fix:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 pip install -r Setup/requirements.txt
 ```
@@ -1068,7 +1065,7 @@ In VS Code:
 3. Select:
 
 ```text
-IRES/.venv/bin/python
+Trainingcred Institute/.venv/bin/python
 ```
 
 ---
@@ -1096,7 +1093,7 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -Q "SELECT @@VERSION;
 Check Python packages:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 python -c "import pyodbc, pandas, sqlalchemy; print('Python setup complete')"
 ```
