@@ -1,6 +1,6 @@
 -- ============================================================
 -- MODULE 2 LAB
--- FILE 05: TRANSACTIONS, ERROR HANDLING, AND CONCURRENCY
+-- FILE 10: TRANSACTIONS AND ERROR HANDLING
 -- ============================================================
 
 USE TrainingDB;
@@ -9,7 +9,48 @@ GO
 SET XACT_ABORT ON;
 GO
 
--- 1. Successful transaction with audit trail.
+-- Notes:
+-- A transaction groups changes so they succeed or fail together.
+-- The examples cover rollback, commit, TRY/CATCH, and error logging.
+
+-- 1. Simple transaction rollback.
+-- The update happens inside the transaction, then ROLLBACK undoes it.
+DECLARE @RollbackDemoTransactionID BIGINT;
+
+SELECT TOP 1
+    @RollbackDemoTransactionID = TransactionID
+FROM m2.FinancialTransactions
+WHERE Status = 'Pending'
+ORDER BY TransactionID;
+
+SELECT
+    TransactionID,
+    Status AS StatusBeforeRollbackDemo
+FROM m2.FinancialTransactions
+WHERE TransactionID = @RollbackDemoTransactionID;
+
+BEGIN TRANSACTION;
+
+UPDATE m2.FinancialTransactions
+SET Status = 'Posted'
+WHERE TransactionID = @RollbackDemoTransactionID;
+
+SELECT
+    TransactionID,
+    Status AS StatusInsideTransaction
+FROM m2.FinancialTransactions
+WHERE TransactionID = @RollbackDemoTransactionID;
+
+ROLLBACK TRANSACTION;
+
+SELECT
+    TransactionID,
+    Status AS StatusAfterRollback
+FROM m2.FinancialTransactions
+WHERE TransactionID = @RollbackDemoTransactionID;
+GO
+
+-- 2. Successful transaction with audit trail.
 DECLARE @TransactionID BIGINT;
 DECLARE @OldStatus VARCHAR(20);
 DECLARE @OldAmount DECIMAL(18,2);
@@ -57,7 +98,8 @@ FROM m2.TransactionAudit
 ORDER BY AuditID DESC;
 GO
 
--- 2. Failed transaction that rolls back and logs the error.
+-- 3. Failed transaction that rolls back and logs the error.
+-- This intentionally uses a bad AccountID to trigger the foreign-key constraint.
 DECLARE @RowsBefore INT = (
     SELECT COUNT(*)
     FROM m2.FinancialTransactions
@@ -96,20 +138,4 @@ SELECT TOP 5
     ErrorMessage
 FROM m2.ErrorLog
 ORDER BY ErrorLogID DESC;
-GO
-
--- 3. Concurrency pattern for discussion.
--- In production, use the smallest transaction scope that protects correctness.
--- UPDLOCK + HOLDLOCK can reserve the row/key range while business validation runs.
-BEGIN TRANSACTION;
-
-SELECT TOP 1
-    AccountID,
-    AccountNumber,
-    CurrentBalance
-FROM m2.Accounts WITH (UPDLOCK, HOLDLOCK)
-WHERE AccountNumber = 'M2-LSL-0001';
-
--- Keep transactions short. This rollback is intentional for the lab demo.
-ROLLBACK TRANSACTION;
 GO

@@ -16,7 +16,7 @@ Module 1/labs/
 Start with SQL fundamentals:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 1/labs/sql-fundamentals/01_ddl_create_database_and_tables.sql"
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 1/labs/sql-fundamentals/02_dml_insert_records.sql"
@@ -26,17 +26,17 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 1/labs/sql
 Then test Python connectivity:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 python "Module 1/labs/sql-python-connection/test_sql_connection.py"
 ```
 
 ## Windows Notes
 
-For Windows learners, use the Windows-specific Python connection script:
+For Windows, use the Windows-specific Python connection script:
 
 ```powershell
-cd "$HOME\Desktop\IRES\Module 1\labs\sql-python-connection"
+cd "$HOME\Desktop\Trainingcred Institute\Module 1\labs\sql-python-connection"
 python test_sql_connection_windows.py
 ```
 

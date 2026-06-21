@@ -1,18 +1,65 @@
 -- ============================================================
 -- MODULE 2 LAB
--- FILE 04: MERGE, TABLE EXPRESSIONS, AND BULK-STYLE OPERATIONS
+-- FILE 08: MERGE OPERATIONS
 -- ============================================================
 
 USE TrainingDB;
 GO
 
+-- Notes:
+-- MERGE compares a source dataset with a target table.
+-- Source rows are previewed and classified before the MERGE operation runs.
+
 -- 1. Review staging rows before loading.
-SELECT *
+SELECT
+    ReferenceCode,
+    AccountNumber,
+    TransactionDate,
+    Amount,
+    CurrencyCode,
+    Status
 FROM m2.StagingTransactions
 ORDER BY ReferenceCode;
 GO
 
--- 2. MERGE staging data into the transaction table.
+-- 2. Show which staging rows already exist in the target table.
+SELECT
+    s.ReferenceCode,
+    s.AccountNumber,
+    CASE
+        WHEN t.TransactionID IS NULL THEN 'New row'
+        ELSE 'Existing row'
+    END AS MergeActionPreview,
+    t.TransactionID AS ExistingTransactionID
+FROM m2.StagingTransactions AS s
+LEFT JOIN m2.FinancialTransactions AS t
+    ON s.ReferenceCode = t.ReferenceCode
+ORDER BY s.ReferenceCode;
+GO
+
+-- 3. Clean and validate source rows before MERGE.
+WITH CleanStage AS (
+    SELECT
+        s.ReferenceCode,
+        a.AccountID,
+        s.TransactionDate,
+        s.ValueDate,
+        s.TransactionType,
+        s.Amount,
+        s.CurrencyCode,
+        s.Channel,
+        s.Status
+    FROM m2.StagingTransactions AS s
+    INNER JOIN m2.Accounts AS a
+        ON s.AccountNumber = a.AccountNumber
+    WHERE s.Amount > 0
+)
+SELECT *
+FROM CleanStage
+ORDER BY ReferenceCode;
+GO
+
+-- 4. MERGE staging data into the transaction table.
 DECLARE @MergeResults TABLE (
     MergeAction VARCHAR(10),
     ReferenceCode VARCHAR(40),
@@ -54,7 +101,10 @@ WHEN NOT MATCHED THEN
     VALUES
         (source.AccountID, source.TransactionDate, source.ValueDate, source.TransactionType, source.Amount, source.CurrencyCode, source.Channel, source.Status, source.ReferenceCode)
 OUTPUT
-    $action,
+    CASE
+        WHEN deleted.TransactionID IS NULL THEN 'INSERT'
+        ELSE 'UPDATE'
+    END,
     inserted.ReferenceCode,
     inserted.TransactionID
 INTO @MergeResults;
@@ -64,48 +114,20 @@ FROM @MergeResults
 ORDER BY ReferenceCode;
 GO
 
--- 3. Table expression: prepare monthly totals before loading a summary table.
-IF OBJECT_ID('m2.MonthlyTransactionSummary', 'U') IS NULL
-BEGIN
-    CREATE TABLE m2.MonthlyTransactionSummary (
-        SummaryMonth DATE NOT NULL,
-        CurrencyCode CHAR(3) NOT NULL,
-        PostedTransactionCount INT NOT NULL,
-        PostedAmount DECIMAL(18,2) NOT NULL,
-        LoadedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-        CONSTRAINT PK_M2_MonthlyTransactionSummary
-            PRIMARY KEY (SummaryMonth, CurrencyCode)
-    );
-END;
-GO
-
-TRUNCATE TABLE m2.MonthlyTransactionSummary;
-GO
-
--- 4. Bulk-style INSERT ... SELECT from a table expression.
-WITH MonthlyTotals AS (
-    SELECT
-        DATEFROMPARTS(YEAR(TransactionDate), MONTH(TransactionDate), 1) AS SummaryMonth,
-        CurrencyCode,
-        COUNT(*) AS PostedTransactionCount,
-        SUM(Amount) AS PostedAmount
-    FROM m2.FinancialTransactions
-    WHERE Status = 'Posted'
-    GROUP BY
-        DATEFROMPARTS(YEAR(TransactionDate), MONTH(TransactionDate), 1),
-        CurrencyCode
-)
-INSERT INTO m2.MonthlyTransactionSummary
-    (SummaryMonth, CurrencyCode, PostedTransactionCount, PostedAmount)
+-- 5. Confirm the staging references now exist in the target table.
 SELECT
-    SummaryMonth,
-    CurrencyCode,
-    PostedTransactionCount,
-    PostedAmount
-FROM MonthlyTotals;
-GO
-
-SELECT *
-FROM m2.MonthlyTransactionSummary
-ORDER BY SummaryMonth, CurrencyCode;
+    t.ReferenceCode,
+    a.AccountNumber,
+    t.TransactionDate,
+    t.Amount,
+    t.CurrencyCode,
+    t.Status
+FROM m2.FinancialTransactions AS t
+INNER JOIN m2.Accounts AS a
+    ON t.AccountID = a.AccountID
+WHERE t.ReferenceCode IN (
+    SELECT ReferenceCode
+    FROM m2.StagingTransactions
+)
+ORDER BY t.ReferenceCode;
 GO

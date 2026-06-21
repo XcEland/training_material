@@ -10,10 +10,10 @@ Module 2/labs/advanced-t-sql-query-design-optimization/
 
 The lab covers:
 
-- Complex joins, subqueries, CTEs, and window functions
-- Execution plans, statistics, and indexing
-- MERGE, table expressions, and bulk-style `INSERT ... SELECT`
-- TRY/CATCH, transactions, rollback, and concurrency-safe patterns
+- Joins, subqueries, CTEs, and window functions in separate teaching files
+- Large-scale demo data, execution plans, and indexing in separate teaching files
+- MERGE operations and bulk-style `INSERT ... SELECT`
+- Transactions, TRY/CATCH error handling, and concurrency notes
 - Query optimisation benchmarking with before-and-after evidence
 
 The lab uses `TrainingDB` and creates objects under the `m2` schema so it does not overwrite Module 1 tables.

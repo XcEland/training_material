@@ -1,6 +1,6 @@
 -- ============================================================
 -- MODULE 2 DATA LAB
--- FILE 06: QUERY OPTIMIZATION BENCHMARK
+-- FILE 12: QUERY OPTIMIZATION BENCHMARK
 -- ============================================================
 
 USE TrainingDB;
@@ -217,7 +217,7 @@ FROM m2.OptimizationBenchmark
 ORDER BY QueryName, QueryVersion DESC;
 GO
 
--- Learner task:
+-- Task:
 -- Use the Messages tab for logical reads and CPU time.
 -- Use the Actual Execution Plan for operator changes.
 -- Record the findings in optimization_findings_template.md.

@@ -1,6 +1,6 @@
 # Stored Procedures, Functions, Triggers, and Database Automation
 
-This Module 3 lab supports the Day 3 hands-on exercise: automated data validation stored procedure with error handling and audit logging.
+This Module 3 lab covers automated data validation stored procedures with error handling and audit logging.
 
 Guiding documents:
 
@@ -36,7 +36,7 @@ Module 3/labs/stored-procedures-functions-triggers-automation/
 Run from the project root:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 3/labs/stored-procedures-functions-triggers-automation/01_setup_regulatory_validation_dataset.sql"
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -i "Module 3/labs/stored-procedures-functions-triggers-automation/02_stored_procedure_design_patterns.sql"
@@ -51,7 +51,7 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -i "Mod
 For Windows Authentication in PowerShell:
 
 ```powershell
-cd "$HOME\Desktop\IRES"
+cd "$HOME\Desktop\Trainingcred Institute"
 
 sqlcmd -S localhost -E -C -i "Module 3\labs\stored-procedures-functions-triggers-automation\01_setup_regulatory_validation_dataset.sql"
 sqlcmd -S localhost -E -C -d TrainingDB -i "Module 3\labs\stored-procedures-functions-triggers-automation\02_stored_procedure_design_patterns.sql"
@@ -63,20 +63,11 @@ sqlcmd -S localhost -E -C -d TrainingDB -i "Module 3\labs\stored-procedures-func
 
 If using SQL Server Express, replace `localhost` with `localhost\SQLEXPRESS`.
 
-## Live Demonstration Notes
-
-Use SSMS for the procedure and trigger demos:
-
-1. Open each script in order.
-2. Execute one section at a time.
-3. Inspect `m3.ProcedureExecutionLog`, `m3.ErrorLog`, `m3.ValidationRun`, `m3.ValidationViolation`, and `m3.AuditLog`.
-4. For the dynamic SQL section, compare unsafe string concatenation with the secure `sp_executesql` pattern in the final procedure.
-
 ## Data Lab Deliverable
 
 Run `06_hands_on_validation_lab.sql`, then complete `validation_lab_worksheet.md`.
 
-Each learner should record:
+Record:
 
 - Validation procedure parameters used
 - Rules executed

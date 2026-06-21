@@ -21,7 +21,7 @@ The course uses:
 The recommended folder structure is:
 
 ```text
-IRES/
+Trainingcred Institute/
 │
 ├── README.md
 │
@@ -62,10 +62,10 @@ IRES/
 
 # 2. One Virtual Environment for the Whole Course
 
-This course uses **one Python virtual environment** at the root of the `IRES` folder:
+This course uses **one Python virtual environment** at the root of the `Trainingcred Institute` folder:
 
 ```text
-IRES/.venv/
+Trainingcred Institute/.venv/
 ```
 
 Do **not** create a separate virtual environment inside each module.
@@ -138,14 +138,14 @@ After installing VS Code, open the course folder:
 ### Linux
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 code .
 ```
 
 ### Windows PowerShell
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 code .
 ```
 
@@ -175,7 +175,7 @@ The SQL Server setup depends on the operating system.
 
 ### Linux
 
-Linux students will use:
+Linux setup uses:
 
 * Docker
 * SQL Server running in a Docker container
@@ -191,7 +191,7 @@ Setup/linux/README.md
 
 ### Windows
 
-Windows students will use:
+Windows setup uses:
 
 * SQL Server Developer or Express
 * SQL Server Management Studio, SSMS
@@ -247,7 +247,7 @@ Create the virtual environment from the root of the course folder.
 ## Linux
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -262,7 +262,7 @@ When the environment is active, the terminal should show:
 ## Windows PowerShell
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -322,7 +322,7 @@ Install the libraries after activating the virtual environment.
 ## Linux
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 pip install -r Setup/requirements.txt
 ```
@@ -330,7 +330,7 @@ pip install -r Setup/requirements.txt
 ## Windows PowerShell
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 pip install -r Setup\requirements.txt
 ```
@@ -370,19 +370,19 @@ DB_DRIVER=ODBC Driver 18 for SQL Server
 DB_AUTH=sql
 ```
 
-Students should copy the template to the root folder.
+Copy the template to the root folder.
 
 ## Linux
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 cp Setup/.env.example .env
 ```
 
 ## Windows PowerShell
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 Copy-Item Setup\.env.example .env
 ```
 
@@ -395,7 +395,7 @@ The `.env` file should not be uploaded to GitHub because it contains database co
 Create a `.gitignore` file at the root of the course folder:
 
 ```text
-IRES/.gitignore
+Trainingcred Institute/.gitignore
 ```
 
 Recommended contents:
@@ -439,13 +439,13 @@ Python: Select Interpreter
 ## Linux Interpreter Path
 
 ```text
-IRES/.venv/bin/python
+Trainingcred Institute/.venv/bin/python
 ```
 
 ## Windows Interpreter Path
 
 ```text
-IRES\.venv\Scripts\python.exe
+Trainingcred Institute\.venv\Scripts\python.exe
 ```
 
 This ensures VS Code uses the course virtual environment.
@@ -518,14 +518,14 @@ Activate the virtual environment.
 ### Linux
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 ```
 
 ### Windows PowerShell
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 ```
 
@@ -579,7 +579,7 @@ Module 1/Labs/lab 1/test_connection.py
 ## Linux
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 python "Module 1/Labs/lab 1/test_connection.py"
 ```
@@ -587,7 +587,7 @@ python "Module 1/Labs/lab 1/test_connection.py"
 ## Windows PowerShell
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 python "Module 1\Labs\lab 1\test_connection.py"
 ```
@@ -631,13 +631,13 @@ Select:
 ### Linux
 
 ```text
-IRES/.venv/bin/python
+Trainingcred Institute/.venv/bin/python
 ```
 
 ### Windows
 
 ```text
-IRES\.venv\Scripts\python.exe
+Trainingcred Institute\.venv\Scripts\python.exe
 ```
 
 ---
@@ -655,7 +655,7 @@ Fix:
 ### Linux
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 pip install -r Setup/requirements.txt
 ```
@@ -663,7 +663,7 @@ pip install -r Setup/requirements.txt
 ### Windows PowerShell
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 pip install -r Setup\requirements.txt
 ```
@@ -718,9 +718,9 @@ Follow this order:
 
 # 15. Course Readiness Confirmation
 
-A student is ready for Module 1 if they can:
+Ready for Module 1 when you can:
 
-* Open the `IRES` folder in VS Code
+* Open the `Trainingcred Institute` folder in VS Code
 * Activate the `.venv` virtual environment
 * Import `pyodbc`, `pandas`, and `sqlalchemy`
 * Connect to SQL Server

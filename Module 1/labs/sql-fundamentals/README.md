@@ -15,6 +15,7 @@ The `Customers` table uses the same teaching fields shown in the SELECT deck: `i
 By the end of this lab, you should be able to:
 
 - Explain the difference between DDL, DML, and DQL.
+- Recognize common SQL Server data types and how they relate to Python data types.
 - Create a SQL Server database and tables.
 - Define primary keys, foreign keys, default values, and basic constraints.
 - Insert records into related tables.
@@ -52,11 +53,18 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -Q "SEL
 ```text
 Module 1/labs/sql-fundamentals/
 ├── README.md
+├── 00_sql_server_data_types.sql
+├── 00_sql_server_data_types.md
 ├── 01_ddl_create_database_and_tables.sql
+├── 01_ddl_create_database_and_tables.md
 ├── 02_dml_insert_records.sql
+├── 02_dml_insert_records.md
 ├── 03_dql_select_queries.sql
+├── 03_dql_select_queries.md
 ├── 04_dml_update_delete_queries.sql
-└── 05_ddl_alter_drop_optional.sql
+├── 04_dml_update_delete_queries.md
+├── 05_ddl_alter_drop_optional.sql
+└── 05_ddl_alter_drop_optional.md
 ```
 
 ## DDL, DML and DQL
@@ -72,7 +80,9 @@ Module 1/labs/sql-fundamentals/
 Run these commands from the project root so the paths with spaces work correctly:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
+
+sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 1/labs/sql-fundamentals/00_sql_server_data_types.sql"
 
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 1/labs/sql-fundamentals/01_ddl_create_database_and_tables.sql"
 
@@ -149,5 +159,5 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 1/labs/sql
 Run commands from:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 ```

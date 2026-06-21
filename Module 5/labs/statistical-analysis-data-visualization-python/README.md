@@ -36,7 +36,7 @@ Module 5/labs/statistical-analysis-data-visualization-python/
 ## Linux Setup
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 pip install -r Setup/requirements.txt
 
@@ -46,7 +46,7 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 5/labs/sta
 Run notebooks:
 
 ```bash
-cd "$HOME/Desktop/IRES/Module 5/labs/statistical-analysis-data-visualization-python"
+cd "$HOME/Desktop/Trainingcred Institute/Module 5/labs/statistical-analysis-data-visualization-python"
 jupyter lab
 ```
 
@@ -61,12 +61,12 @@ DB_SERVER=localhost\SQLEXPRESS
 From PowerShell:
 
 ```powershell
-cd "$HOME\Desktop\IRES"
+cd "$HOME\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 pip install -r Setup\requirements.txt
 
 sqlcmd -S localhost -E -C -i "Module 5\labs\statistical-analysis-data-visualization-python\01_setup_analysis_dataset.sql"
-cd "$HOME\Desktop\IRES\Module 5\labs\statistical-analysis-data-visualization-python"
+cd "$HOME\Desktop\Trainingcred Institute\Module 5\labs\statistical-analysis-data-visualization-python"
 jupyter lab
 ```
 

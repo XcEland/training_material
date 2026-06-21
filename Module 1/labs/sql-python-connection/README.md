@@ -7,9 +7,10 @@ This lab connects Python to SQL Server and prints the top 5 records from `Traini
 From the project root:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -r Setup/requirements.txt
+python3 -m pip install -r Setup/requirements.txt
 ```
 
 Make sure the database exists and has data:
@@ -38,9 +39,11 @@ DB_DRIVER=ODBC Driver 18 for SQL Server
 ## Run on Linux
 
 ```bash
-cd "$HOME/Desktop/IRES/Module 1/labs/sql-python-connection"
-python test_sql_connection.py
+cd "$HOME/Desktop/Trainingcred Institute/Module 1/labs/sql-python-connection"
+python3 test_sql_connection.py
 ```
+
+On this Linux setup, use `python3`. If `python` is not installed as an alias, `python test_sql_connection.py` will fail with `Command 'python' not found`.
 
 ## Run on Windows
 
@@ -64,7 +67,7 @@ DB_SERVER=localhost\SQLEXPRESS
 Create and populate the database from PowerShell:
 
 ```powershell
-cd "$HOME\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 sqlcmd -S localhost -E -C -i "Module 1\labs\sql-fundamentals\01_ddl_create_database_and_tables.sql"
 sqlcmd -S localhost -E -C -i "Module 1\labs\sql-fundamentals\02_dml_insert_records.sql"
 ```
@@ -72,7 +75,11 @@ sqlcmd -S localhost -E -C -i "Module 1\labs\sql-fundamentals\02_dml_insert_recor
 From PowerShell:
 
 ```powershell
-cd "$HOME\Desktop\IRES\Module 1\labs\sql-python-connection"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+py -m pip install -r Setup\requirements.txt
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute\Module 1\labs\sql-python-connection"
 python test_sql_connection_windows.py
 ```
 
@@ -87,7 +94,7 @@ id   name                 country      score
 1    Maria                Germany        350
 2    John                 USA            900
 3    Georg                UK             750
-4    Martin               Germany        650
+4    Martin               Germany        500
 5    Peter                USA              0
 ```
 
@@ -101,6 +108,12 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -Q "SEL
 If Python says `No module named 'pyodbc'`, activate the virtual environment first:
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
+```
+
+Then run the Linux script with:
+
+```bash
+python3 "Module 1/labs/sql-python-connection/test_sql_connection.py"
 ```

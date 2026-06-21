@@ -21,7 +21,7 @@ FROM m3.StagingRegulatorySubmissions
 ORDER BY SubmissionID;
 GO
 
--- 2. Add one more lab issue for learners to detect.
+-- 2. Add one more lab issue for the validation run.
 INSERT INTO m3.StagingRegulatorySubmissions
     (InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus, SubmittedAt)
 VALUES

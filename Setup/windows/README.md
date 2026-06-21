@@ -22,7 +22,7 @@ The Windows setup uses:
 The course folder should be organized like this:
 
 ```text
-IRES/
+Trainingcred Institute/
 │
 ├── Setup/
 │   ├── requirements.txt
@@ -60,7 +60,7 @@ IRES/
 The course uses one Python virtual environment for all modules:
 
 ```text
-IRES\.venv\
+Trainingcred Institute\.venv\
 ```
 
 ---
@@ -203,7 +203,7 @@ Developer Edition
 
 During setup:
 
-1. Choose **Basic** for a simple installation, or **Custom** if your instructor requires specific settings.
+1. Choose **Basic** for a simple installation, or **Custom** for specific installation settings.
 2. Wait for SQL Server installation to complete.
 3. Keep note of the installed instance name.
 
@@ -287,7 +287,7 @@ Connect
 
 ## Option B: SQL Server Authentication
 
-Use this if your instructor gives you SQL login details.
+Use this for SQL Server Authentication.
 
 Example:
 
@@ -556,7 +556,7 @@ The Customers table records should be displayed.
 Open PowerShell and go to the course root folder:
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 ```
 
 Create the virtual environment:
@@ -629,7 +629,7 @@ pytest
 Install the libraries:
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 pip install -r Setup\requirements.txt
 ```
@@ -678,10 +678,10 @@ DB_DRIVER=ODBC Driver 18 for SQL Server
 DB_AUTH=sql
 ```
 
-Students should copy the template to create their real local `.env` file:
+Copy the template to create the real local `.env` file:
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 Copy-Item Setup\.env.example .env
 ```
 
@@ -694,7 +694,7 @@ The `.env` file should not be pushed to GitHub because it contains passwords.
 Create or open:
 
 ```text
-IRES\.gitignore
+Trainingcred Institute\.gitignore
 ```
 
 Add:
@@ -787,7 +787,7 @@ except Exception as e:
 Run the script:
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 python "Module 1\Labs\lab 1\test_connection.py"
 ```
@@ -912,7 +912,7 @@ git --version
 Activate virtual environment:
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 ```
 
@@ -937,7 +937,7 @@ python "Module 1\Labs\lab 1\test_connection.py"
 Open course folder in VS Code:
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 code .
 ```
 
@@ -1084,7 +1084,7 @@ Python: Select Interpreter
 3. Select:
 
 ```text
-IRES\.venv\Scripts\python.exe
+Trainingcred Institute\.venv\Scripts\python.exe
 ```
 
 ---
@@ -1144,7 +1144,7 @@ ODBC Driver 18 for SQL Server
 Run:
 
 ```powershell
-cd "$env:USERPROFILE\Desktop\IRES"
+cd "$env:USERPROFILE\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 python -c "import pyodbc, pandas, sqlalchemy; print('Python setup complete')"
 ```

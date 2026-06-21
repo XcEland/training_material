@@ -37,7 +37,7 @@ Module 4/labs/python-data-manipulation-database-connectivity/
 ## Linux Setup
 
 ```bash
-cd "$HOME/Desktop/IRES"
+cd "$HOME/Desktop/Trainingcred Institute"
 source .venv/bin/activate
 pip install -r Setup/requirements.txt
 
@@ -47,7 +47,7 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 4/labs/pyt
 Run demos and lab:
 
 ```bash
-cd "$HOME/Desktop/IRES/Module 4/labs/python-data-manipulation-database-connectivity"
+cd "$HOME/Desktop/Trainingcred Institute/Module 4/labs/python-data-manipulation-database-connectivity"
 
 python demo_01_pyodbc_connection.py
 python demo_02_pandas_sqlalchemy_extract.py
@@ -65,7 +65,7 @@ DB_SERVER=localhost\SQLEXPRESS
 From PowerShell:
 
 ```powershell
-cd "$HOME\Desktop\IRES"
+cd "$HOME\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 pip install -r Setup\requirements.txt
 
@@ -75,7 +75,7 @@ sqlcmd -S localhost -E -C -i "Module 4\labs\python-data-manipulation-database-co
 Run:
 
 ```powershell
-cd "$HOME\Desktop\IRES\Module 4\labs\python-data-manipulation-database-connectivity"
+cd "$HOME\Desktop\Trainingcred Institute\Module 4\labs\python-data-manipulation-database-connectivity"
 
 python demo_01_pyodbc_connection.py --env .env.windows
 python demo_02_pandas_sqlalchemy_extract.py --env .env.windows
@@ -108,9 +108,9 @@ SELECT * FROM m4.CurrencySummary ORDER BY CurrencyCode;
 SELECT TOP 5 * FROM m4.EtlRunLog ORDER BY RunID DESC;
 ```
 
-## Peer Review
+## Review Checklist
 
-Use `etl_peer_review_checklist.md` to review another learner's script for:
+Use `etl_peer_review_checklist.md` to review ETL scripts for:
 
 - connection handling
 - row-count reconciliation
