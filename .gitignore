@@ -6,3 +6,11 @@ __pycache__/
 *.csv
 *.log
 .ipynb_checkpoints/
+
+# Root-level course training/admin PDFs
+/Attendance-Sheet-Transact-SQL-and-Python-Programming-Training-Atang-Mahlomaholo.pdf
+/Pre-Training-Assessment-Atang-Mahlomaholo.pdf
+/Pre-Training-Assessment-Lydia-Libete.pdf
+/Transact-SQL  workbook.pdf
+/Transact-SQL training_program.pdf
+/Transact-SQL_and_Python_Programming_Training_Brochure (1).pdf
