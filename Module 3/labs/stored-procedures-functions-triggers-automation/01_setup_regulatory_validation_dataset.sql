@@ -20,8 +20,11 @@ GO
 
 DROP TRIGGER IF EXISTS m3.trg_RegulatorySubmissions_Audit;
 DROP TRIGGER IF EXISTS m3.trg_RegulatorySubmissions_BusinessRules;
+DROP TRIGGER IF EXISTS m3.trg_StagingRegulatorySubmissions_InsertLog;
 GO
 
+DROP PROCEDURE IF EXISTS m3.usp_CountRegulatorySubmissions;
+DROP PROCEDURE IF EXISTS m3.usp_ListSubmissionsByInstitution;
 DROP PROCEDURE IF EXISTS m3.usp_GetInstitutionSubmissionSummary;
 DROP PROCEDURE IF EXISTS m3.usp_RunDataQualityChecks;
 DROP PROCEDURE IF EXISTS m3.usp_LogProcedureExecution;

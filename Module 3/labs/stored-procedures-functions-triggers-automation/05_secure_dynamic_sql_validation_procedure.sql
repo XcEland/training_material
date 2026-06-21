@@ -6,6 +6,56 @@
 USE TrainingDB;
 GO
 
+-- Notes:
+-- Dynamic SQL builds a SQL statement as text, then executes it.
+-- Start with static SQL whenever the table and column names are known.
+-- Use dynamic SQL only when the object names or rule logic must be flexible.
+-- Use QUOTENAME for schema, table, and column names.
+-- Use sp_executesql for parameterized execution.
+
+-- 1. Static validation query.
+-- The table and column names are known, so dynamic SQL is not needed.
+SELECT
+    COUNT(*) AS MissingInstitutionCodeRows
+FROM m3.StagingRegulatorySubmissions
+WHERE InstitutionCode IS NULL;
+GO
+
+-- 2. Simple dynamic SQL example.
+-- The table name is assembled safely with QUOTENAME.
+DECLARE @BasicSql NVARCHAR(MAX);
+DECLARE @TargetSchema SYSNAME = 'm3';
+DECLARE @TargetTable SYSNAME = 'StagingRegulatorySubmissions';
+
+SET @BasicSql = N'
+    SELECT
+        COUNT(*) AS StagingRows
+    FROM ' + QUOTENAME(@TargetSchema) + N'.' + QUOTENAME(@TargetTable) + N';';
+
+EXEC sp_executesql @BasicSql;
+GO
+
+-- 3. Parameterized dynamic SQL example.
+-- The table name is dynamic, but the filter value is passed as a parameter.
+DECLARE @FilteredSql NVARCHAR(MAX);
+DECLARE @SchemaName SYSNAME = 'm3';
+DECLARE @TableName SYSNAME = 'StagingRegulatorySubmissions';
+DECLARE @Status VARCHAR(20) = 'Received';
+
+SET @FilteredSql = N'
+    SELECT
+        COUNT(*) AS RowsWithStatus
+    FROM ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName) + N'
+    WHERE SubmissionStatus = @Status;';
+
+EXEC sp_executesql
+    @FilteredSql,
+    N'@Status VARCHAR(20)',
+    @Status = @Status;
+GO
+
+-- 4. Advanced dynamic SQL procedure.
+-- This procedure reads configured validation rules and applies them to a chosen table.
 CREATE OR ALTER PROCEDURE m3.usp_RunDataQualityChecks
     @TargetSchema SYSNAME,
     @TargetTable SYSNAME,

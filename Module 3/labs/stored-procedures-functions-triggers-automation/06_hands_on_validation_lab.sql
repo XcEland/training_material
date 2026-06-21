@@ -22,10 +22,20 @@ ORDER BY SubmissionID;
 GO
 
 -- 2. Add one more lab issue for the validation run.
-INSERT INTO m3.StagingRegulatorySubmissions
-    (InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus, SubmittedAt)
-VALUES
-    ('RCH', '2026-03-31', 'Clearing House', 76000000.00, 61000000.00, NULL, 87.5000, 'Submitted', SYSUTCDATETIME());
+IF NOT EXISTS (
+    SELECT 1
+    FROM m3.StagingRegulatorySubmissions
+    WHERE InstitutionCode = 'RCH'
+      AND ReportingPeriod = '2026-03-31'
+      AND ReportType = 'Clearing House'
+      AND LiquidityCoverageRatio = 87.5000
+)
+BEGIN
+    INSERT INTO m3.StagingRegulatorySubmissions
+        (InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus, SubmittedAt)
+    VALUES
+        ('RCH', '2026-03-31', 'Clearing House', 76000000.00, 61000000.00, NULL, 87.5000, 'Submitted', SYSUTCDATETIME());
+END;
 GO
 
 -- 3. Run the automated validation procedure.

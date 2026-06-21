@@ -23,13 +23,21 @@ Guiding documents:
 Module 3/labs/stored-procedures-functions-triggers-automation/
 ├── README.md
 ├── 01_setup_regulatory_validation_dataset.sql
+├── 01_setup_regulatory_validation_dataset.md
 ├── 02_stored_procedure_design_patterns.sql
+├── 02_stored_procedure_design_patterns.md
 ├── 03_user_defined_functions.sql
+├── 03_user_defined_functions.md
 ├── 04_triggers_audit_and_business_rules.sql
+├── 04_triggers_audit_and_business_rules.md
 ├── 05_secure_dynamic_sql_validation_procedure.sql
+├── 05_secure_dynamic_sql_validation_procedure.md
 ├── 06_hands_on_validation_lab.sql
+├── 06_hands_on_validation_lab.md
 └── validation_lab_worksheet.md
 ```
+
+The `.sql` files are complete runnable solutions. The matching `.md` files are live-coding scaffolds with table context, object names, field names, and lesson comments.
 
 ## Linux Run Commands
 

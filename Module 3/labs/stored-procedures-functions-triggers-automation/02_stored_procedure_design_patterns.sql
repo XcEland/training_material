@@ -6,6 +6,56 @@
 USE TrainingDB;
 GO
 
+-- Notes:
+-- A stored procedure is a saved SQL program that can be executed again and again.
+-- This file starts with a basic procedure, then adds parameters, output values,
+-- execution logging, return codes, and TRY/CATCH error handling.
+
+-- 1. Basic stored procedure: no parameters.
+-- This procedure returns a simple count of regulatory submissions.
+CREATE OR ALTER PROCEDURE m3.usp_CountRegulatorySubmissions
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        COUNT(*) AS TotalSubmissions
+    FROM m3.RegulatorySubmissions;
+END;
+GO
+
+EXEC m3.usp_CountRegulatorySubmissions;
+GO
+
+-- 2. Parameterized stored procedure.
+-- This procedure accepts one institution code and returns matching submissions.
+CREATE OR ALTER PROCEDURE m3.usp_ListSubmissionsByInstitution
+    @InstitutionCode VARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        SubmissionID,
+        InstitutionCode,
+        ReportingPeriod,
+        ReportType,
+        TotalAssets,
+        TotalLiabilities,
+        SubmissionStatus
+    FROM m3.RegulatorySubmissions
+    WHERE InstitutionCode = @InstitutionCode
+    ORDER BY ReportingPeriod;
+END;
+GO
+
+EXEC m3.usp_ListSubmissionsByInstitution
+    @InstitutionCode = 'MCB';
+GO
+
+-- 3. Reusable logging procedure with an output parameter.
+-- If @ExecutionLogID is NULL, insert a new log row and return the new ID.
+-- If @ExecutionLogID has a value, update that existing log row.
 CREATE OR ALTER PROCEDURE m3.usp_LogProcedureExecution
     @ProcedureName SYSNAME,
     @Status VARCHAR(20),
@@ -38,6 +88,9 @@ BEGIN
 END;
 GO
 
+-- 4. Advanced reporting procedure.
+-- This version combines optional parameters, an output parameter, return codes,
+-- execution logging, and TRY/CATCH error handling.
 CREATE OR ALTER PROCEDURE m3.usp_GetInstitutionSubmissionSummary
     @InstitutionCode VARCHAR(20) = NULL,
     @StartPeriod DATE = NULL,
@@ -109,6 +162,7 @@ BEGIN
 END;
 GO
 
+-- 5. Execute the advanced procedure and capture output values.
 DECLARE @RowsReturned INT;
 DECLARE @ReturnCode INT;
 
@@ -123,7 +177,8 @@ SELECT
     @RowsReturned AS RowsReturned;
 GO
 
-SELECT TOP 5
+-- 6. Review execution logs.
+SELECT TOP 10
     ExecutionLogID,
     ProcedureName,
     Status,
