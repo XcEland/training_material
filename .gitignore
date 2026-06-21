@@ -7,6 +7,9 @@ __pycache__/
 *.log
 .ipynb_checkpoints/
 
+# Course source/export folder
+/Course/
+
 # Root-level course training/admin PDFs
 /Attendance-Sheet-Transact-SQL-and-Python-Programming-Training-Atang-Mahlomaholo.pdf
 /Pre-Training-Assessment-Atang-Mahlomaholo.pdf
