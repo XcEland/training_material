@@ -11,8 +11,12 @@ GO
 -- m3.RegulatorySubmissions fields: SubmissionID, InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus, SubmittedAt
 
 -- Function names:
+-- m3.fn_DaysLate
 -- m3.fn_CapitalAdequacyBand
+-- m3.fn_LeverageRatio
+-- m3.fn_SubmissionsByInstitution
 -- m3.fn_SubmissionsByPeriod
+-- m3.fn_InstitutionRiskSummary
 
 -- Preview tables used in this lab.
 SELECT TOP 5 * FROM m3.RegulatorySubmissions;
@@ -20,10 +24,19 @@ SELECT TOP 5 * FROM m3.Institutions;
 
 -- Notes:
 -- A scalar function returns one value.
--- A table-valued function returns a table result.
+-- An inline table-valued function returns a table from one SELECT statement.
+-- A multi-statement table-valued function returns a table variable built inside the function.
 -- Functions are useful for reusable business logic inside SELECT queries.
 
--- 1. Create scalar function m3.fn_CapitalAdequacyBand.
+-- 1. Beginner scalar function: m3.fn_DaysLate.
+-- Input parameters: @DueDate DATE and @SubmittedDate DATE.
+-- Return type: INT.
+-- Use DATEDIFF(DAY, @DueDate, @SubmittedDate).
+-- Test it with direct dates first.
+-- Then use it against m3.RegulatorySubmissions.
+-- In this lab, assume each report is due 10 days after ReportingPeriod.
+
+-- 2. Scalar function with business logic: m3.fn_CapitalAdequacyBand.
 -- Input parameter: @CapitalAdequacyRatio DECIMAL(9,4).
 -- Return type: VARCHAR(30).
 -- Business bands:
@@ -32,32 +45,42 @@ SELECT TOP 5 * FROM m3.Institutions;
 -- 10 to below 13 = Watchlist.
 -- 13 to below 16 = Adequate.
 -- 16 and above = Strong.
+-- Test direct values before applying it to table rows.
 
--- 2. Test the scalar function with direct values.
--- Use NULL, 9.5, 12.5, 14.5, and 17.0.
--- This confirms the business bands before applying the function to table rows.
+-- 3. Scalar function for a calculation: m3.fn_LeverageRatio.
+-- Input parameters: @TotalAssets and @TotalLiabilities.
+-- Return type: DECIMAL(9,4).
+-- Calculate liabilities divided by assets.
+-- Use NULLIF to avoid divide-by-zero errors.
 
--- 3. Use the scalar function in a SELECT.
--- Source table: m3.RegulatorySubmissions.
--- Return SubmissionID, InstitutionCode, ReportingPeriod, CapitalAdequacyRatio, and CapitalAdequacyBand.
+-- 4. Inline table-valued function: m3.fn_SubmissionsByInstitution.
+-- Input parameter: @InstitutionCode VARCHAR(20).
+-- RETURNS TABLE AS RETURN (...one SELECT...).
+-- Return submissions for one institution.
+-- Usage: SELECT * FROM m3.fn_SubmissionsByInstitution('MCB').
 
--- 4. Create inline table-valued function m3.fn_SubmissionsByPeriod.
--- Input parameters: @StartPeriod DATE, @EndPeriod DATE.
+-- 5. Inline table-valued function with date parameters: m3.fn_SubmissionsByPeriod.
+-- Input parameters: @StartPeriod DATE and @EndPeriod DATE.
 -- Return submissions between the two dates.
 -- Join m3.RegulatorySubmissions to m3.Institutions.
 -- Include CapitalAdequacyBand by calling the scalar function.
 
--- 5. Use the table-valued function like a table.
--- Query m3.fn_SubmissionsByPeriod('2026-01-01', '2026-03-31').
--- ORDER BY note: sort by InstitutionCode and ReportingPeriod.
+-- 6. Multi-statement table-valued function: m3.fn_InstitutionRiskSummary.
+-- Input parameter: @Country VARCHAR(50) = NULL.
+-- RETURNS @RiskSummary TABLE (...columns...).
+-- INSERT summary rows into @RiskSummary.
+-- RETURN the table variable.
+-- Use it like a table in SELECT and JOIN statements.
 
 -- Practice tasks:
 
--- Practice 1. Test the scalar function directly.
--- Use values: NULL, 9.5, 11.5, 14.0, 17.0.
+-- Practice 1. Test m3.fn_DaysLate with a report submitted 5 days late.
 
 -- Practice 2. Query only Watchlist or Below Minimum submissions.
--- Use m3.fn_CapitalAdequacyBand in the WHERE clause or a derived query.
+-- Use m3.fn_CapitalAdequacyBand in a derived query.
 
--- Practice 3. Run the table-valued function for February 2026 only.
--- Compare the result to the full period query.
+-- Practice 3. Run m3.fn_SubmissionsByInstitution for 'LMB'.
+
+-- Practice 4. Run m3.fn_SubmissionsByPeriod for February 2026 only.
+
+-- Practice 5. Run m3.fn_InstitutionRiskSummary for South Africa.

@@ -12,7 +12,7 @@ GO
 -- ------------------------------------------------------------
 -- Query 1 BEFORE: non-sargable date filter and SELECT *
 -- ------------------------------------------------------------
-DROP TABLE IF EXISTS #Q1Before;
+DROP TABLE IF EXISTS #Q1AFter;
 GO
 
 SET STATISTICS IO ON;
@@ -28,6 +28,16 @@ WHERE YEAR(TransactionDate) = 2026
   AND CurrencyCode = 'USD'
   AND Status = 'Posted';
 GO
+
+SELECT *
+INTO #Q1AFter
+FROM m2.FinancialTransactions
+WHERE TransactionDate >= '2026-06-01'
+  AND TransactionDate < '2026-07-01'
+  AND CurrencyCode = 'USD'
+  AND Status = 'Posted';
+GO
+
 
 SET STATISTICS XML OFF;
 SET STATISTICS TIME OFF;
@@ -185,9 +195,21 @@ GO
 DROP TABLE IF EXISTS #Q1After;
 GO
 
+DROP TABLE IF EXISTS #Q1Before;
+GO
+
 SET STATISTICS IO ON;
 SET STATISTICS TIME ON;
 SET STATISTICS XML ON;
+GO
+
+SELECT *
+INTO #Q1Before
+FROM m2.FinancialTransactions
+WHERE YEAR(TransactionDate) = 2026
+  AND MONTH(TransactionDate) = 6
+  AND CurrencyCode = 'USD'
+  AND Status = 'Posted';
 GO
 
 SELECT

@@ -23,6 +23,20 @@
 # 4. Use break.
 # Stop the loop when the value is "USD".
 
+
+currencies = ["LSL", "USD", "EUR", "GBP"]
+name = "John"
+
+for currency in currencies:
+    gender = 'Male'
+    name = "Maria"
+    print(currency)
+    # print(name)
+
+print(name)
+print(gender)
+
+
 # 5. Loop through dictionaries.
 # Create a list of customer dictionaries.
 # Print each customer's name and score.

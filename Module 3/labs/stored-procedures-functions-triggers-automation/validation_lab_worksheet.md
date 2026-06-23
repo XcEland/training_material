@@ -41,6 +41,29 @@ Use this during the Module 3 hands-on lab and group walkthrough.
 - Errors written to `m3.ErrorLog`:
 - Data changes written to `m3.AuditLog`:
 
+## Execution Log Diagnosis
+
+- Procedure tested:
+- Failure scenario used:
+- Was a `Failed` row written to `m3.ProcedureExecutionLog`:
+- Was `EndedAt` populated:
+- Was a detailed error written to `m3.ErrorLog`:
+- Logging gap found:
+- Corrective logging improvement:
+
+## Enterprise Validation Procedure
+
+- Procedure name:
+- Starts logging before validation checks:
+- Creates `m3.ValidationRun` row:
+- Creates `m3.ValidationViolation` rows:
+- Updates final run status:
+- Prints diagnostic details in `CATCH`:
+- Writes failures to `m3.ErrorLog`:
+- Writes success/failure to `m3.ProcedureExecutionLog`:
+- Return code meaning:
+- High-severity quality gate used:
+
 ## Reflection
 
 - First real Central Bank validation rule to automate:

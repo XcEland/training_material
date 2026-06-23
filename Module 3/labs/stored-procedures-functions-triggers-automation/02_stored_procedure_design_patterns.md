@@ -9,88 +9,118 @@ GO
 -- Tables and fields:
 -- m3.Institutions fields: InstitutionCode, InstitutionName, InstitutionType, Country, IsActive
 -- m3.RegulatorySubmissions fields: SubmissionID, InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus, SubmittedAt
+-- m3.StagingRegulatorySubmissions fields: SubmissionID, InstitutionCode, ReportingPeriod, ReportType, TotalAssets, TotalLiabilities, CapitalAdequacyRatio, LiquidityCoverageRatio, SubmissionStatus, SubmittedAt
 -- m3.ProcedureExecutionLog fields: ExecutionLogID, ProcedureName, StartedAt, EndedAt, Status, RowsAffected, Message
 -- m3.ErrorLog fields: ErrorLogID, ErrorTime, ProcedureName, ErrorNumber, ErrorSeverity, ErrorState, ErrorLine, ErrorMessage
 
 -- Procedure names:
--- m3.usp_CountRegulatorySubmissions
--- m3.usp_ListSubmissionsByInstitution
+-- m3.usp_GetCountrySubmissionStats
+-- m3.usp_ListSubmissionsByCountry
+-- m3.usp_CleanStagingSubmissionNulls
+-- m3.usp_GetCountryRiskReport
 -- m3.usp_LogProcedureExecution
 -- m3.usp_GetInstitutionSubmissionSummary
 
 -- Preview tables used in this lab.
 SELECT TOP 5 * FROM m3.Institutions;
 SELECT TOP 5 * FROM m3.RegulatorySubmissions;
+SELECT TOP 5 * FROM m3.StagingRegulatorySubmissions;
 SELECT TOP 5 * FROM m3.ProcedureExecutionLog;
 SELECT TOP 5 * FROM m3.ErrorLog;
 
 -- Notes:
 -- A stored procedure is a reusable database program.
--- Stored procedures can accept input parameters, output parameters, and return codes.
--- TRY/CATCH captures errors so they can be logged.
+-- Start with a normal SELECT query, then wrap it inside CREATE OR ALTER PROCEDURE.
+-- Stored procedures can use variables, parameters, IF/ELSE, TRY/CATCH, output parameters, and return codes.
 -- SET NOCOUNT ON avoids extra row-count messages from interfering with procedure output.
 
--- 1. Basic stored procedure with no parameters.
--- Procedure name: m3.usp_CountRegulatorySubmissions.
--- Purpose: count all rows in m3.RegulatorySubmissions.
--- Execute with EXEC m3.usp_CountRegulatorySubmissions.
+-- Common input parameter examples:
+-- @Country
+-- @InstitutionCode
+-- @StartPeriod
+-- @EndPeriod
+-- @ReportType
+-- @UploadedBy
 
--- 2. Parameterized stored procedure.
--- Procedure name: m3.usp_ListSubmissionsByInstitution.
--- Input parameter: @InstitutionCode VARCHAR(20).
--- Purpose: list submissions for one institution.
--- Example execution: @InstitutionCode = 'MCB'.
--- ORDER BY note: sort by ReportingPeriod.
+-- 1. Start with a normal query.
+-- For Lesotho institutions, find total institutions and average capital adequacy.
+-- Join m3.Institutions to m3.RegulatorySubmissions.
+-- Filter Country = 'Lesotho'.
 
--- 3. Create m3.usp_LogProcedureExecution.
--- Purpose: write or update procedure execution log rows.
+-- 2. Turn the query into a basic stored procedure.
+-- Procedure name: m3.usp_GetCountrySubmissionStats.
+-- No parameters yet.
+-- Hard-code Country = 'Lesotho'.
+-- Execute with EXEC m3.usp_GetCountrySubmissionStats.
+
+-- 3. Add an input parameter.
+-- ALTER or CREATE OR ALTER the same procedure.
+-- Input parameter: @Country VARCHAR(50) = 'Lesotho'.
+-- Replace the hard-coded country with @Country.
+-- Execute once with @Country = 'South Africa'.
+-- Execute once without a parameter to use the default.
+
+-- 4. Return multiple result sets.
+-- Result set 1: institution count and average capital adequacy.
+-- Result set 2: total submissions, total assets, and total liabilities.
+-- Each SELECT statement ends with a semicolon.
+
+-- 5. Use variables inside a stored procedure.
+-- Declare @TotalInstitutions and @AvgCapitalAdequacyRatio.
+-- Assign values using SELECT @Variable = aggregate_value.
+-- PRINT the values with CONCAT.
+-- Use COALESCE when printed values may be NULL.
+
+-- 6. Control structures and basic parameter validation.
+-- Procedure name: m3.usp_ListSubmissionsByCountry.
+-- Input parameter: @Country VARCHAR(50) = 'Lesotho'.
+-- IF the country does not exist, PRINT a message and RETURN.
+-- ELSE return submissions for that country.
+
+-- 7. Clean NULL values in staging data.
+-- Procedure name: m3.usp_CleanStagingSubmissionNulls.
+-- Input parameter: @DefaultStatus VARCHAR(20) = 'Received'.
+-- IF SubmissionStatus is NULL, update it to @DefaultStatus.
+-- IF SubmittedAt is NULL, update it to SYSUTCDATETIME().
+-- Return RowsCleaned.
+-- Keep this work on the staging table, not the main table.
+
+-- 8. Report procedure with NULL handling.
+-- Procedure name: m3.usp_GetCountryRiskReport.
+-- Input parameters: @Country and @MinimumCapitalAdequacy.
+-- IF @MinimumCapitalAdequacy is negative, THROW an error.
+-- Use COALESCE to display NULL capital adequacy as 0 in the report only.
+-- Use CASE to classify Not Reported, Below Minimum, or Meets Minimum.
+
+-- 9. Reusable execution logging procedure.
+-- Procedure name: m3.usp_LogProcedureExecution.
 -- Input parameters: ProcedureName, Status, RowsAffected, Message.
--- Output parameter: ExecutionLogID.
--- If ExecutionLogID is NULL, insert a new log row.
--- If ExecutionLogID has a value, update the existing log row.
+-- Output parameter: @ExecutionLogID.
+-- If @ExecutionLogID is NULL, insert a new log row.
+-- If @ExecutionLogID has a value, update the existing log row.
 
--- 4. Create m3.usp_GetInstitutionSubmissionSummary.
--- Purpose: return institution submission summary metrics.
+-- 10. Full procedure: optional parameters, output, return code, TRY/CATCH.
+-- Procedure name: m3.usp_GetInstitutionSubmissionSummary.
 -- Input parameters:
 -- @InstitutionCode VARCHAR(20) = NULL
 -- @StartPeriod DATE = NULL
 -- @EndPeriod DATE = NULL
 -- Output parameter: @RowsReturned INT OUTPUT.
 -- Return code: 0 for success, 1 for failure.
-
--- 5. Start procedure logging.
--- Declare @ExecutionLogID.
--- Execute m3.usp_LogProcedureExecution with Status = 'Started'.
-
--- 6. Use TRY/CATCH.
--- TRY block: run the summary query, set row count, log success, return 0.
--- CATCH block: insert details into m3.ErrorLog, log failure, set RowsReturned to 0, return 1.
-
--- 7. Summary query logic.
--- Join m3.RegulatorySubmissions to m3.Institutions.
--- Use optional filters where parameter is NULL or matches the row.
--- Group by InstitutionCode, InstitutionName, and ReportType.
--- Return counts, sums, and averages.
-
--- 8. Execute the advanced procedure.
--- Declare @RowsReturned and @ReturnCode.
--- Execute procedure with a start and end period.
--- Return @ReturnCode and @RowsReturned.
-
--- 9. Review execution logs.
--- Query m3.ProcedureExecutionLog.
--- ORDER BY note: sort newest first by ExecutionLogID DESC.
+-- TRY block: validate dates, run the report, set row count, log success.
+-- CATCH block: insert error details into m3.ErrorLog.
+-- CATCH block: use ERROR_MESSAGE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), and ERROR_PROCEDURE().
+-- CATCH block: PRINT Error Message, Error Number, Error Severity, Error State, Error Line, and Error Procedure.
+-- CATCH block: log failure and return 1.
 
 -- Practice tasks:
 
--- Practice 1. Execute the summary procedure for one institution.
--- Use @InstitutionCode = 'MCB'.
--- Return the output row count and return code.
+-- Practice 1. Execute m3.usp_GetCountrySubmissionStats for Lesotho and South Africa.
 
--- Practice 2. Execute the summary procedure for one reporting period range.
--- Use January 2026 only.
--- Compare returned rows with the all-period result.
+-- Practice 2. Execute m3.usp_GetCountryRiskReport with @MinimumCapitalAdequacy = 12.
 
--- Practice 3. Query failed procedure executions.
--- Source table: m3.ProcedureExecutionLog.
--- Filter Status = 'Failed'.
+-- Practice 3. Execute m3.usp_GetInstitutionSubmissionSummary for @InstitutionCode = 'MCB'.
+-- Capture @RowsReturned and @ReturnCode.
+
+-- Practice 4. Force an error by passing @StartPeriod after @EndPeriod.
+-- Check m3.ErrorLog and m3.ProcedureExecutionLog afterward.

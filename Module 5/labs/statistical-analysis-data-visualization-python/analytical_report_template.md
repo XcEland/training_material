@@ -39,8 +39,23 @@ Reference the generated charts from `outputs/`.
 
 ## 6. Time Series Insight
 
-Describe trend direction, rolling average movement, and forecast implication.
+Describe trend direction, rolling average movement, decomposition output, and forecast implication.
 
-## 7. Recommendation
+- Trend component:
+- Seasonal component:
+- Residual component:
+- Forecast implication:
+
+## 7. Phase 1 Pipeline Benchmark Review
+
+Use `outputs/phase1_pipeline_benchmarks.csv`.
+
+- Observation-row benchmark:
+- Model-accuracy benchmark:
+- Required-visuals benchmark:
+- Pipeline-runtime benchmark:
+- Overall pass/fail judgement:
+
+## 8. Recommendation
 
 State one practical action for a Central Bank analyst or supervisory team.

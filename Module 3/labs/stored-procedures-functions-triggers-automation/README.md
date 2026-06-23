@@ -11,7 +11,7 @@ Guiding documents:
 ## Learning Order
 
 1. Prepare regulatory reporting tables with known data quality issues.
-2. Build stored procedures with parameters, output values, return codes, and execution logs.
+2. Build stored procedures from fundamentals: queries, parameters, variables, control flow, null handling, reports, output values, return codes, and execution logs.
 3. Create scalar and table-valued functions for reusable business logic.
 4. Add triggers for audit trails and business rule enforcement.
 5. Build a secure dynamic SQL validation procedure.

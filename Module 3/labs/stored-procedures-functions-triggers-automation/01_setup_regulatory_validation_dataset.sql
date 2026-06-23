@@ -20,18 +20,30 @@ GO
 
 DROP TRIGGER IF EXISTS m3.trg_RegulatorySubmissions_Audit;
 DROP TRIGGER IF EXISTS m3.trg_RegulatorySubmissions_BusinessRules;
+DROP TRIGGER IF EXISTS m3.trg_RegulatorySubmissions_PreventValidatedDelete;
 DROP TRIGGER IF EXISTS m3.trg_StagingRegulatorySubmissions_InsertLog;
+DROP TRIGGER IF EXISTS m3.trg_StagingRegulatorySubmissions_DataValidation;
+DROP TRIGGER IF EXISTS m3.trg_AfterInsertEmployee;
 GO
 
 DROP PROCEDURE IF EXISTS m3.usp_CountRegulatorySubmissions;
 DROP PROCEDURE IF EXISTS m3.usp_ListSubmissionsByInstitution;
+DROP PROCEDURE IF EXISTS m3.usp_GetCountrySubmissionStats;
+DROP PROCEDURE IF EXISTS m3.usp_ListSubmissionsByCountry;
+DROP PROCEDURE IF EXISTS m3.usp_CleanStagingSubmissionNulls;
+DROP PROCEDURE IF EXISTS m3.usp_GetCountryRiskReport;
 DROP PROCEDURE IF EXISTS m3.usp_GetInstitutionSubmissionSummary;
+DROP PROCEDURE IF EXISTS m3.usp_RunEnterpriseStagingValidation;
 DROP PROCEDURE IF EXISTS m3.usp_RunDataQualityChecks;
 DROP PROCEDURE IF EXISTS m3.usp_LogProcedureExecution;
 GO
 
-DROP FUNCTION IF EXISTS m3.fn_CapitalAdequacyBand;
+DROP FUNCTION IF EXISTS m3.fn_InstitutionRiskSummary;
 DROP FUNCTION IF EXISTS m3.fn_SubmissionsByPeriod;
+DROP FUNCTION IF EXISTS m3.fn_SubmissionsByInstitution;
+DROP FUNCTION IF EXISTS m3.fn_LeverageRatio;
+DROP FUNCTION IF EXISTS m3.fn_DaysLate;
+DROP FUNCTION IF EXISTS m3.fn_CapitalAdequacyBand;
 GO
 
 IF OBJECT_ID('m3.ValidationViolation', 'U') IS NOT NULL DROP TABLE m3.ValidationViolation;
@@ -40,6 +52,8 @@ IF OBJECT_ID('m3.ValidationRule', 'U') IS NOT NULL DROP TABLE m3.ValidationRule;
 IF OBJECT_ID('m3.AuditLog', 'U') IS NOT NULL DROP TABLE m3.AuditLog;
 IF OBJECT_ID('m3.ErrorLog', 'U') IS NOT NULL DROP TABLE m3.ErrorLog;
 IF OBJECT_ID('m3.ProcedureExecutionLog', 'U') IS NOT NULL DROP TABLE m3.ProcedureExecutionLog;
+IF OBJECT_ID('m3.EmployeeLogs', 'U') IS NOT NULL DROP TABLE m3.EmployeeLogs;
+IF OBJECT_ID('m3.Employees', 'U') IS NOT NULL DROP TABLE m3.Employees;
 IF OBJECT_ID('m3.StagingRegulatorySubmissions', 'U') IS NOT NULL DROP TABLE m3.StagingRegulatorySubmissions;
 IF OBJECT_ID('m3.RegulatorySubmissions', 'U') IS NOT NULL DROP TABLE m3.RegulatorySubmissions;
 IF OBJECT_ID('m3.Institutions', 'U') IS NOT NULL DROP TABLE m3.Institutions;
