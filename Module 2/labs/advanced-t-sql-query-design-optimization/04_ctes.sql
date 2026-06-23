@@ -11,6 +11,61 @@ GO
 -- Use CTEs to make multi-step reporting logic easier to read.
 -- CTEs work well with aggregate functions when a report needs several logical steps.
 
+-- The CTE creates a small named result set, then the SELECT reads from it.
+WITH SampleCurrencies AS (
+    SELECT 'USD' AS CurrencyCode
+    UNION ALL
+    SELECT 'EUR'
+    UNION ALL
+    SELECT 'LSL'
+)
+SELECT
+    CurrencyCode
+FROM SampleCurrencies;
+GO
+
+-- Warm-up 2. CTE that filters one table.
+-- The CTE keeps only active accounts, then the final SELECT chooses what to display.
+WITH ActiveAccounts AS (
+    SELECT
+        AccountNumber,
+        AccountType,
+        CurrencyCode,
+        CurrentBalance
+    FROM m2.Accounts
+    WHERE AccountStatus = 'Active'
+)
+SELECT TOP 10
+    AccountNumber,
+    AccountType,
+    CurrencyCode,
+    CurrentBalance
+FROM ActiveAccounts
+ORDER BY AccountNumber;
+GO
+
+-- Warm-up 3. CTE that creates a calculated column.
+-- The CTE gives the calculation a name so the final SELECT is easier to read.
+WITH AccountBalanceLabels AS (
+    SELECT
+        AccountNumber,
+        CurrencyCode,
+        CurrentBalance,
+        CASE
+            WHEN CurrentBalance >= 10000 THEN 'High'
+            ELSE 'Normal'
+        END AS BalanceLabel
+    FROM m2.Accounts
+)
+SELECT TOP 10
+    AccountNumber,
+    CurrencyCode,
+    CurrentBalance,
+    BalanceLabel
+FROM AccountBalanceLabels
+ORDER BY CurrentBalance DESC;
+GO
+
 -- 1. Simple CTE: name the filtered transaction set.
 WITH PostedTransactions AS (
     SELECT

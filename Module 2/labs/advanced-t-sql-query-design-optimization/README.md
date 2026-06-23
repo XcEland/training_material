@@ -25,7 +25,8 @@ Guiding documents:
 10. Practice bulk-style `INSERT ... SELECT` summary loading.
 11. Practice transactions and TRY/CATCH error handling.
 12. Review concurrency and locking patterns.
-13. Complete a data lab: optimise poor queries and record before/after metrics.
+13. Practice table expressions.
+14. Complete a data lab: optimise poor queries and record before/after metrics.
 
 ## Files
 
@@ -60,6 +61,8 @@ Module 2/labs/advanced-t-sql-query-design-optimization/
 ├── 11_concurrency_notes.md
 ├── 12_data_lab_query_optimization_benchmark.sql
 ├── 12_data_lab_query_optimization_benchmark.md
+├── 13_table_expressions.sql
+├── 13_table_expressions.md
 └── optimization_findings_template.md
 ```
 
@@ -98,6 +101,7 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -i "Mod
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -i "Module 2/labs/advanced-t-sql-query-design-optimization/10_transactions_error_handling.sql"
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -i "Module 2/labs/advanced-t-sql-query-design-optimization/11_concurrency_notes.sql"
 sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -i "Module 2/labs/advanced-t-sql-query-design-optimization/12_data_lab_query_optimization_benchmark.sql"
+sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -d TrainingDB -i "Module 2/labs/advanced-t-sql-query-design-optimization/13_table_expressions.sql"
 ```
 
 ## Windows Run Commands
@@ -120,6 +124,7 @@ sqlcmd -S localhost -E -C -d TrainingDB -i "Module 2\labs\advanced-t-sql-query-d
 sqlcmd -S localhost -E -C -d TrainingDB -i "Module 2\labs\advanced-t-sql-query-design-optimization\10_transactions_error_handling.sql"
 sqlcmd -S localhost -E -C -d TrainingDB -i "Module 2\labs\advanced-t-sql-query-design-optimization\11_concurrency_notes.sql"
 sqlcmd -S localhost -E -C -d TrainingDB -i "Module 2\labs\advanced-t-sql-query-design-optimization\12_data_lab_query_optimization_benchmark.sql"
+sqlcmd -S localhost -E -C -d TrainingDB -i "Module 2\labs\advanced-t-sql-query-design-optimization\13_table_expressions.sql"
 ```
 
 If using SQL Server Express, replace `localhost` with `localhost\SQLEXPRESS`.

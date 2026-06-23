@@ -8,7 +8,8 @@
 # Use descriptive variable names.
 # Python variable names are case-sensitive.
 # Snake case is recommended for Python variable names.
-
+a = 4
+print(a)
 # 1. Create string variables.
 # Variables: customer_name, country.
 # Print both values.

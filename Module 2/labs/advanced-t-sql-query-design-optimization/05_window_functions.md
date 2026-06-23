@@ -28,6 +28,18 @@ SELECT TOP 5 * FROM m2.Counterparties AS cp;
 -- Window functions calculate across related rows without collapsing the result like GROUP BY does.
 -- Focus on OVER, PARTITION BY, and ORDER BY.
 
+-- Simple comparison A: GROUP BY reduces rows.
+-- Source table: m2.FinancialTransactions.
+-- Filter: Status = 'Posted'.
+-- Group by CurrencyCode.
+-- Return one row per CurrencyCode with SUM(Amount).
+
+-- Simple comparison B: PARTITION BY keeps all rows.
+-- Source table: m2.FinancialTransactions.
+-- Filter: Status = 'Posted'.
+-- Use SUM(Amount) OVER (PARTITION BY CurrencyCode).
+-- Return transaction rows with the currency total beside each row.
+
 -- 1A. GROUP BY summary: one row per currency.
 -- GROUP BY collapses each currency group into one summary row.
 -- Source table: m2.FinancialTransactions.

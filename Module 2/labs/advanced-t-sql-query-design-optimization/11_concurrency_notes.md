@@ -35,6 +35,17 @@ SELECT * FROM m2.Accounts AS a WHERE a.AccountNumber = 'M2-LSL-0001';
 -- Select the same account WITH (UPDLOCK, HOLDLOCK).
 -- ROLLBACK TRANSACTION.
 
--- 3. Active-request query: show active sessions and requests.
+-- 3. Funds transfer example.
+-- Source account: M2-LSL-0001 gives out the money.
+-- Destination account: M2-LSL-0002 receives the money.
+-- BEGIN TRANSACTION.
+-- Declare @TransferAmount = 5000.00.
+-- Select M2-LSL-0001 and M2-LSL-0002 WITH (UPDLOCK, HOLDLOCK).
+-- Subtract the amount from M2-LSL-0001.
+-- Add the amount to M2-LSL-0002.
+-- Select both accounts to view the changed balances.
+-- ROLLBACK TRANSACTION so the lab data stays unchanged.
+
+-- 4. Active-request query: show active sessions and requests.
 -- Query sys.dm_exec_requests.
 -- Filter database_id = DB_ID().
