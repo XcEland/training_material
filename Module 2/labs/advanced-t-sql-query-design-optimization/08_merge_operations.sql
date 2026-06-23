@@ -10,6 +10,71 @@ GO
 -- MERGE compares a source dataset with a target table.
 -- Source rows are previewed and classified before the MERGE operation runs.
 
+-- Warm-up. Simple MERGE with temp tables.
+-- Target is the current data. Source is the new incoming data.
+-- If ProductID matches, update the target row.
+-- If ProductID does not match, insert a new target row.
+DROP TABLE IF EXISTS #ProductTarget;
+DROP TABLE IF EXISTS #ProductSource;
+GO
+
+CREATE TABLE #ProductTarget (
+    ProductID INT NOT NULL PRIMARY KEY,
+    ProductName VARCHAR(50) NOT NULL,
+    Quantity INT NOT NULL
+);
+
+CREATE TABLE #ProductSource (
+    ProductID INT NOT NULL PRIMARY KEY,
+    ProductName VARCHAR(50) NOT NULL,
+    Quantity INT NOT NULL
+);
+
+INSERT INTO #ProductTarget
+    (ProductID, ProductName, Quantity)
+VALUES
+    (1, 'Notebook', 10),
+    (2, 'Pen', 25);
+
+INSERT INTO #ProductSource
+    (ProductID, ProductName, Quantity)
+VALUES
+    (2, 'Pen', 40),      -- Existing product: update quantity.
+    (3, 'Marker', 15);   -- New product: insert row.
+GO
+
+SELECT
+    'Before MERGE' AS StepName,
+    ProductID,
+    ProductName,
+    Quantity
+FROM #ProductTarget
+ORDER BY ProductID;
+GO
+
+MERGE #ProductTarget AS target
+USING #ProductSource AS source
+    ON target.ProductID = source.ProductID
+WHEN MATCHED THEN
+    UPDATE SET
+        target.ProductName = source.ProductName,
+        target.Quantity = source.Quantity
+WHEN NOT MATCHED THEN
+    INSERT
+        (ProductID, ProductName, Quantity)
+    VALUES
+        (source.ProductID, source.ProductName, source.Quantity);
+GO
+
+SELECT
+    'After MERGE' AS StepName,
+    ProductID,
+    ProductName,
+    Quantity
+FROM #ProductTarget
+ORDER BY ProductID;
+GO
+
 -- 1. Review staging rows before loading.
 SELECT
     ReferenceCode,

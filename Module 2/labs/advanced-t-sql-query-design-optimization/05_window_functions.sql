@@ -10,6 +10,71 @@ GO
 -- Window functions calculate across related rows without collapsing the result like GROUP BY does.
 -- Focus on OVER, PARTITION BY, and ORDER BY.
 
+-- Simple comparison A: GROUP BY reduces rows.
+-- One output row is returned for each CurrencyCode.
+SELECT
+    CurrencyCode,
+    SUM(Amount) AS PostedAmountForCurrency
+FROM m2.FinancialTransactions
+WHERE Status = 'Posted'
+GROUP BY CurrencyCode
+ORDER BY CurrencyCode;
+GO
+
+-- Simple comparison B: PARTITION BY keeps all rows.
+-- Each transaction row stays visible, and the currency total is added beside it.
+SELECT TOP 10
+    TransactionID,
+    CurrencyCode,
+    Amount,
+    SUM(Amount) OVER (
+        PARTITION BY CurrencyCode
+    ) AS PostedAmountForCurrency
+FROM m2.FinancialTransactions
+WHERE Status = 'Posted'
+ORDER BY CurrencyCode, TransactionID;
+GO
+
+-- Warm-up 1. ROW_NUMBER with one ordered list.
+-- ROW_NUMBER adds a sequence number without changing the rows returned.
+SELECT TOP 10
+    TransactionID,
+    TransactionDate,
+    Amount,
+    ROW_NUMBER() OVER (
+        ORDER BY TransactionDate, TransactionID
+    ) AS RowNumber
+FROM m2.FinancialTransactions
+WHERE Status = 'Posted'
+ORDER BY TransactionDate, TransactionID;
+GO
+
+-- Warm-up 2. COUNT with OVER.
+-- COUNT(*) OVER() adds the total row count beside each returned row.
+SELECT TOP 10
+    TransactionID,
+    CurrencyCode,
+    Amount,
+    COUNT(*) OVER () AS TotalPostedRowsInResultSet
+FROM m2.FinancialTransactions
+WHERE Status = 'Posted'
+ORDER BY TransactionDate, TransactionID;
+GO
+
+-- Warm-up 3. PARTITION BY groups the window calculation.
+-- The currency total is shown beside each transaction without collapsing the detail rows.
+SELECT TOP 10
+    TransactionID,
+    CurrencyCode,
+    Amount,
+    SUM(Amount) OVER (
+        PARTITION BY CurrencyCode
+    ) AS PostedAmountForCurrency
+FROM m2.FinancialTransactions
+WHERE Status = 'Posted'
+ORDER BY CurrencyCode, TransactionDate, TransactionID;
+GO
+
 -- 1A. GROUP BY summary: one row per currency.
 -- GROUP BY collapses each currency group into one summary row.
 SELECT

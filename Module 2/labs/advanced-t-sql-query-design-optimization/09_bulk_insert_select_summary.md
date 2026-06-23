@@ -45,3 +45,51 @@ SELECT TOP 5 * FROM m2.FinancialTransactions AS t;
 
 -- 5. Verify loaded summary rows.
 -- Select from m2.MonthlyTransactionSummary ordered by SummaryMonth, CurrencyCode.
+
+-- Optional Python demo:
+-- File: 09_bulk_insert_select_summary_python.py.
+-- This version does the same summary load from Python.
+-- It reads posted transactions from SQL Server.
+-- It groups rows by month and CurrencyCode in Python.
+-- It clears m2.MonthlyTransactionSummary.
+-- It bulk-loads the summary rows with pyodbc executemany and fast_executemany.
+
+-- Python setup:
+-- Install packages:
+-- pip install pyodbc python-dotenv
+
+-- Environment variables used by the Python script:
+-- DB_DRIVER=ODBC Driver 18 for SQL Server
+-- DB_SERVER=your_server_name
+-- DB_NAME=TrainingDB
+-- DB_USER=your_username
+-- DB_PASSWORD=your_password
+-- DB_TRUSTED=no
+
+-- For Windows authentication:
+-- DB_TRUSTED=yes
+
+-- Run:
+-- python 09_bulk_insert_select_summary_python.py
+
+-- Compare:
+-- Run the SQL version first, then run the Python version.
+-- Both should load the same monthly summary rows into m2.MonthlyTransactionSummary.
+
+-- Optional Python CSV bulk insert demo:
+-- Files:
+-- - 09_staging_transactions_sample.csv
+-- - 09_bulk_insert_csv_to_staging.py
+
+-- This version loads rows from a CSV file into m2.StagingTransactions.
+-- It reads the CSV file with Python's built-in csv module.
+-- It deletes only the sample rows where ReferenceCode starts with M2-CSV.
+-- It bulk-loads the CSV rows with pyodbc executemany and fast_executemany.
+-- It prints the inserted staging rows for verification.
+
+-- Run:
+-- python 09_bulk_insert_csv_to_staging.py
+
+-- After running it:
+-- Open 08_merge_operations.sql.
+-- The MERGE lab can use the new staging rows as incoming data.

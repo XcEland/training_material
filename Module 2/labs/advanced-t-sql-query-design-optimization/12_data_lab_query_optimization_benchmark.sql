@@ -6,40 +6,19 @@
 USE TrainingDB;
 GO
 
--- Data Lab goal:
--- 1. Run poor queries.
--- 2. Capture elapsed time and row counts.
--- 3. Apply an index or rewrite.
--- 4. Re-run and compare.
--- 5. Complete optimization_findings_template.md.
-
-IF OBJECT_ID('m2.OptimizationBenchmark', 'U') IS NULL
-BEGIN
-    CREATE TABLE m2.OptimizationBenchmark (
-        BenchmarkID INT IDENTITY(1,1) PRIMARY KEY,
-        QueryName VARCHAR(100) NOT NULL,
-        QueryVersion VARCHAR(30) NOT NULL,
-        RowsReturned INT NOT NULL,
-        ElapsedMs INT NOT NULL,
-        Notes VARCHAR(300) NOT NULL,
-        CapturedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
-    );
-END;
-GO
-
-TRUNCATE TABLE m2.OptimizationBenchmark;
-GO
-
-SET STATISTICS IO ON;
-SET STATISTICS TIME ON;
-GO
+-- Use Messages for STATISTICS IO/TIME.
+-- Use the XML result to compare execution plans.
 
 -- ------------------------------------------------------------
 -- Query 1 BEFORE: non-sargable date filter and SELECT *
 -- ------------------------------------------------------------
-DECLARE @StartTime DATETIME2 = SYSDATETIME();
-
 DROP TABLE IF EXISTS #Q1Before;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
+GO
 
 SELECT *
 INTO #Q1Before
@@ -48,69 +27,23 @@ WHERE YEAR(TransactionDate) = 2026
   AND MONTH(TransactionDate) = 6
   AND CurrencyCode = 'USD'
   AND Status = 'Posted';
-
-INSERT INTO m2.OptimizationBenchmark
-    (QueryName, QueryVersion, RowsReturned, ElapsedMs, Notes)
-SELECT
-    'Q1 June USD posted transactions',
-    'Before',
-    COUNT(*),
-    DATEDIFF(MILLISECOND, @StartTime, SYSDATETIME()),
-    'Non-sargable YEAR/MONTH filter and SELECT *'
-FROM #Q1Before;
 GO
 
--- Apply optimisation: index plus sargable date range and selected columns.
-IF NOT EXISTS (
-    SELECT 1
-    FROM sys.indexes
-    WHERE name = 'IX_M2_FinancialTransactions_DateCurrencyStatus'
-      AND object_id = OBJECT_ID('m2.FinancialTransactions')
-)
-BEGIN
-    CREATE INDEX IX_M2_FinancialTransactions_DateCurrencyStatus
-    ON m2.FinancialTransactions (TransactionDate, CurrencyCode, Status)
-    INCLUDE (TransactionID, AccountID, TransactionType, Amount, ReferenceCode);
-END;
-GO
-
-DECLARE @StartTime DATETIME2 = SYSDATETIME();
-
-DROP TABLE IF EXISTS #Q1After;
-
-SELECT
-    TransactionID,
-    AccountID,
-    TransactionDate,
-    TransactionType,
-    Amount,
-    CurrencyCode,
-    Status,
-    ReferenceCode
-INTO #Q1After
-FROM m2.FinancialTransactions
-WHERE TransactionDate >= '2026-06-01'
-  AND TransactionDate < '2026-07-01'
-  AND CurrencyCode = 'USD'
-  AND Status = 'Posted';
-
-INSERT INTO m2.OptimizationBenchmark
-    (QueryName, QueryVersion, RowsReturned, ElapsedMs, Notes)
-SELECT
-    'Q1 June USD posted transactions',
-    'After',
-    COUNT(*),
-    DATEDIFF(MILLISECOND, @StartTime, SYSDATETIME()),
-    'Sargable date range, selected columns, supporting index'
-FROM #Q1After;
+SET STATISTICS XML OFF;
+SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
 GO
 
 -- ------------------------------------------------------------
--- Query 2 BEFORE: repeated correlated running-total subquery.
+-- Query 2 BEFORE: repeated correlated running-total subquery
 -- ------------------------------------------------------------
-DECLARE @StartTime DATETIME2 = SYSDATETIME();
-
 DROP TABLE IF EXISTS #Q2Before;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
+GO
 
 SELECT TOP 500
     cp.CounterpartyName,
@@ -142,22 +75,153 @@ ORDER BY
     a.AccountNumber,
     t.TransactionDate,
     t.TransactionID;
-
-INSERT INTO m2.OptimizationBenchmark
-    (QueryName, QueryVersion, RowsReturned, ElapsedMs, Notes)
-SELECT
-    'Q2 account running totals',
-    'Before',
-    COUNT(*),
-    DATEDIFF(MILLISECOND, @StartTime, SYSDATETIME()),
-    'Correlated subquery recalculates a running total for many rows'
-FROM #Q2Before;
 GO
 
--- Query 2 AFTER: window function computes running totals in one pass.
-DECLARE @StartTime DATETIME2 = SYSDATETIME();
+SET STATISTICS XML OFF;
+SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
+GO
 
+-- ------------------------------------------------------------
+-- Query 3 BEFORE: filter after grouping
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS #Q3Before;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
+GO
+
+SELECT
+    CurrencyCode,
+    COUNT(*) AS PostedTransactionCount,
+    SUM(Amount) AS PostedAmount
+INTO #Q3Before
+FROM m2.FinancialTransactions
+GROUP BY
+    CurrencyCode,
+    Status
+HAVING Status = 'Posted';
+GO
+
+SET STATISTICS XML OFF;
+SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
+GO
+
+-- ------------------------------------------------------------
+-- Query 4 BEFORE: function on filtered column
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS #Q4Before;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
+GO
+
+SELECT TOP 500
+    TransactionID,
+    AccountID,
+    TransactionDate,
+    Amount,
+    CurrencyCode,
+    Status
+INTO #Q4Before
+FROM m2.FinancialTransactions
+WHERE UPPER(Status) = 'POSTED'
+ORDER BY TransactionDate DESC;
+GO
+
+SET STATISTICS XML OFF;
+SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
+GO
+
+-- ------------------------------------------------------------
+-- Improvement 1: rewrite inefficient queries
+-- ------------------------------------------------------------
+-- The AFTER examples below rewrite the inefficient parts:
+-- - Query 1 changes YEAR/MONTH filters to a date range.
+-- - Query 2 changes a correlated subquery to a window function.
+-- - Query 3 moves Status filtering before GROUP BY.
+-- - Query 4 removes UPPER() from the filtered column.
+
+-- ------------------------------------------------------------
+-- Improvement 2: add a proper index for common filters
+-- ------------------------------------------------------------
+IF NOT EXISTS (
+    SELECT 1
+    FROM sys.indexes
+    WHERE name = 'IX_M2_FinancialTransactions_StatusDate'
+      AND object_id = OBJECT_ID('m2.FinancialTransactions')
+)
+BEGIN
+    CREATE INDEX IX_M2_FinancialTransactions_StatusDate
+    ON m2.FinancialTransactions (Status, TransactionDate);
+END;
+GO
+
+-- ------------------------------------------------------------
+-- Improvement 3: use a covering index for Query 1 AFTER
+-- ------------------------------------------------------------
+IF NOT EXISTS (
+    SELECT 1
+    FROM sys.indexes
+    WHERE name = 'IX_M2_FinancialTransactions_Q1Covering'
+      AND object_id = OBJECT_ID('m2.FinancialTransactions')
+)
+BEGIN
+    CREATE INDEX IX_M2_FinancialTransactions_Q1Covering
+    ON m2.FinancialTransactions (TransactionDate, CurrencyCode, Status)
+    INCLUDE (TransactionID, AccountID, TransactionType, Amount, ReferenceCode);
+END;
+GO
+
+-- ------------------------------------------------------------
+-- Query 1 AFTER: sargable date range and selected columns
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS #Q1After;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
+GO
+
+SELECT
+    TransactionID,
+    AccountID,
+    TransactionDate,
+    TransactionType,
+    Amount,
+    CurrencyCode,
+    Status,
+    ReferenceCode
+INTO #Q1After
+FROM m2.FinancialTransactions
+WHERE TransactionDate >= '2026-06-01'
+  AND TransactionDate < '2026-07-01'
+  AND CurrencyCode = 'USD'
+  AND Status = 'Posted';
+GO
+
+SET STATISTICS XML OFF;
+SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
+GO
+
+-- ------------------------------------------------------------
+-- Query 2 AFTER: window function running total
+-- ------------------------------------------------------------
 DROP TABLE IF EXISTS #Q2After;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
+GO
 
 WITH PostedTransactions AS (
     SELECT
@@ -190,34 +254,108 @@ ORDER BY
     a.AccountNumber,
     pt.TransactionDate,
     pt.TransactionID;
-
-INSERT INTO m2.OptimizationBenchmark
-    (QueryName, QueryVersion, RowsReturned, ElapsedMs, Notes)
-SELECT
-    'Q2 account running totals',
-    'After',
-    COUNT(*),
-    DATEDIFF(MILLISECOND, @StartTime, SYSDATETIME()),
-    'Window function computes running totals without repeated subqueries'
-FROM #Q2After;
 GO
 
-SET STATISTICS IO OFF;
+SET STATISTICS XML OFF;
 SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
+GO
+
+-- ------------------------------------------------------------
+-- Query 3 AFTER: filter before grouping
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS #Q3After;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
 GO
 
 SELECT
-    QueryName,
-    QueryVersion,
-    RowsReturned,
-    ElapsedMs,
-    Notes,
-    CapturedAt
-FROM m2.OptimizationBenchmark
-ORDER BY QueryName, QueryVersion DESC;
+    CurrencyCode,
+    COUNT(*) AS PostedTransactionCount,
+    SUM(Amount) AS PostedAmount
+INTO #Q3After
+FROM m2.FinancialTransactions
+WHERE Status = 'Posted'
+GROUP BY CurrencyCode;
 GO
 
--- Task:
--- Use the Messages tab for logical reads and CPU time.
--- Use the Actual Execution Plan for operator changes.
--- Record the findings in optimization_findings_template.md.
+SET STATISTICS XML OFF;
+SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
+GO
+
+-- ------------------------------------------------------------
+-- Query 4 AFTER: direct predicate on filtered column
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS #Q4After;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+SET STATISTICS XML ON;
+GO
+
+SELECT TOP 500
+    TransactionID,
+    AccountID,
+    TransactionDate,
+    Amount,
+    CurrencyCode,
+    Status
+INTO #Q4After
+FROM m2.FinancialTransactions
+WHERE Status = 'Posted'
+ORDER BY TransactionDate DESC;
+GO
+
+SET STATISTICS XML OFF;
+SET STATISTICS TIME OFF;
+SET STATISTICS IO OFF;
+GO
+
+-- ------------------------------------------------------------
+-- Row-count check
+-- ------------------------------------------------------------
+SELECT
+    'Q1 Before' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q1Before
+UNION ALL
+SELECT
+    'Q1 After' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q1After
+UNION ALL
+SELECT
+    'Q2 Before' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q2Before
+UNION ALL
+SELECT
+    'Q2 After' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q2After
+UNION ALL
+SELECT
+    'Q3 Before' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q3Before
+UNION ALL
+SELECT
+    'Q3 After' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q3After
+UNION ALL
+SELECT
+    'Q4 Before' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q4Before
+UNION ALL
+SELECT
+    'Q4 After' AS QueryVersion,
+    COUNT(*) AS RowsReturned
+FROM #Q4After;
+GO

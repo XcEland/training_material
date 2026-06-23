@@ -28,6 +28,17 @@ SELECT TOP 5 * FROM m2.Accounts AS a;
 -- MERGE compares a source dataset with a target table.
 -- Source rows are previewed and classified before the MERGE operation runs.
 
+-- Warm-up. Simple MERGE with temp tables.
+-- Create #ProductTarget as the current data.
+-- Create #ProductSource as the incoming data.
+-- ProductID = 2 exists in both tables, so it should be updated.
+-- ProductID = 3 exists only in the source table, so it should be inserted.
+-- Use MERGE #ProductTarget AS target USING #ProductSource AS source.
+-- Match on target.ProductID = source.ProductID.
+-- WHEN MATCHED: update ProductName and Quantity.
+-- WHEN NOT MATCHED: insert ProductID, ProductName, and Quantity.
+-- Select #ProductTarget before and after MERGE to see the change.
+
 -- 1. Review staging rows before loading.
 -- Output: ReferenceCode, AccountNumber, TransactionDate, Amount, CurrencyCode, Status.
 

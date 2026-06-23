@@ -27,6 +27,7 @@ myvar2 = "John"
 # Variables do not need to be declared with any particular type, and can even change type after they have been set.
 # Variable names are case-sensitive.
 a = 4
+a = 5
 A = "Sally"
 
 x = 5  # x is of type int

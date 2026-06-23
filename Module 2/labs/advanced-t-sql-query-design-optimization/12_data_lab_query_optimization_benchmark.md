@@ -8,53 +8,115 @@ GO
 
 -- Table context
 -- Schema: m2
--- m2.Counterparties fields: CounterpartyID, CounterpartyName, Sector, Country, RiskRating
--- m2.Accounts fields: AccountID, AccountNumber, CounterpartyID, AccountType, CurrencyCode, CurrentBalance, OpenedDate, AccountStatus
--- m2.FxRates fields: CurrencyCode, RateDate, RateToLSL
--- m2.FinancialTransactions fields: TransactionID, AccountID, TransactionDate, ValueDate, TransactionType, Amount, CurrencyCode, Channel, Status, ReferenceCode, CreatedAt
--- m2.StagingTransactions fields: ReferenceCode, AccountNumber, TransactionDate, ValueDate, TransactionType, Amount, CurrencyCode, Channel, Status
--- m2.MonthlyTransactionSummary fields: SummaryMonth, CurrencyCode, PostedTransactionCount, PostedAmount, LoadedAt
--- m2.TransactionAudit fields: AuditID, TransactionID, ActionName, OldStatus, NewStatus, OldAmount, NewAmount, ChangedBy, ChangedAt
--- m2.ErrorLog fields: ErrorLogID, ErrorTime, ProcedureName, ErrorNumber, ErrorMessage
--- m2.OptimizationBenchmark fields: BenchmarkID, QueryName, QueryVersion, RowsReturned, ElapsedMs, Notes, CapturedAt
--- System views used later: sys.indexes, sys.dm_db_index_usage_stats, sys.dm_exec_requests
-
--- Preview the tables used in the benchmark.
-SELECT TOP 5 * FROM m2.FinancialTransactions AS t;
-SELECT TOP 5 * FROM m2.Accounts AS a;
-SELECT TOP 5 * FROM m2.Counterparties AS cp;
-SELECT TOP 5 * FROM m2.OptimizationBenchmark AS b;
+-- Main table: m2.FinancialTransactions
+-- Supporting tables: m2.Accounts, m2.Counterparties
 
 -- Data Lab goal:
--- 1. Run poor queries.
--- 2. Capture elapsed time and row counts.
--- 3. Apply an index or rewrite.
--- 4. Re-run and compare.
--- 5. Complete optimization_findings_template.md.
+-- 1. Run each BEFORE query.
+-- 2. Check Messages for logical reads and CPU time.
+-- 3. Check the XML execution plan output.
+-- 4. Run the matching AFTER query.
+-- 5. Compare reads, time, row counts, and plan shape.
 
-SET STATISTICS IO ON;
-SET STATISTICS TIME ON;
+-- Turn these on before each query section:
+-- SET STATISTICS IO ON;
+-- SET STATISTICS TIME ON;
+-- SET STATISTICS XML ON;
 
+-- Turn these off after each query section:
+-- SET STATISTICS XML OFF;
+-- SET STATISTICS TIME OFF;
+-- SET STATISTICS IO OFF;
+
+-- ------------------------------------------------------------
 -- Query 1 BEFORE: non-sargable date filter and SELECT *
--- Use YEAR(TransactionDate), MONTH(TransactionDate), CurrencyCode = 'USD', Status = 'Posted'.
--- Store rows in #Q1Before and insert benchmark result as QueryVersion = 'Before'.
+-- ------------------------------------------------------------
+-- Use YEAR(TransactionDate) = 2026.
+-- Use MONTH(TransactionDate) = 6.
+-- Filter CurrencyCode = 'USD' and Status = 'Posted'.
+-- Store rows in #Q1Before.
 
--- Query 1 AFTER: sargable date range, selected columns, supporting index.
--- Create IX_M2_FinancialTransactions_DateCurrencyStatus.
--- Use TransactionDate >= '2026-06-01' and TransactionDate < '2026-07-01'.
--- Store rows in #Q1After and insert benchmark result as QueryVersion = 'After'.
-
--- Query 2 BEFORE: repeated correlated running-total subquery.
+-- ------------------------------------------------------------
+-- Query 2 BEFORE: repeated correlated running-total subquery
+-- ------------------------------------------------------------
 -- Join FinancialTransactions, Accounts, and Counterparties.
 -- Use a correlated subquery to calculate RunningPostedAmount.
--- Store rows in #Q2Before and insert benchmark result.
+-- Store TOP 500 rows in #Q2Before.
 
--- Query 2 AFTER: window function computes running totals in one pass.
--- Use SUM(t.Amount) OVER (PARTITION BY t.AccountID ORDER BY t.TransactionDate, t.TransactionID).
--- Store rows in #Q2After and insert benchmark result.
+-- ------------------------------------------------------------
+-- Query 3 BEFORE: filter after grouping
+-- ------------------------------------------------------------
+-- Group by CurrencyCode and Status.
+-- Use HAVING Status = 'Posted'.
+-- Store rows in #Q3Before.
 
--- Final output:
--- Select QueryName, QueryVersion, RowsReturned, ElapsedMs, Notes, CapturedAt.
+-- ------------------------------------------------------------
+-- Query 4 BEFORE: function on filtered column
+-- ------------------------------------------------------------
+-- Use UPPER(Status) = 'POSTED'.
+-- Store TOP 500 rows in #Q4Before.
 
-SET STATISTICS IO OFF;
-SET STATISTICS TIME OFF;
+-- ------------------------------------------------------------
+-- Improvement 1: rewrite inefficient queries
+-- ------------------------------------------------------------
+-- Query 1: replace YEAR/MONTH with a date range.
+-- Query 2: replace the correlated subquery with a window function.
+-- Query 3: move Status filtering before GROUP BY.
+-- Query 4: remove UPPER() from the filtered column.
+
+-- ------------------------------------------------------------
+-- Improvement 2: add a proper index
+-- ------------------------------------------------------------
+-- Create IX_M2_FinancialTransactions_StatusDate.
+-- Key columns: Status, TransactionDate.
+-- Use it for common Status and date filters.
+
+-- ------------------------------------------------------------
+-- Improvement 3: use a covering index
+-- ------------------------------------------------------------
+-- Create IX_M2_FinancialTransactions_Q1Covering.
+-- Key columns: TransactionDate, CurrencyCode, Status.
+-- Included columns: TransactionID, AccountID, TransactionType, Amount, ReferenceCode.
+-- Use it to support Query 1 AFTER without needing extra lookups for selected columns.
+
+-- ------------------------------------------------------------
+-- Query 1 AFTER: sargable date range and selected columns
+-- ------------------------------------------------------------
+-- Select only the needed columns.
+-- Use TransactionDate >= '2026-06-01'.
+-- Use TransactionDate < '2026-07-01'.
+-- Keep CurrencyCode = 'USD' and Status = 'Posted'.
+-- Store rows in #Q1After.
+
+-- ------------------------------------------------------------
+-- Query 2 AFTER: window function running total
+-- ------------------------------------------------------------
+-- Use SUM(t.Amount) OVER (
+--     PARTITION BY t.AccountID
+--     ORDER BY t.TransactionDate, t.TransactionID
+-- ).
+-- Store TOP 500 rows in #Q2After.
+
+-- ------------------------------------------------------------
+-- Query 3 AFTER: filter before grouping
+-- ------------------------------------------------------------
+-- Use WHERE Status = 'Posted' before GROUP BY.
+-- Group only by CurrencyCode.
+-- Store rows in #Q3After.
+
+-- ------------------------------------------------------------
+-- Query 4 AFTER: direct predicate on filtered column
+-- ------------------------------------------------------------
+-- Use Status = 'Posted'.
+-- Store TOP 500 rows in #Q4After.
+
+-- Final check:
+-- Return row counts from #Q1Before, #Q1After, #Q2Before, #Q2After,
+-- #Q3Before, #Q3After, #Q4Before, and #Q4After.
+
+-- Record findings:
+-- - Logical reads
+-- - CPU time
+-- - Elapsed time
+-- - Operators seen in the XML plan
+-- - What changed between BEFORE and AFTER

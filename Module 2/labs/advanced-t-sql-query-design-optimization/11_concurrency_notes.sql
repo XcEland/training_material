@@ -35,7 +35,41 @@ WHERE AccountNumber = 'M2-LSL-0001';
 ROLLBACK TRANSACTION;
 GO
 
--- 3. Active-request query: show active sessions and requests.
+-- 3. Funds transfer example: deduct from one account and add to another.
+-- Source account: M2-LSL-0001 gives out the money.
+-- Destination account: M2-LSL-0002 receives the money.
+-- The two rows are locked while the transfer is being calculated.
+-- ROLLBACK keeps the lab data unchanged.
+BEGIN TRANSACTION;
+
+DECLARE @TransferAmount DECIMAL(18,2) = 5000.00;
+
+SELECT
+    AccountNumber,
+    CurrentBalance AS BalanceBeforeTransfer
+FROM m2.Accounts WITH (UPDLOCK, HOLDLOCK)
+WHERE AccountNumber IN ('M2-LSL-0001', 'M2-LSL-0002');
+
+-- Deduct funds from the source account.
+UPDATE m2.Accounts
+SET CurrentBalance = CurrentBalance - @TransferAmount
+WHERE AccountNumber = 'M2-LSL-0001';
+
+-- Add the same funds to the destination account.
+UPDATE m2.Accounts
+SET CurrentBalance = CurrentBalance + @TransferAmount
+WHERE AccountNumber = 'M2-LSL-0002';
+
+SELECT
+    AccountNumber,
+    CurrentBalance AS BalanceAfterTransfer
+FROM m2.Accounts
+WHERE AccountNumber IN ('M2-LSL-0001', 'M2-LSL-0002');
+
+ROLLBACK TRANSACTION;
+GO
+
+-- 4. Active-request query: show active sessions and requests.
 SELECT
     session_id,
     status,
