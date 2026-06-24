@@ -84,8 +84,7 @@ Add capstone Module 1 planning notes
 ```
 
 ## Capstone
-
-The capstone project is developed progressively from Module 1 to Module 10. Learners choose the final topic with the facilitator, then build the project in stages as new SQL, Python, automation, integration, monitoring, security, and deployment concepts are introduced.
+The capstone project is developed progressively from Module 1 to Module 10. Learners choose the final topic with the facilitator, then build the project in stages as new SQL and Python concepts are introduced.
 
 Final delivery includes a 15-minute project presentation and demonstration. By Module 10, learners should be able to present a complete deployment plan, success metrics framework, ROI scenario, and strategic roadmap.
 
