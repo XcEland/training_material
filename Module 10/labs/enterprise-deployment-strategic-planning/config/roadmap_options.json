@@ -1,0 +1,59 @@
+{
+  "options": [
+    {
+      "name": "Standardise SQL Server release pipeline",
+      "horizon": "Horizon 1: 0-6 months",
+      "owner": "Database Team Lead",
+      "estimated_budget": 12000,
+      "business_value": 5,
+      "security_value": 5,
+      "implementation_effort": 2,
+      "risk_reduction": 5,
+      "milestone": "All database changes pass through scripted deployment and rollback review."
+    },
+    {
+      "name": "Automate monthly regulatory reporting",
+      "horizon": "Horizon 1: 0-6 months",
+      "owner": "Data Automation Lead",
+      "estimated_budget": 18000,
+      "business_value": 5,
+      "security_value": 4,
+      "implementation_effort": 3,
+      "risk_reduction": 5,
+      "milestone": "Monthly report generated and distributed with audit logs."
+    },
+    {
+      "name": "Expand API data integration capability",
+      "horizon": "Horizon 2: 6-18 months",
+      "owner": "Integration Lead",
+      "estimated_budget": 30000,
+      "business_value": 4,
+      "security_value": 4,
+      "implementation_effort": 4,
+      "risk_reduction": 4,
+      "milestone": "Approved external data feeds validated and loaded into SQL Server."
+    },
+    {
+      "name": "Deploy enterprise observability dashboard",
+      "horizon": "Horizon 2: 6-18 months",
+      "owner": "Operations Lead",
+      "estimated_budget": 25000,
+      "business_value": 4,
+      "security_value": 4,
+      "implementation_effort": 3,
+      "risk_reduction": 5,
+      "milestone": "Production SQL and Python workflows monitored with alert thresholds."
+    },
+    {
+      "name": "Evaluate cloud-native analytics platform",
+      "horizon": "Horizon 3: 18-36 months",
+      "owner": "Enterprise Architecture",
+      "estimated_budget": 60000,
+      "business_value": 4,
+      "security_value": 3,
+      "implementation_effort": 5,
+      "risk_reduction": 3,
+      "milestone": "Feasibility study and controlled proof of concept completed."
+    }
+  ]
+}
