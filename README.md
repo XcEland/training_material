@@ -100,3 +100,20 @@ https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sha
 
 Chat: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
 2: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
+
+
+Git commands 
+
+To pull latest changes wjile keeping local changes:
+git status
+git add .
+git stash push -m "my local work before pulling"
+git pull --rebase origin module3
+git stash pop
+
+If you get stash pop issues: use these commands:
+git add .
+git commit -m "Resolve local changes after pulling latest module3"
+
+To force pull, use this command:
+git pull --rebase origin module3
