@@ -7,6 +7,7 @@ __pycache__/
 !Module 4/labs/python-data-manipulation-database-connectivity/data/m4_raw_financial_transactions_sample.csv
 *.log
 .ipynb_checkpoints/
+schema.sql
 
 # Course source/export folder
 /Course/
