@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ report_title }} - {{ report_month }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #172033;
+      margin: 32px;
+      line-height: 1.45;
+    }
+    h1, h2 {
+      color: #0f766e;
+    }
+    .meta {
+      color: #475569;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .card {
+      border: 1px solid #cbd5e1;
+      padding: 12px;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+    .card strong {
+      display: block;
+      font-size: 12px;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+    .card span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #e2f3ef;
+    }
+    .warning {
+      border-left: 4px solid #b91c1c;
+      padding: 10px 12px;
+      background: #fef2f2;
+    }
+    .ok {
+      border-left: 4px solid #0f766e;
+      padding: 10px 12px;
+      background: #ecfdf5;
+    }
+    footer {
+      margin-top: 32px;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{ report_title }}</h1>
+  <div class="meta">
+    <div>{{ central_bank_name }}</div>
+    <div>Report month: {{ report_month }}</div>
+    <div>Generated at: {{ generated_at }}</div>
+    <div>Environment: {{ environment }}</div>
+  </div>
+
+  <h2>Executive Summary</h2>
+  <p>
+    The monthly reporting workflow processed {{ institution_count }} institution records.
+    The stress rate for the month was {{ stress_rate_percent }}.
+    Total transaction value was {{ total_transaction_value }} LSL.
+  </p>
+
+  {% if stress_rate > maximum_stress_rate %}
+  <div class="warning">
+    Stress-rate benchmark exceeded. Supervisory follow-up is recommended for stressed institutions.
+  </div>
+  {% else %}
+  <div class="ok">
+    Stress-rate benchmark is within the configured monitoring threshold.
+  </div>
+  {% endif %}
+
+  <div class="cards">
+    <div class="card">
+      <strong>Institutions</strong>
+      <span>{{ institution_count }}</span>
+    </div>
+    <div class="card">
+      <strong>Stress Rows</strong>
+      <span>{{ stress_rows }}</span>
+    </div>
+    <div class="card">
+      <strong>Mean Liquidity</strong>
+      <span>{{ mean_liquidity }}</span>
+    </div>
+    <div class="card">
+      <strong>Mean NPL</strong>
+      <span>{{ mean_npl }}</span>
+    </div>
+  </div>
+
+  <h2>Institution Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Institution</th>
+        <th>Type</th>
+        <th>Region</th>
+        <th>Liquidity</th>
+        <th>Capital</th>
+        <th>NPL</th>
+        <th>Stress</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in institution_rows %}
+      <tr>
+        <td>{{ row.InstitutionName }}</td>
+        <td>{{ row.InstitutionType }}</td>
+        <td>{{ row.Region }}</td>
+        <td>{{ "%.2f"|format(row.LiquidityRatio * 100) }}%</td>
+        <td>{{ "%.2f"|format(row.CapitalAdequacyRatio * 100) }}%</td>
+        <td>{{ "%.2f"|format(row.NplRatio * 100) }}%</td>
+        <td>{{ "Yes" if row.StressFlag else "No" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Phase 2 Simulation Benchmark Results</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Benchmark</th>
+        <th>Result</th>
+        <th>Evidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in benchmark_results %}
+      <tr>
+        <td>{{ item.benchmark }}</td>
+        <td>{{ "Pass" if item.passed else "Fail" }}</td>
+        <td>{{ item.evidence }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Recommended Action</h2>
+  <p>{{ recommendation }}</p>
+
+  <footer>
+    Training simulation report. Review before external distribution.
+  </footer>
+</body>
+</html>

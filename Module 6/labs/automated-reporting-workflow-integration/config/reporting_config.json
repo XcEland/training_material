@@ -1,0 +1,31 @@
+{
+  "report_title": "Monthly Financial Stability Executive Report",
+  "central_bank_name": "Central Bank Training Simulation",
+  "default_report_month": "2026-06",
+  "output_quality_thresholds": {
+    "minimum_institution_rows": 6,
+    "maximum_stress_rate": 0.5,
+    "minimum_required_sections": 5
+  },
+  "stakeholder_groups": [
+    {
+      "group": "Executive Committee",
+      "recipients": [
+        "governor.office@example.org",
+        "deputy.governor@example.org"
+      ]
+    },
+    {
+      "group": "Financial Supervision",
+      "recipients": [
+        "bank.supervision@example.org",
+        "risk.analytics@example.org"
+      ]
+    }
+  ],
+  "scheduling_examples": {
+    "windows_task_scheduler": "Monthly on the first business day at 07:30",
+    "cron": "30 7 1 * *",
+    "python_schedule": "Run a lightweight scheduler process that checks whether today's date is the configured reporting day"
+  }
+}
