@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wb:data xmlns:wb="http://www.worldbank.org">
+  <wb:data>
+    <wb:indicator id="FP.CPI.TOTL.ZG">Inflation, consumer prices (annual %)</wb:indicator>
+    <wb:country id="LS">Lesotho</wb:country>
+    <wb:countryiso3code>LSO</wb:countryiso3code>
+    <wb:date>2025</wb:date>
+    <wb:value>6.2</wb:value>
+  </wb:data>
+  <wb:data>
+    <wb:indicator id="FP.CPI.TOTL.ZG">Inflation, consumer prices (annual %)</wb:indicator>
+    <wb:country id="LS">Lesotho</wb:country>
+    <wb:countryiso3code>LSO</wb:countryiso3code>
+    <wb:date>2024</wb:date>
+    <wb:value>5.8</wb:value>
+  </wb:data>
+  <wb:data>
+    <wb:indicator id="FP.CPI.TOTL.ZG">Inflation, consumer prices (annual %)</wb:indicator>
+    <wb:country id="ZA">South Africa</wb:country>
+    <wb:countryiso3code>ZAF</wb:countryiso3code>
+    <wb:date>2025</wb:date>
+    <wb:value>4.7</wb:value>
+  </wb:data>
+  <wb:data>
+    <wb:indicator id="FP.CPI.TOTL.ZG">Inflation, consumer prices (annual %)</wb:indicator>
+    <wb:country id="BW">Botswana</wb:country>
+    <wb:countryiso3code>BWA</wb:countryiso3code>
+    <wb:date>2025</wb:date>
+    <wb:value />
+  </wb:data>
+</wb:data>

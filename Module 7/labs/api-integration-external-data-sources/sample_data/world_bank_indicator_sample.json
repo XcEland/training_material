@@ -1,0 +1,76 @@
+[
+  {
+    "page": 1,
+    "pages": 1,
+    "per_page": 4,
+    "total": 4,
+    "sourceid": "2",
+    "lastupdated": "2026-06-01"
+  },
+  [
+    {
+      "indicator": {
+        "id": "FP.CPI.TOTL.ZG",
+        "value": "Inflation, consumer prices (annual %)"
+      },
+      "country": {
+        "id": "LS",
+        "value": "Lesotho"
+      },
+      "countryiso3code": "LSO",
+      "date": "2025",
+      "value": 6.2,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 1
+    },
+    {
+      "indicator": {
+        "id": "FP.CPI.TOTL.ZG",
+        "value": "Inflation, consumer prices (annual %)"
+      },
+      "country": {
+        "id": "LS",
+        "value": "Lesotho"
+      },
+      "countryiso3code": "LSO",
+      "date": "2024",
+      "value": 5.8,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 1
+    },
+    {
+      "indicator": {
+        "id": "FP.CPI.TOTL.ZG",
+        "value": "Inflation, consumer prices (annual %)"
+      },
+      "country": {
+        "id": "ZA",
+        "value": "South Africa"
+      },
+      "countryiso3code": "ZAF",
+      "date": "2025",
+      "value": 4.7,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 1
+    },
+    {
+      "indicator": {
+        "id": "FP.CPI.TOTL.ZG",
+        "value": "Inflation, consumer prices (annual %)"
+      },
+      "country": {
+        "id": "BW",
+        "value": "Botswana"
+      },
+      "countryiso3code": "BWA",
+      "date": "2025",
+      "value": null,
+      "unit": "",
+      "obs_status": "missing",
+      "decimal": 1
+    }
+  ]
+]

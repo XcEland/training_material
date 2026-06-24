@@ -1,0 +1,32 @@
+{
+  "currency": "USD",
+  "scenarios": [
+    {
+      "name": "conservative",
+      "investment_cost": 18000,
+      "monthly_hours_saved": 80,
+      "staff_hourly_cost": 28,
+      "monthly_errors_avoided": 6,
+      "cost_per_error": 120,
+      "monthly_operating_cost": 1000
+    },
+    {
+      "name": "base_case",
+      "investment_cost": 18000,
+      "monthly_hours_saved": 130,
+      "staff_hourly_cost": 32,
+      "monthly_errors_avoided": 12,
+      "cost_per_error": 150,
+      "monthly_operating_cost": 1000
+    },
+    {
+      "name": "optimistic",
+      "investment_cost": 18000,
+      "monthly_hours_saved": 180,
+      "staff_hourly_cost": 35,
+      "monthly_errors_avoided": 18,
+      "cost_per_error": 180,
+      "monthly_operating_cost": 1000
+    }
+  ]
+}
