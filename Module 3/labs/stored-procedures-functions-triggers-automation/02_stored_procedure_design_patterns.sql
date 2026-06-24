@@ -24,6 +24,85 @@ GO
 -- 1. START WITH A NORMAL QUERY
 -- ============================================================
 
+-- Demo setup: Sales.Customers table
+CREATE SCHEMA Sales;
+GO
+
+CREATE TABLE Sales.Customers
+(
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerName NVARCHAR(100) NOT NULL,
+    Country NVARCHAR(50) NOT NULL,
+    Score INT NULL
+);
+GO
+
+INSERT INTO Sales.Customers (CustomerName, Country, Score)
+VALUES
+    ('John Smith', 'USA', 85),
+    ('Mary Johnson', 'USA', 90),
+    ('Robert Brown', 'USA', 78),
+    ('Linda Davis', 'USA', 92),
+    ('James Wilson', 'USA', 88),
+    ('Anna Muller', 'Germany', 81),
+    ('Peter Schmidt', 'Germany', 76),
+    ('Sarah Jones', 'United Kingdom', 84),
+    ('Michael Taylor', 'United Kingdom', 79),
+    ('Thabo Mokoena', 'South Africa', 91);
+GO
+
+-- Demo setup: Sales.Orders table
+CREATE TABLE Sales.Orders
+(
+    OrderID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerID INT NOT NULL,
+    OrderDate DATE NOT NULL,
+    Sales DECIMAL(12,2) NOT NULL,
+    CONSTRAINT FK_Orders_Customers
+        FOREIGN KEY (CustomerID)
+        REFERENCES Sales.Customers(CustomerID)
+);
+GO
+
+INSERT INTO Sales.Orders (CustomerID, OrderDate, Sales)
+VALUES
+    (1, '2026-01-10', 1200.00),
+    (1, '2026-02-15', 850.00),
+    (2, '2026-02-20', 1500.00),
+    (3, '2026-03-05', 640.00),
+    (4, '2026-03-18', 2200.00),
+    (5, '2026-04-02', 980.00),
+    (6, '2026-04-12', 760.00),
+    (7, '2026-05-01', 1340.00),
+    (8, '2026-05-16', 1120.00),
+    (9, '2026-06-03', 430.00),
+    (10, '2026-06-11', 1750.00);
+GO
+
+-- Step 1: Write a query
+SELECT
+    COUNT(*) AS TotalCustomers,
+    AVG(Score) AS AvgScore
+FROM Sales.Customers
+WHERE Country = 'USA';
+GO
+
+-- Step 2: Turn the query into a stored procedure
+CREATE PROCEDURE GetUSCustomerStats
+AS
+BEGIN
+    SELECT
+        COUNT(*) AS TotalCustomers,
+        AVG(Score) AS AvgScore
+    FROM Sales.Customers
+    WHERE Country = 'USA';
+END;
+GO
+
+-- Step 3: Execute it
+EXEC GetUSCustomerStats;
+GO
+
 -- Step 1: Write a query.
 -- For Lesotho institutions, find the total institutions and average capital adequacy.
 SELECT
@@ -293,7 +372,8 @@ BEGIN
 
     IF @MinimumCapitalAdequacy < 0
     BEGIN
-        THROW 50001, 'Minimum capital adequacy cannot be negative.', 1;
+        RAISERROR('Minimum capital adequacy cannot be negative.', 16, 1);
+        RETURN;
     END;
 
     SELECT
@@ -392,7 +472,8 @@ BEGIN
            AND @EndPeriod IS NOT NULL
            AND @StartPeriod > @EndPeriod
         BEGIN
-            THROW 50002, 'Start period cannot be after end period.', 1;
+            RAISERROR('Start period cannot be after end period.', 16, 1);
+            RETURN 1;
         END;
 
         SELECT
