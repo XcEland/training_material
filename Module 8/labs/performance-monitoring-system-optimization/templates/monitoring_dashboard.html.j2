@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Module 8 Monitoring Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 28px;
+      color: #172033;
+      line-height: 1.45;
+    }
+    h1, h2 {
+      color: #0f766e;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+    .metric {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .Normal { border-left: 6px solid #0f766e; }
+    .Warning { border-left: 6px solid #f59e0b; }
+    .Critical { border-left: 6px solid #dc2626; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #e2f3ef;
+    }
+  </style>
+</head>
+<body>
+  <h1>Monitoring Dashboard</h1>
+  <p>Generated at: {{ generated_at }}</p>
+
+  <h2>Database Performance</h2>
+  <div class="grid">
+    {% for item in database_metrics %}
+    <div class="card {{ item.alert_level }}">
+      <strong>{{ item.metric_name }}</strong>
+      <div class="metric">{{ item.metric_value }}</div>
+      <div>Source: {{ item.data_source }}</div>
+      <div>Alert: {{ item.alert_level }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2>Python Workflow Execution</h2>
+  <div class="grid">
+    {% for item in python_metrics %}
+    <div class="card {{ item.alert_level }}">
+      <strong>{{ item.metric_name }}</strong>
+      <div class="metric">{{ item.metric_value }}</div>
+      <div>Source: {{ item.data_source }}</div>
+      <div>Alert: {{ item.alert_level }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2>Capacity Projection</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Projected Rows</th>
+        <th>Projected Storage MB</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in capacity_projection %}
+      <tr>
+        <td>{{ row.month_number }}</td>
+        <td>{{ row.projected_rows }}</td>
+        <td>{{ row.projected_storage_mb }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Operational Review</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Standard</th>
+        <th>Result</th>
+        <th>Evidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in observability_results %}
+      <tr>
+        <td>{{ item.standard }}</td>
+        <td>{{ "Pass" if item.passed else "Fail" }}</td>
+        <td>{{ item.evidence }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

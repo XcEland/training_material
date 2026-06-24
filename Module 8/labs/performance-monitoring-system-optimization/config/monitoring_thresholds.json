@@ -1,0 +1,22 @@
+{
+  "database": {
+    "active_sessions_warning": 20,
+    "active_sessions_critical": 50,
+    "avg_query_duration_ms_warning": 500,
+    "avg_query_duration_ms_critical": 2000,
+    "database_size_mb_warning": 1024,
+    "database_size_mb_critical": 4096
+  },
+  "python_workflow": {
+    "duration_seconds_warning": 5,
+    "duration_seconds_critical": 15,
+    "peak_memory_mb_warning": 100,
+    "peak_memory_mb_critical": 250,
+    "error_count_warning": 1,
+    "error_count_critical": 3
+  },
+  "capacity": {
+    "monthly_growth_rate": 0.08,
+    "planning_months": 12
+  }
+}
