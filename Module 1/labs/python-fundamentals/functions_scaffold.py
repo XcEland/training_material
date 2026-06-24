@@ -7,6 +7,11 @@
 # A function is a reusable block of code.
 # Use def to define a function.
 # Use return to send a value back to the caller.
+def func(name):
+    print("Hello lm " + name)
+
+print(func("John"))
+print(func("Lydia"))
 
 # 1. Create a simple function.
 # Function name: print_welcome.

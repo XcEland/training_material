@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 *.xlsx
 *.csv
+!Module 4/labs/python-data-manipulation-database-connectivity/data/m4_raw_financial_transactions_sample.csv
 *.log
 .ipynb_checkpoints/
 

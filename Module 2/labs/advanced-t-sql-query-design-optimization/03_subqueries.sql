@@ -35,7 +35,8 @@ SELECT TOP 20
     t.TransactionDate,
     t.CurrencyCode,
     t.Amount,
-    t.Status
+    t.Status,
+    AVG(t.Amount) OVER() AS Average
 FROM m2.FinancialTransactions AS t
 WHERE t.Amount > (
     SELECT AVG(t2.Amount)

@@ -187,6 +187,7 @@ GO
 
 -- 10. CROSS JOIN: generate a reporting grid of counterparties and currencies.
 -- CROSS JOIN returns every combination from both inputs.
+SELECT * FROM m2.Counterparties AS cp;
 SELECT TOP 30
     cp.CounterpartyName,
     cp.Sector,

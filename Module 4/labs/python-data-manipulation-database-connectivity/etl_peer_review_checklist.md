@@ -15,6 +15,8 @@ Use this during the Module 4 collaborative troubleshooting session.
 - Connects successfully:
 - Handles connection errors:
 - Uses the expected database:
+- Explains when to use `pyodbc` direct connections:
+- Explains when to use SQLAlchemy with pandas:
 
 ## Extraction
 
@@ -34,9 +36,11 @@ Use this during the Module 4 collaborative troubleshooting session.
 ## Validation
 
 - Row-count reconciliation:
-- Required columns checked for nulls:
+- Required non-nullable columns checked with `df.isnull().sum()`:
+- DataFrame types checked with `df.dtypes`:
 - NumPy total check:
 - Summary totals match detail totals:
+- Validation gate printed in notebook/script log output:
 
 ## File Outputs
 
@@ -50,6 +54,13 @@ Use this during the Module 4 collaborative troubleshooting session.
 - Summary table loaded:
 - ETL run log updated:
 - Final SQL row counts verified:
+
+## Evidence Artefact
+
+- `etl_design_execution_log.md` completed before coding:
+- Execution results added after running:
+- Log output pasted into the evidence artefact:
+- Evidence can support Day 10 Capstone review:
 
 ## Findings
 

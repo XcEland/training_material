@@ -73,3 +73,12 @@ The capstone project is developed progressively from Module 1 to Module 10. Lear
 
 Final delivery includes a 15-minute project presentation and demonstration.
 
+Slides: 
+Slide 1: https://1drv.ms/p/c/86b2518f75840e31/IQB-saCuuUGHS4DU-OPJlGmZASNNNArs0wbUVwWIg_tggoI?e=A0phZg
+
+Slide 2: https://1drv.ms/p/c/86b2518f75840e31/IQDUnStwK1DeS4QJkG02DvK9ASG-mnlVkI2_Cqn_e36oA2c?e=NcrNOz
+
+Slide 3: https://1drv.ms/p/c/86b2518f75840e31/IQD3RZBnejBISJpW3ApT9hY5AYmAu9i8ugs88jxnxDxYnQk?e=HHLDS0
+
+drive link: https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
+https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
