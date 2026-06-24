@@ -99,21 +99,33 @@ drive link: https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G
 https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
 
 Chat: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
-2: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
 
+## Git Commands
 
-Git commands 
+Use `main` if it is the current source-of-truth branch for the class. If the facilitator specifically says to use the `module3` branch, replace `main` with `module3` in the commands below.
 
-To pull latest changes wjile keeping local changes:
+### Pull Latest Changes While Keeping Local Changes
+
+Use this when you have local work that you do not want to lose:
+
+```bash
 git status
-git add .
-git stash push -m "my local work before pulling"
-git pull --rebase origin module3
+git stash push -u -m "my local work before pulling"
+git checkout main
+git pull --rebase origin main
 git stash pop
+```
 
-If you get stash pop issues: use these commands:
+If `git stash pop` creates conflicts, fix the conflicted files, then run:
+
+```bash
 git add .
-git commit -m "Resolve local changes after pulling latest module3"
+git commit -m "Resolve local changes after pulling latest main"
+```
 
-To force pull, use this command:
-git pull --rebase origin module3
+### Pull Latest Changes When You Have No Local Changes
+
+```bash
+git checkout main
+git pull --rebase origin main
+```
