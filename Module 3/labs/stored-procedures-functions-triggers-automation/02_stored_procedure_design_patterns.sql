@@ -92,15 +92,35 @@ GO
 
 
 CREATE OR ALTER PROCEDURE GetUSCustomerStats
-@CountryName NVARCHAR(15)
+@CountryName NVARCHAR(15) = 'USA'
 AS
 BEGIN
 
+BEGIN TRY
+
+    DECLARE @TotalCustomer INT, @AvgScore DECIMAL(5,2);
+    DECLARE @DivResult FLOAT;
+
+-- Data cleaning
+   IF EXISTS( SELECT 1 FROM Sales.Customers WHERE Score IS NULL AND Country = @CountryName
+    )
+   BEGIN
+    UPDATE Sales.Customers
+    SET Score = 0
+    WHERE Score iS NULL AND Country = @CountryName
+   END
+
+   ELSE
+   BEGIN
+    PRINT 'NO NULL Scores Found'
+   END
+-- Reporting
     SELECT
-    COUNT(*) AS TotalCustomers,
-    AVG(Score) AS AvgScore
+    @TotalCustomer = COUNT(*),
+    @AvgScore = AVG(Score)
     FROM Sales.Customers
     WHERE Country = @CountryName;
+
 
     -- Find the total Number. of Orders and Total Sales​
     SELECT
@@ -109,12 +129,36 @@ BEGIN
     FROM Sales.Orders AS o
     JOIN Sales.Customers AS c
         ON c.CustomerID = o.CustomerID
-    WHERE c.Country = 'USA';
+    WHERE c.Country = @CountryName;
+
+    PRINT CONCAT(
+    'Total Customer: ',
+    @TotalCustomer,
+    '. Average Score: ',
+    @AvgScore);
+
+    -- PRINT 'Total Customer: ' 
+    -- + CAST(@TotalCustomer AS NVARCHAR(20)) 
+    -- + '. Average Score: ' 
+    -- + CAST(@AvgScore AS NVARCHAR(20));
+END TRY
+BEGIN CATCH
+
+    PRINT 'An error occurred.';
+    PRINT 'Error Message: ' + ERROR_MESSAGE();
+    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS VARCHAR(20));
+    PRINT 'Error Severity: ' + CAST(ERROR_SEVERITY() AS VARCHAR(20));
+    PRINT 'Error State: ' + CAST(ERROR_STATE() AS VARCHAR(20));
+    PRINT 'Error Line: ' + CAST(ERROR_LINE() AS VARCHAR(20));
+    PRINT 'Error Procedure: ' + ISNULL(ERROR_PROCEDURE(), 'N/A');
+
+END CATCH
+    
 
 END;
 
-EXEC GetUSCustomerStats @CountryName= "Germany";
-
+EXEC GetUSCustomerStats @CountryName= "Lesotho";
+EXEC GetUSCustomerStats;
 
 
 
