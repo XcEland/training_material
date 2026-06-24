@@ -1,8 +1,8 @@
 # Transact-SQL and Python Programming Course
 
-This repository contains practical course materials for learning SQL Server, Transact-SQL, Python programming, database connectivity, data manipulation, automation, analysis, and reporting.
+This repository contains practical course materials for learning SQL Server, Transact-SQL, Python programming, database connectivity, data manipulation, automation, analytics, reporting, integration, monitoring, security, and enterprise deployment planning.
 
-The project is organized as module-based labs, setup guides, practice scripts, and a staged capstone project.
+The project is organized as ten module-based labs, setup guides, practice scripts, and a staged capstone project.
 
 ## Repository Structure
 
@@ -14,31 +14,45 @@ The project is organized as module-based labs, setup guides, practice scripts, a
 ├── Module 3/
 ├── Module 4/
 ├── Module 5/
+├── Module 6/
+├── Module 7/
+├── Module 8/
+├── Module 9/
+├── Module 10/
 ├── Practice/
 ├── Docs/
+├── Slides/
 └── Capstone Project/
 ```
+
+## Modules
+
+| Module | Focus | Main Lab Folder |
+|---|---|---|
+| Module 1 | Foundations, SQL fundamentals, Python basics, Git, and Python-to-SQL Server connectivity | `Module 1/labs/` |
+| Module 2 | Advanced T-SQL query design, joins, subqueries, CTEs, window functions, execution plans, indexes, transactions, and optimization | `Module 2/labs/advanced-t-sql-query-design-optimization/` |
+| Module 3 | Stored procedures, functions, triggers, dynamic SQL, error handling, audit logging, and automated validation | `Module 3/labs/stored-procedures-functions-triggers-automation/` |
+| Module 4 | Python database connectivity, pandas, NumPy, file I/O, ETL workflows, and notebook-based data preparation | `Module 4/labs/python-data-manipulation-database-connectivity/` |
+| Module 5 | SciPy statistics, Matplotlib/Seaborn visualization, Scikit-learn basics, time series analysis, and analytical reporting | `Module 5/labs/statistical-analysis-data-visualization-python/` |
+| Module 6 | Automated reporting, scheduling, email/notification workflows, Jinja2 reports, and environment configuration | `Module 6/labs/automated-reporting-workflow-integration/` |
+| Module 7 | REST API consumption, authentication, rate limiting, JSON/XML parsing, web scraping, validation, and SQL Server loading | `Module 7/labs/api-integration-external-data-sources/` |
+| Module 8 | SQL Server monitoring with DMVs, Query Store, Extended Events, Python profiling, logging, capacity planning, and dashboards | `Module 8/labs/performance-monitoring-system-optimization/` |
+| Module 9 | Role-based access control, SQL injection prevention, Python credential safety, compliance, audit trails, code review, and secure deployment controls | `Module 9/labs/security-compliance-best-practices/` |
+| Module 10 | Enterprise deployment planning, change management, user adoption, KPI/ROI frameworks, strategic roadmaps, and executive capstone proposals | `Module 10/labs/enterprise-deployment-strategic-planning/` |
 
 ## Main Areas
 
 - `Setup/` contains environment setup notes for Linux and Windows.
-- `Module 1/` covers SQL fundamentals, Python fundamentals, and Python-to-SQL Server connectivity.
-- `Module 2/` covers advanced T-SQL querying, joins, subqueries, CTEs, window functions, execution plans, indexes, transactions, and query optimization.
-- `Module 3/` covers stored procedures, functions, triggers, dynamic SQL, error handling, audit logging, and automated validation.
-- `Module 4/` covers Python data manipulation and database connectivity workflows.
-- `Module 5/` covers statistical analysis, visualization, notebooks, and reporting.
 - `Practice/` contains additional SQL practice scripts and datasets.
 - `Docs/` contains supporting course reference documents.
+- `Slides/` contains presentation support material where available.
 - `Capstone Project/` contains the staged project structure developed across the modules.
 
 ## Lab Pattern
 
-Most SQL labs include:
+SQL labs include runnable `.sql` files, comments, and Markdown scaffold files where useful.
 
-- runnable `.sql` solution files
-- matching `.md` live-coding scaffold files with comments, table names, field names, and step-by-step prompts
-
-Python labs use runnable `.py` files and separate commented scaffold files where needed.
+Python labs use a mix of runnable `.py` files, Jupyter notebooks, configuration examples, sample data, tests, and documentation templates. Notebook-based modules include install/setup cells so learners can run the material in local Jupyter environments or Google Colab where practical.
 
 ## Typical Workflow
 
@@ -48,7 +62,8 @@ Python labs use runnable `.py` files and separate commented scaffold files where
 4. Work through each lab in order.
 5. Use the scaffold files for guided live coding.
 6. Commit progress with Git after each meaningful change.
-7. Apply module concepts to the staged capstone project.
+7. Run tests where provided with `pytest -q`.
+8. Apply module concepts to the staged capstone project.
 
 ## Version Control
 
@@ -70,9 +85,9 @@ Add capstone Module 1 planning notes
 
 ## Capstone
 
-The capstone project is developed progressively from Module 1 to Module 10. Learners choose the final topic with the facilitator, then build the project in stages as new SQL and Python concepts are introduced.
+The capstone project is developed progressively from Module 1 to Module 10. Learners choose the final topic with the facilitator, then build the project in stages as new SQL, Python, automation, integration, monitoring, security, and deployment concepts are introduced.
 
-Final delivery includes a 15-minute project presentation and demonstration.
+Final delivery includes a 15-minute project presentation and demonstration. By Module 10, learners should be able to present a complete deployment plan, success metrics framework, ROI scenario, and strategic roadmap.
 
 Slides: 
 Slide 1: https://1drv.ms/p/c/86b2518f75840e31/IQB-saCuuUGHS4DU-OPJlGmZASNNNArs0wbUVwWIg_tggoI?e=A0phZg
@@ -83,3 +98,5 @@ Slide 3: https://1drv.ms/p/c/86b2518f75840e31/IQD3RZBnejBISJpW3ApT9hY5AYmAu9i8ug
 
 drive link: https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
 https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
+
+Chat: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
