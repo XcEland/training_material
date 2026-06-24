@@ -70,6 +70,7 @@ Add capstone Module 1 planning notes
 
 ## Capstone
 https://1drv.ms/p/c/86b2518f75840e31/IQD3RZBnejBISJpW3ApT9hY5AYmAu9i8ugs88jxnxDxYnQk?e=BEULLd
+drive link: https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
 The capstone project is developed progressively from Module 1 to Module 10. Learners choose the final topic with the facilitator, then build the project in stages as new SQL and Python concepts are introduced.
 
 Final delivery includes a 15-minute project presentation and demonstration.
