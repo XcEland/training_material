@@ -99,4 +99,3 @@ drive link: https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G
 https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
 
 Chat: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
-2: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
