@@ -80,12 +80,43 @@ VALUES
 GO
 
 -- Step 1: Write a query
+SELECT * FROM Sales.Customers;
+SELECT * FROM Sales.Orders;
+
 SELECT
     COUNT(*) AS TotalCustomers,
     AVG(Score) AS AvgScore
 FROM Sales.Customers
 WHERE Country = 'USA';
 GO
+
+
+CREATE OR ALTER PROCEDURE GetUSCustomerStats
+@CountryName NVARCHAR(15)
+AS
+BEGIN
+
+    SELECT
+    COUNT(*) AS TotalCustomers,
+    AVG(Score) AS AvgScore
+    FROM Sales.Customers
+    WHERE Country = @CountryName;
+
+    -- Find the total Number. of Orders and Total Sales​
+    SELECT
+    COUNT(o.OrderID) AS TotalOrders,
+    SUM(o.Sales) AS TotalSales
+    FROM Sales.Orders AS o
+    JOIN Sales.Customers AS c
+        ON c.CustomerID = o.CustomerID
+    WHERE c.Country = 'USA';
+
+END;
+
+EXEC GetUSCustomerStats @CountryName= "Germany";
+
+
+
 
 -- Step 2: Turn the query into a stored procedure
 CREATE PROCEDURE GetUSCustomerStats
