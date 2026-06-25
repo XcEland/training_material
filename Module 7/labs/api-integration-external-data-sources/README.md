@@ -2,6 +2,21 @@
 
 This Module 7 lab teaches external data ingestion from beginner to advanced level. The examples use public financial/economic style data, local sample payloads, validation rules, and optional SQL Server loading.
 
+## Discussion Outcomes
+
+This lab supports the following discussion and assessment outcomes:
+
+1. Implement RESTful API consumption scripts using Python `requests`, authentication handling, and rate limiting controls.
+2. Develop JSON and XML parsing routines that map external data structures to relational database schemas.
+3. Apply BeautifulSoup web scraping techniques to extract structured data from authorised web sources.
+4. Design validation and quality assessment procedures that enforce acceptance criteria before database insertion.
+5. Construct integration testing suites that verify external data workflows end to end.
+6. Execute an API integration exercise that delivers a validated, quality-assured external data load into SQL Server.
+
+## Dataset and Lab Preservation Note
+
+New datasets or examples should be added at the top of the learning sequence when they become the preferred classroom demonstration. Existing local JSON, XML, and HTML sample files should remain available as fallback/offline datasets and additional practice material.
+
 The lab is designed to run reliably:
 
 - Real API calls are supported.
