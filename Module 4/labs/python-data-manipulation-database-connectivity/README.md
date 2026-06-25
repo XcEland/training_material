@@ -8,9 +8,13 @@ The notebooks also run without SQL Server by falling back to the included CSV sa
 
 1. Run the SQL setup script if SQL Server is available.
 2. Open the database connectivity notebook and test `pyodbc`, SQLAlchemy, and pandas extraction.
-3. Clean and transform transaction data with pandas.
-4. Validate totals, outliers, and row quality with NumPy.
-5. Export CSV/Excel files and load cleaned results back to SQL Server when a connection is available.
+3. Work through `05_pandas_weo_transformation_basics.ipynb` for pandas basics using the IMF WEO Excel dataset.
+4. Work through `06_numpy_weo_array_validation_basics.ipynb` to understand NumPy arrays, shape, axis direction, changes, missing values, and outlier checks.
+5. Clean and transform transaction data with pandas in the existing workflow notebook.
+6. Validate totals, outliers, and row quality with NumPy in the existing transaction validation notebook.
+7. Export CSV/Excel files and load cleaned results back to SQL Server when a connection is available.
+
+New examples and datasets must be added without deleting existing labs. The WEO dataset is now the first pandas and NumPy teaching dataset, while the existing transaction dataset remains available for ETL and validation practice.
 
 ## Files
 
@@ -24,7 +28,10 @@ Module 4/labs/python-data-manipulation-database-connectivity/
 ├── 02_pandas_cleaning_transformation_workflow.ipynb
 ├── 03_numpy_quantitative_validation.ipynb
 ├── 04_file_io_etl_load_back_to_sql.ipynb
+├── 05_pandas_weo_transformation_basics.ipynb
+├── 06_numpy_weo_array_validation_basics.ipynb
 ├── data/
+│   ├── WEOApr2026all.xlsx
 │   └── m4_raw_financial_transactions_sample.csv
 ├── outputs/
 ├── etl_peer_review_checklist.md
@@ -52,6 +59,8 @@ Use `pyodbc` for direct connection checks. Use SQLAlchemy with pandas for the ma
 | Notebook | Focus |
 | --- | --- |
 | `01_database_connectivity_pyodbc_sqlalchemy_pandas.ipynb` | Environment setup, SQL Server connection strings, `pyodbc`, SQLAlchemy, and pandas extraction |
+| `05_pandas_weo_transformation_basics.ipynb` | Beginner-friendly pandas basics and transformations using the IMF WEO Excel dataset |
+| `06_numpy_weo_array_validation_basics.ipynb` | Beginner-friendly NumPy arrays, axis direction, year-on-year changes, missing values, and outlier checks using the IMF WEO Excel dataset |
 | `02_pandas_cleaning_transformation_workflow.ipynb` | DataFrame inspection, missing values, type conversion, normalization, grouping, pivoting, and a public World Bank API enrichment example |
 | `03_numpy_quantitative_validation.ipynb` | NumPy arrays, descriptive statistics, z-scores, outlier flags, and reconciliation checks |
 | `04_file_io_etl_load_back_to_sql.ipynb` | File I/O, CSV/Excel exports, transformation functions, validation rules, and optional SQL Server load-back |
@@ -70,6 +79,7 @@ The final notebook prints all three checks before writing files or loading SQL S
 
 The lab uses:
 
+- IMF WEO Excel workbook `data/WEOApr2026all.xlsx` for the beginner pandas and NumPy transformation labs.
 - SQL Server table `m4.RawFinancialTransactions` when the setup script has been run.
 - Local fallback file `data/m4_raw_financial_transactions_sample.csv`.
 - Built-in fallback rows inside each notebook if the notebook is moved without the CSV file.
@@ -132,9 +142,10 @@ Then open the lab folder in JupyterLab or VS Code and run the notebooks in order
 
 1. Upload a notebook to Colab.
 2. Run the first install/import cell.
-3. Upload `data/m4_raw_financial_transactions_sample.csv` if you want the full sample dataset.
-4. If the CSV is not uploaded, the notebook still runs with a small built-in fallback dataset.
-5. SQL Server connection cells will skip safely unless your SQL Server is reachable from Colab.
+3. Upload `data/WEOApr2026all.xlsx` when running the WEO pandas or NumPy basics notebooks.
+4. Upload `data/m4_raw_financial_transactions_sample.csv` if you want the full transaction sample dataset.
+5. If the files are not uploaded, the notebooks still run with small built-in fallback datasets.
+6. SQL Server connection cells will skip safely unless your SQL Server is reachable from Colab.
 
 ## Expected Outputs
 

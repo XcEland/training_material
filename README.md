@@ -54,6 +54,12 @@ SQL labs include runnable `.sql` files, comments, and Markdown scaffold files wh
 
 Python labs use a mix of runnable `.py` files, Jupyter notebooks, configuration examples, sample data, tests, and documentation templates. Notebook-based modules include install/setup cells so learners can run the material in local Jupyter environments or Google Colab where practical.
 
+## Lab Update Policy
+
+When adding new examples, datasets, or discussion outcomes to an existing module, do not delete the existing labs. Add the new material at the top of the relevant lab flow where it is the preferred teaching example, then keep earlier examples as secondary practice, fallback data, or extension exercises.
+
+If a newer dataset is introduced for a topic, use it first in the lesson sequence where possible. Existing datasets should remain in the repository unless they are broken, duplicated, or explicitly replaced by the facilitator.
+
 ## Typical Workflow
 
 1. Complete the setup guide for your operating system.
