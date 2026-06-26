@@ -6,6 +6,7 @@ __pycache__/
 *.csv
 !Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx
 !Module 4/labs/python-data-manipulation-database-connectivity/data/m4_raw_financial_transactions_sample.csv
+!Module 5/labs/statistical-analysis-data-visualization-python/data/beginner_financial_indicators.csv
 *.log
 .ipynb_checkpoints/
 schema.sql
