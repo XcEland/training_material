@@ -1,0 +1,42 @@
+date,institution,region,institution_type,liquidity_ratio,capital_adequacy_ratio,npl_ratio,profit_margin,total_deposits_m,total_loans_m,transaction_count,stress_flag
+2026-01-01,Bank A,Maseru,Commercial Bank,35.6,19.5,3.2,4.62,980,610,3100,0
+2026-01-01,Bank B,Leribe,Commercial Bank,31.1,17.4,4.9,3.61,860,590,2500,0
+2026-01-01,Bank C,Mafeteng,Microfinance,26.6,14.8,6.6,2.31,520,380,1700,0
+2026-01-01,Bank D,Quthing,Microfinance,22.6,12.4,8.3,1.2,430,350,1350,1
+2026-02-01,Bank A,Maseru,Commercial Bank,35.65,19.4,3.28,4.58,988,616,3155,0
+2026-02-01,Bank B,Leribe,Commercial Bank,,17.28,5.03,3.57,866,598,2550,0
+2026-02-01,Bank C,Mafeteng,Microfinance,26.49,14.66,6.78,2.26,524,390,1745,0
+2026-02-01,Bank D,Quthing,Microfinance,22.41,12.24,8.53,1.15,432,362,1390,1
+2026-03-01,Bank A,Maseru,Commercial Bank,35.7,19.3,3.36,4.54,996,622,3210,0
+2026-03-01,Bank B,Leribe,Commercial Bank,31.04,17.16,5.16,3.52,872,606,2600,0
+2026-03-01,Bank C,Mafeteng,Microfinance,26.38,14.52,6.96,2.2,528,400,1790,0
+2026-03-01,Bank D,Quthing,Microfinance,22.22,12.08,8.76,1.09,434,374,1430,1
+2026-04-01,Bank A,Maseru,Commercial Bank,34.55,19.2,3.74,4.46,1004,628,3265,0
+2026-04-01,Bank B,Leribe,Commercial Bank,29.81,17.04,5.59,3.44,878,614,2650,0
+2026-04-01,Bank C,Mafeteng,Microfinance,25.07,14.38,,2.12,532,410,1835,0
+2026-04-01,Bank D,Quthing,Microfinance,20.83,11.92,9.29,1.0,436,386,1470,1
+2026-05-01,Bank A,Maseru,Commercial Bank,34.6,19.1,3.82,4.42,1012,634,3320,0
+2026-05-01,Bank B,Leribe,Commercial Bank,29.78,16.92,5.72,3.39,884,622,2700,0
+2026-05-01,Bank C,Mafeteng,Microfinance,24.96,14.24,7.62,2.07,536,420,1880,0
+2026-05-01,Bank D,Quthing,Microfinance,20.64,11.76,9.52,0.94,438,398,1510,1
+2026-06-01,Bank A,Maseru,Commercial Bank,34.65,19.0,3.9,4.38,1020,640,3375,0
+2026-06-01,Bank B,Leribe,Commercial Bank,29.75,16.8,5.85,3.35,890,630,2750,0
+2026-06-01,Bank C,Mafeteng,Microfinance,24.85,14.1,7.8,2.01,540,430,1925,0
+2026-06-01,Bank D,Quthing,Microfinance,20.45,11.6,9.75,0.88,440,410,1550,1
+2026-07-01,Bank A,Maseru,Commercial Bank,33.5,18.9,4.28,4.31,1028,646,3430,0
+2026-07-01,Bank B,Leribe,Commercial Bank,28.52,16.68,6.28,3.27,896,638,2800,0
+2026-07-01,Bank C,Mafeteng,Microfinance,23.54,13.96,8.28,1.93,544,440,1970,1
+2026-07-01,Bank D,Quthing,Microfinance,19.06,11.44,10.28,,442,422,1590,1
+2026-08-01,Bank A,Maseru,Commercial Bank,33.55,18.8,4.36,4.27,1036,652,3485,0
+2026-08-01,Bank B,Leribe,Commercial Bank,28.49,16.56,6.41,3.22,902,646,2850,0
+2026-08-01,Bank C,Mafeteng,Microfinance,23.43,13.82,8.46,1.87,548,450,2015,1
+2026-08-01,Bank D,Quthing,Microfinance,18.87,11.28,10.51,0.73,444,434,1630,1
+2026-09-01,Bank A,Maseru,Commercial Bank,33.6,18.7,4.44,4.23,1044,658,3540,0
+2026-09-01,Bank B,Leribe,Commercial Bank,28.46,16.44,6.54,3.18,908,654,2900,0
+2026-09-01,Bank C,Mafeteng,Microfinance,23.32,13.68,8.64,1.82,552,460,2060,1
+2026-09-01,Bank D,Quthing,Microfinance,18.68,11.12,10.74,0.67,446,446,1670,1
+2026-10-01,Bank A,Maseru,Commercial Bank,32.45,18.6,4.82,4.15,1052,664,3595,0
+2026-10-01,Bank B,Leribe,Commercial Bank,27.23,16.32,6.97,3.09,914,662,2950,0
+2026-10-01,Bank C,Mafeteng,Microfinance,22.01,13.54,9.12,1.74,556,470,2105,1
+2026-10-01,Bank D,Quthing,Microfinance,17.29,10.96,11.27,0.58,448,458,1710,1
+2026-01-01,Bank A,Maseru,Commercial Bank,35.6,19.5,3.2,4.62,980,610,3100,0
