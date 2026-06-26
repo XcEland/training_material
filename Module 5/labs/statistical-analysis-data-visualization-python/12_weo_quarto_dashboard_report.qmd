@@ -1,0 +1,516 @@
+---
+title: "WEO Macroeconomic Dashboard and Report"
+subtitle: "Module 5 Quarto lab using the April 2026 WEO workbook"
+author: "Trainingcred Institute"
+format:
+  dashboard:
+    theme: cosmo
+    orientation: rows
+execute:
+  echo: true
+  warning: false
+  message: false
+jupyter: python3
+---
+
+# Lab Notes {.sidebar}
+
+This Quarto lab turns the WEO Excel workbook into a small dashboard and analytical report.
+
+Run this file with **Quarto** and a **Python 3** environment:
+
+```bash
+quarto render 12_weo_quarto_dashboard_report.qmd
+```
+
+The notebook-style Python chunks load the workbook, clean the data, create visualizations, and generate report-ready tables.
+
+The WEO workbook is expected in one of these locations:
+
+- `../../../Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx`
+- `Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx`
+- `data/WEOApr2026all.xlsx`
+- `/content/WEOApr2026all.xlsx`
+- `WEOApr2026all.xlsx`
+
+# Setup
+
+## Python Packages
+
+```{python}
+# If a package is missing, run this once in a notebook or terminal:
+# %pip install pandas numpy matplotlib seaborn scipy scikit-learn openpyxl joblib
+```
+
+## Imports and Display Settings
+
+```{python}
+from pathlib import Path
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from IPython.display import Markdown, display
+from scipy import stats
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
+# These settings only change how tables display in the rendered report.
+pd.set_option("display.max_columns", 60)
+pd.set_option("display.width", 160)
+
+sns.set_theme(style="whitegrid", context="notebook")
+
+OUTPUT_DIR = Path("outputs")
+OUTPUT_DIR.mkdir(exist_ok=True)
+```
+
+## Load and Prepare WEO Data
+
+```{python}
+def find_weo_workbook():
+    """Find the WEO workbook locally, in Google Colab, or beside this file."""
+    candidate_paths = [
+        Path("../../../Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx"),
+        Path("Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx"),
+        Path("data/WEOApr2026all.xlsx"),
+        Path("/content/WEOApr2026all.xlsx"),
+        Path("WEOApr2026all.xlsx"),
+    ]
+
+    for path in candidate_paths:
+        if path.exists():
+            return path
+
+    raise FileNotFoundError("WEOApr2026all.xlsx was not found. Check the workbook path before rendering.")
+
+
+def standardize_column_names(frame):
+    """Convert non-year columns to readable snake_case names."""
+    renamed_columns = {}
+
+    for column in frame.columns:
+        if isinstance(column, int):
+            renamed_columns[column] = column
+        else:
+            renamed_columns[column] = (
+                str(column)
+                .strip()
+                .lower()
+                .replace(".", "_")
+                .replace(" ", "_")
+                .replace("-", "_")
+            )
+
+    return frame.rename(columns=renamed_columns)
+
+
+def get_year_columns(frame):
+    """Return columns that represent years, such as 1980, 2026, or 2031."""
+    return [column for column in frame.columns if isinstance(column, int) or str(column).isdigit()]
+
+
+def make_long_indicator_data(frame, indicator_ids, source_sheet):
+    """Convert WEO wide year columns into tidy long format."""
+    year_columns = get_year_columns(frame)
+    id_columns = ["country_id", "country", "indicator_id", "indicator", "unit"]
+
+    filtered = frame.loc[frame["indicator_id"].isin(indicator_ids), id_columns + year_columns].copy()
+
+    long_df = filtered.melt(
+        id_vars=id_columns,
+        value_vars=year_columns,
+        var_name="year",
+        value_name="value",
+    )
+    long_df["year"] = long_df["year"].astype(int)
+    long_df["value"] = pd.to_numeric(long_df["value"], errors="coerce")
+    long_df["source_sheet"] = source_sheet
+    return long_df
+```
+
+```{python}
+WEO_PATH = find_weo_workbook()
+excel_file = pd.ExcelFile(WEO_PATH)
+
+countries_raw = standardize_column_names(pd.read_excel(WEO_PATH, sheet_name="Countries"))
+country_groups_raw = standardize_column_names(pd.read_excel(WEO_PATH, sheet_name="Country Groups"))
+commodity_prices_raw = standardize_column_names(pd.read_excel(WEO_PATH, sheet_name="Commodity Prices"))
+group_composition = standardize_column_names(pd.read_excel(WEO_PATH, sheet_name="Country Group Composition"))
+
+group_composition = group_composition.rename(columns={
+    "groupcode": "group_code",
+    "groupname": "group_name",
+    "countrycode": "country_id",
+    "countryname": "country_name",
+})
+
+INDICATOR_LABELS = {
+    "NGDP_RPCH": "gdp_growth_pct",
+    "PCPIPCH": "inflation_pct",
+    "LUR": "unemployment_rate",
+    "BCA_NGDPD": "current_account_pct_gdp",
+    "GGXWDG_NGDP": "government_debt_pct_gdp",
+    "NGDPDPC": "gdp_per_capita_usd",
+    "NID_NGDP": "investment_pct_gdp",
+    "NGSD_NGDP": "savings_pct_gdp",
+    "TX_RPCH": "export_volume_growth_pct",
+    "TM_RPCH": "import_volume_growth_pct",
+}
+
+country_long = make_long_indicator_data(countries_raw, list(INDICATOR_LABELS), "Countries")
+
+country_macro = (
+    country_long.pivot_table(
+        index=["country_id", "country", "year"],
+        columns="indicator_id",
+        values="value",
+        aggfunc="first",
+    )
+    .reset_index()
+    .rename(columns=INDICATOR_LABELS)
+)
+country_macro.columns.name = None
+
+advanced_codes = set(group_composition.loc[group_composition["group_name"].eq("Advanced Economies"), "country_id"])
+emerging_codes = set(group_composition.loc[group_composition["group_name"].eq("Emerging Market and Developing Economies"), "country_id"])
+ssa_codes = set(group_composition.loc[group_composition["group_name"].eq("Sub-Saharan Africa (SSA)"), "country_id"])
+
+country_macro["economic_group"] = np.select(
+    [country_macro["country_id"].isin(advanced_codes), country_macro["country_id"].isin(emerging_codes)],
+    ["Advanced Economies", "Emerging Market and Developing Economies"],
+    default="Other",
+)
+country_macro["is_sub_saharan_africa"] = country_macro["country_id"].isin(ssa_codes)
+
+analysis_year = 2026
+latest = country_macro[country_macro["year"].eq(analysis_year)].copy()
+
+group_long = make_long_indicator_data(country_groups_raw, ["NGDP_RPCH", "PCPIPCH", "TM_RPCH", "TX_RPCH"], "Country Groups")
+commodity_long = make_long_indicator_data(commodity_prices_raw, ["POILAPSP", "PFOODW", "PNGASW", "PCOALW", "PALLFNFW"], "Commodity Prices")
+```
+
+# Overview
+
+## Key Metrics
+
+```{python}
+growth = latest["gdp_growth_pct"].dropna()
+inflation = latest["inflation_pct"].dropna()
+debt = latest["government_debt_pct_gdp"].dropna()
+
+advanced_growth = latest.loc[latest["economic_group"].eq("Advanced Economies"), "gdp_growth_pct"].dropna()
+emerging_growth = latest.loc[latest["economic_group"].eq("Emerging Market and Developing Economies"), "gdp_growth_pct"].dropna()
+
+summary_cards = pd.DataFrame([
+    {"metric": "Countries with 2026 GDP growth", "value": f"{growth.shape[0]:,.0f}"},
+    {"metric": "Average 2026 GDP growth", "value": f"{growth.mean():.2f}%"},
+    {"metric": "Average 2026 inflation", "value": f"{inflation.mean():.2f}%"},
+    {"metric": "Average government debt", "value": f"{debt.mean():.2f}% of GDP"},
+    {"metric": "Advanced economies growth", "value": f"{advanced_growth.mean():.2f}%"},
+    {"metric": "Emerging/developing growth", "value": f"{emerging_growth.mean():.2f}%"},
+])
+
+display(summary_cards)
+```
+
+## Executive Summary
+
+```{python}
+t_stat, p_value = stats.ttest_ind(advanced_growth, emerging_growth, equal_var=False)
+mean_growth = growth.mean()
+confidence_interval = stats.t.interval(
+    confidence=0.95,
+    df=len(growth) - 1,
+    loc=mean_growth,
+    scale=stats.sem(growth),
+)
+
+display(Markdown(f"""
+For **{analysis_year}**, the WEO workbook shows an average country-level real GDP growth rate of
+**{mean_growth:.2f}%**. The 95% confidence interval is approximately
+**{confidence_interval[0]:.2f}% to {confidence_interval[1]:.2f}%**.
+
+Advanced economies average **{advanced_growth.mean():.2f}%** growth, while emerging market and
+developing economies average **{emerging_growth.mean():.2f}%**. The group comparison p-value is
+**{p_value:.2e}**, which is below 0.05, so the group difference is statistically significant in
+this workbook.
+"""))
+```
+
+# Growth and Inflation
+
+## GDP Growth Trend by Group
+
+```{python}
+#| fig-width: 11
+#| fig-height: 5
+
+trend_groups = ["World", "Advanced Economies", "Emerging Market and Developing Economies", "Sub-Saharan Africa (SSA)"]
+growth_trend = group_long[
+    group_long["country"].isin(trend_groups)
+    & group_long["indicator_id"].eq("NGDP_RPCH")
+    & group_long["year"].between(2015, 2031)
+].copy()
+
+fig, ax = plt.subplots(figsize=(11, 5))
+sns.lineplot(data=growth_trend, x="year", y="value", hue="country", marker="o", ax=ax)
+ax.axhline(0, color="black", linewidth=0.8)
+ax.set_title("Real GDP Growth Trend by WEO Group")
+ax.set_xlabel("Year")
+ax.set_ylabel("GDP Growth (%)")
+plt.tight_layout()
+plt.show()
+```
+
+## Inflation vs GDP Growth
+
+```{python}
+#| fig-width: 8
+#| fig-height: 5
+
+scatter_df = latest.dropna(subset=["inflation_pct", "gdp_growth_pct", "gdp_per_capita_usd"]).copy()
+
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.scatterplot(
+    data=scatter_df,
+    x="inflation_pct",
+    y="gdp_growth_pct",
+    hue="economic_group",
+    size="gdp_per_capita_usd",
+    sizes=(30, 220),
+    alpha=0.75,
+    ax=ax,
+)
+ax.axhline(0, color="black", linewidth=0.8)
+ax.set_title(f"Inflation vs GDP Growth by Country, {analysis_year}")
+ax.set_xlabel("Inflation (%)")
+ax.set_ylabel("GDP Growth (%)")
+plt.tight_layout()
+plt.show()
+```
+
+## Inflation Distribution
+
+```{python}
+#| fig-width: 8
+#| fig-height: 4
+
+fig, ax = plt.subplots(figsize=(8, 4))
+sns.histplot(data=latest, x="inflation_pct", bins=20, ax=ax)
+ax.set_title(f"Country Inflation Distribution, {analysis_year}")
+ax.set_xlabel("Inflation (%)")
+ax.set_ylabel("Number of Countries")
+plt.tight_layout()
+plt.show()
+```
+
+# Country Comparison
+
+## Top and Bottom GDP Growth Countries
+
+```{python}
+#| fig-width: 9
+#| fig-height: 8
+
+ranked_growth = latest.dropna(subset=["gdp_growth_pct"]).sort_values("gdp_growth_pct")
+plot_ranked = pd.concat([ranked_growth.head(10), ranked_growth.tail(10)])
+
+fig, ax = plt.subplots(figsize=(9, 8))
+sns.barplot(data=plot_ranked, x="gdp_growth_pct", y="country", hue="economic_group", dodge=False, ax=ax)
+ax.axvline(0, color="black", linewidth=0.8)
+ax.set_title(f"Top and Bottom Real GDP Growth Countries, {analysis_year}")
+ax.set_xlabel("GDP Growth (%)")
+ax.set_ylabel("Country")
+plt.tight_layout()
+plt.show()
+```
+
+## GDP Growth by Economic Group
+
+```{python}
+#| fig-width: 8
+#| fig-height: 4
+
+group_plot = latest[
+    latest["economic_group"].isin(["Advanced Economies", "Emerging Market and Developing Economies"])
+].copy()
+
+fig, ax = plt.subplots(figsize=(8, 4))
+sns.boxplot(data=group_plot, x="economic_group", y="gdp_growth_pct", ax=ax)
+ax.set_title(f"GDP Growth Spread by Economic Group, {analysis_year}")
+ax.set_xlabel("Economic Group")
+ax.set_ylabel("GDP Growth (%)")
+ax.tick_params(axis="x", rotation=10)
+plt.tight_layout()
+plt.show()
+```
+
+## Correlation Heatmap
+
+```{python}
+#| fig-width: 9
+#| fig-height: 6
+
+heatmap_columns = [
+    "gdp_growth_pct",
+    "inflation_pct",
+    "unemployment_rate",
+    "government_debt_pct_gdp",
+    "current_account_pct_gdp",
+    "investment_pct_gdp",
+    "savings_pct_gdp",
+    "gdp_per_capita_usd",
+]
+
+corr = latest[heatmap_columns].corr()
+
+fig, ax = plt.subplots(figsize=(9, 6))
+sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", linewidths=0.5, ax=ax)
+ax.set_title(f"WEO Indicator Correlation Heatmap, {analysis_year}")
+plt.tight_layout()
+plt.show()
+```
+
+# Commodity Watch
+
+## Selected Commodity Price Trends
+
+```{python}
+#| fig-width: 11
+#| fig-height: 5
+
+commodity_names = {
+    "POILAPSP": "Oil price",
+    "PFOODW": "Food index",
+    "PNGASW": "Natural gas index",
+    "PCOALW": "Coal index",
+    "PALLFNFW": "All commodities index",
+}
+
+commodity_plot = commodity_long[commodity_long["year"].between(2015, 2031)].copy()
+commodity_plot["indicator_name"] = commodity_plot["indicator_id"].map(commodity_names)
+
+fig, ax = plt.subplots(figsize=(11, 5))
+sns.lineplot(data=commodity_plot, x="year", y="value", hue="indicator_name", marker="o", ax=ax)
+ax.set_title("Selected Commodity Price Trends")
+ax.set_xlabel("Year")
+ax.set_ylabel("Value / Index")
+plt.tight_layout()
+plt.show()
+```
+
+# Predictive Model
+
+## Model Setup
+
+```{python}
+model_df = country_macro.sort_values(["country_id", "year"]).copy()
+model_df["next_year_gdp_growth_pct"] = model_df.groupby("country_id")["gdp_growth_pct"].shift(-1)
+
+feature_columns = [
+    "gdp_growth_pct",
+    "inflation_pct",
+    "unemployment_rate",
+    "government_debt_pct_gdp",
+    "current_account_pct_gdp",
+    "investment_pct_gdp",
+    "savings_pct_gdp",
+    "export_volume_growth_pct",
+    "import_volume_growth_pct",
+    "gdp_per_capita_usd",
+]
+target_column = "next_year_gdp_growth_pct"
+
+ml_df = model_df[model_df["year"].between(2010, 2030)].dropna(subset=[target_column]).copy()
+train_df = ml_df[ml_df["year"] <= 2023].copy()
+test_df = ml_df[ml_df["year"] >= 2024].copy()
+
+X_train = train_df[feature_columns]
+y_train = train_df[target_column]
+X_test = test_df[feature_columns]
+y_test = test_df[target_column]
+
+display(pd.DataFrame([
+    {"item": "Training rows", "value": len(X_train)},
+    {"item": "Testing rows", "value": len(X_test)},
+    {"item": "Countries", "value": ml_df["country"].nunique()},
+]))
+```
+
+## Model Metrics
+
+```{python}
+linear_model = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="median")),
+    ("scaler", StandardScaler()),
+    ("model", LinearRegression()),
+])
+
+linear_model.fit(X_train, y_train)
+predictions = linear_model.predict(X_test)
+
+mae = mean_absolute_error(y_test, predictions)
+rmse = np.sqrt(mean_squared_error(y_test, predictions))
+r2 = r2_score(y_test, predictions)
+
+model_metrics = pd.DataFrame([
+    {"metric": "MAE", "value": round(mae, 3), "meaning": "Average absolute error in GDP-growth percentage points"},
+    {"metric": "RMSE", "value": round(rmse, 3), "meaning": "Error measure that penalizes large mistakes more strongly"},
+    {"metric": "R2", "value": round(r2, 3), "meaning": "Share of variance explained; 1 is best, 0 is average-baseline level"},
+])
+
+display(model_metrics)
+```
+
+## Actual vs Predicted Growth
+
+```{python}
+#| fig-width: 6
+#| fig-height: 6
+
+prediction_review = test_df[["country", "year", "economic_group", target_column]].copy()
+prediction_review["prediction"] = predictions
+
+fig, ax = plt.subplots(figsize=(6, 6))
+sns.scatterplot(data=prediction_review, x=target_column, y="prediction", hue="economic_group", alpha=0.75, ax=ax)
+
+min_value = min(prediction_review[target_column].min(), prediction_review["prediction"].min())
+max_value = max(prediction_review[target_column].max(), prediction_review["prediction"].max())
+ax.plot([min_value, max_value], [min_value, max_value], color="black", linewidth=1)
+
+ax.set_title("Actual vs Predicted Next-Year GDP Growth")
+ax.set_xlabel("Actual next-year growth (%)")
+ax.set_ylabel("Predicted next-year growth (%)")
+plt.tight_layout()
+plt.show()
+```
+
+# Report Summary
+
+## Key Findings
+
+```{python}
+display(Markdown(f"""
+### Summary
+
+- The average country-level GDP growth projection for **{analysis_year}** is **{mean_growth:.2f}%**.
+- The 95% confidence interval for average GDP growth is **{confidence_interval[0]:.2f}% to {confidence_interval[1]:.2f}%**.
+- Emerging market and developing economies have a higher average growth rate than advanced economies in this workbook.
+- The p-value for the group comparison is **{p_value:.2e}**, which is below 0.05.
+- The simple linear model has MAE of **{mae:.2f}** percentage points and RMSE of **{rmse:.2f}** percentage points.
+
+### Interpretation
+
+This dashboard is suitable for a teaching report. It shows how to move from Excel workbook data to cleaned DataFrames,
+descriptive statistics, visual EDA, commodity monitoring, and a simple predictive model.
+
+The model should not be presented as a production forecast. Its purpose is to demonstrate an end-to-end analytical workflow.
+"""))
+```

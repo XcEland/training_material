@@ -26,6 +26,8 @@ The primary notebooks are:
 08_weo_scipy_statistics.ipynb
 09_weo_visualization_eda.ipynb
 10_weo_ml_prediction.ipynb
+11_weo_beginner_seaborn_visualization.ipynb
+12_weo_quarto_dashboard_report.qmd
 01_statistics_scipy.ipynb
 02_visualization_matplotlib_seaborn.ipynb
 03_machine_learning_sklearn.ipynb
@@ -34,7 +36,7 @@ The primary notebooks are:
 
 The beginner notebooks introduce SciPy, charting, and Scikit-learn with a small CSV dataset and heavily commented code before learners move into the existing integrated Module 5 notebooks.
 
-The WEO notebooks use the Module 4 Excel workbook to teach macroeconomic data preparation from multiple sheets, SciPy statistics, Matplotlib/Seaborn EDA, commodity trend charts, and a simple next-year GDP growth prediction model.
+The WEO notebooks and Quarto report use the Module 4 Excel workbook to teach macroeconomic data preparation from multiple sheets, SciPy statistics, Matplotlib/Seaborn EDA, dedicated beginner Seaborn charting, commodity trend charts, a simple next-year GDP growth prediction model, and a rendered dashboard/report workflow.
 
 Beginner dataset:
 

@@ -31,8 +31,10 @@ The integrated notebooks `01`, `02`, `03`, and `04` try to extract data from SQL
 5. Run `08_weo_scipy_statistics.ipynb` for WEO Excel loading, sheet preparation, SciPy statistics, correlations, outliers, and group hypothesis testing.
 6. Run `09_weo_visualization_eda.ipynb` for WEO EDA charts across GDP growth, inflation, economic groups, and commodity prices.
 7. Run `10_weo_ml_prediction.ipynb` for a next-year GDP growth prediction model using WEO macroeconomic indicators.
-8. Continue to the existing SciPy, visualization, machine learning, and time-series notebooks for the integrated Module 5 workflow.
-9. Create a report summary and evaluate the Phase 1 pipeline benchmarks.
+8. Run `11_weo_beginner_seaborn_visualization.ipynb` for a dedicated beginner Seaborn charting lab using the WEO dataset.
+9. Render `12_weo_quarto_dashboard_report.qmd` for a WEO dashboard/report using Quarto and Python chunks.
+10. Continue to the existing SciPy, visualization, machine learning, and time-series notebooks for the integrated Module 5 workflow.
+11. Create a report summary and evaluate the Phase 1 pipeline benchmarks.
 
 New beginner notebooks are added without deleting the existing labs. The existing notebooks remain the integrated reporting workflow.
 
@@ -53,6 +55,8 @@ Module 5/labs/statistical-analysis-data-visualization-python/
 ├── 08_weo_scipy_statistics.ipynb
 ├── 09_weo_visualization_eda.ipynb
 ├── 10_weo_ml_prediction.ipynb
+├── 11_weo_beginner_seaborn_visualization.ipynb
+├── 12_weo_quarto_dashboard_report.qmd
 ├── 01_statistics_scipy.ipynb
 ├── 02_visualization_matplotlib_seaborn.ipynb
 ├── 03_machine_learning_sklearn.ipynb
@@ -71,6 +75,8 @@ Module 5/labs/statistical-analysis-data-visualization-python/
 | `08_weo_scipy_statistics.ipynb` | WEO Excel workbook loading, multi-sheet DataFrame preparation, SciPy statistics, confidence intervals, correlations, outliers, and t-tests | Apply statistics to real macroeconomic workbook data |
 | `09_weo_visualization_eda.ipynb` | WEO EDA charts for GDP growth, inflation, country groups, and commodity prices | Build scenario-based visual analysis from multiple workbook sheets |
 | `10_weo_ml_prediction.ipynb` | Predict next-year GDP growth from WEO macro indicators using linear regression and random forest models | Practice a realistic predictive modeling workflow from Excel data |
+| `11_weo_beginner_seaborn_visualization.ipynb` | Dedicated Seaborn charting lab: scatter, line, histogram, KDE, bar, count, box, violin, strip, regression, heatmap, pair plot, and cat plot | Learn how to choose and read common Seaborn visualizations |
+| `12_weo_quarto_dashboard_report.qmd` | Quarto dashboard/report with WEO summary cards, trend charts, EDA visuals, commodity trends, model metrics, and narrative findings | Render a professional analytical dashboard/report from Python code chunks |
 | `01_statistics_scipy.ipynb` | SciPy descriptive statistics, correlation, and hypothesis testing | Apply statistical functions to financial datasets |
 | `02_visualization_matplotlib_seaborn.ipynb` | Matplotlib and Seaborn charts with interpretation checks | Evaluate whether charts represent distributions and trends accurately |
 | `03_machine_learning_sklearn.ipynb` | Scikit-learn classification, confusion matrix, accuracy, precision, and recall | Assess predictive reliability of business-data patterns |
@@ -165,6 +171,27 @@ load_indicator_data()
 
 No SQL Server connection is required for the beginner statistical, visualization, or machine-learning learning activities.
 
+## Quarto Dashboard Report
+
+Install Quarto from <https://quarto.org/> and make sure your Python environment has the required packages:
+
+```bash
+pip install pandas numpy matplotlib seaborn scipy scikit-learn openpyxl joblib
+```
+
+Render the WEO dashboard/report from the lab folder:
+
+```bash
+cd "$HOME/Desktop/Trainingcred Institute/Module 5/labs/statistical-analysis-data-visualization-python"
+quarto render 12_weo_quarto_dashboard_report.qmd
+```
+
+Expected rendered file:
+
+```text
+12_weo_quarto_dashboard_report.html
+```
+
 ## Expected Outputs
 
 The notebooks generate outputs such as:
@@ -191,6 +218,11 @@ outputs/beginner_liquidity_time_model.joblib
 outputs/beginner_ml_model_metrics.csv
 outputs/weo_scipy_2026_summary.csv
 outputs/weo_scipy_growth_outliers.csv
+outputs/weo_scipy_growth_distribution.png
+outputs/weo_scipy_growth_confidence_interval.png
+outputs/weo_scipy_inflation_growth_scatter.png
+outputs/weo_scipy_growth_outlier_zscores.png
+outputs/weo_scipy_group_growth_boxplot.png
 outputs/weo_group_gdp_growth_trend.png
 outputs/weo_top_bottom_growth_bar.png
 outputs/weo_inflation_vs_growth_scatter.png
@@ -206,6 +238,20 @@ outputs/weo_next_year_gdp_growth_model.joblib
 outputs/weo_ml_model_metrics.csv
 outputs/weo_ml_prediction_review.csv
 outputs/weo_ml_feature_importance.csv
+outputs/weo_seaborn_scatterplot.png
+outputs/weo_seaborn_lineplot.png
+outputs/weo_seaborn_histplot.png
+outputs/weo_seaborn_kdeplot.png
+outputs/weo_seaborn_barplot.png
+outputs/weo_seaborn_countplot.png
+outputs/weo_seaborn_boxplot.png
+outputs/weo_seaborn_violinplot.png
+outputs/weo_seaborn_stripplot.png
+outputs/weo_seaborn_regplot.png
+outputs/weo_seaborn_heatmap.png
+outputs/weo_seaborn_pairplot.png
+outputs/weo_seaborn_catplot.png
+12_weo_quarto_dashboard_report.html
 outputs/liquidity_trend.png
 outputs/npl_distribution_by_type.png
 outputs/correlation_heatmap.png
