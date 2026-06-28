@@ -13,6 +13,7 @@ It uses SQL Server metrics when available and fallback values when not.
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -20,7 +21,8 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from sqlalchemy import text
 
-from db_utils import get_sqlalchemy_engine
+from db_utils import get_sqlalchemy_engine, load_environment
+from monitoring_data_sources import workflow_totals
 
 
 LAB_DIR = Path(__file__).resolve().parent
@@ -72,6 +74,12 @@ def fallback_database_metrics(thresholds: dict[str, Any]) -> list[dict[str, Any]
 
 def collect_database_metrics(thresholds: dict[str, Any], env_file: str = ".env") -> list[dict[str, Any]]:
     """Collect database metrics from SQL Server or return fallback samples."""
+    load_environment(env_file)
+    trusted = os.getenv("DB_TRUSTED", "no").lower() in ("yes", "true", "1")
+    if not trusted and not os.getenv("DB_PASSWORD"):
+        print("Using fallback database metrics: DB_PASSWORD is not configured.")
+        return fallback_database_metrics(thresholds)
+
     try:
         engine = get_sqlalchemy_engine(env_file)
         with engine.connect() as conn:
@@ -160,11 +168,43 @@ def collect_python_metrics(thresholds: dict[str, Any]) -> list[dict[str, Any]]:
     ]
 
 
+def collect_workflow_metrics(thresholds: dict[str, Any]) -> list[dict[str, Any]]:
+    """Summarise Module 6/7 workflow observations for the dashboard."""
+    totals = workflow_totals()
+    py_thresholds = thresholds["python_workflow"]
+
+    return [
+        {
+            "metric_name": "Observed Workflows",
+            "metric_value": totals["workflow_count"],
+            "alert_level": "Normal",
+            "data_source": "Module 6 and Module 7 output summaries",
+        },
+        {
+            "metric_name": "Records Processed",
+            "metric_value": totals["total_records_processed"],
+            "alert_level": "Normal",
+            "data_source": "Workflow output artifacts",
+        },
+        {
+            "metric_name": "Quality Issue Count",
+            "metric_value": totals["total_quality_issues"],
+            "alert_level": alert_level(
+                float(totals["total_quality_issues"]),
+                py_thresholds["error_count_warning"],
+                py_thresholds["error_count_critical"],
+            ),
+            "data_source": "Module 7 quality gate alert",
+        },
+    ]
+
+
 def build_capacity_projection(thresholds: dict[str, Any]) -> list[dict[str, Any]]:
     capacity = thresholds["capacity"]
     projection = []
-    rows = 500_000.0
-    storage_mb = 750.0
+    totals = workflow_totals()
+    rows = float(max(totals["total_records_processed"], 1))
+    storage_mb = max(rows * 0.0025, 0.01)
     for month_number in range(1, capacity["planning_months"] + 1):
         rows *= 1 + capacity["monthly_growth_rate"]
         storage_mb *= 1 + capacity["monthly_growth_rate"]
@@ -206,13 +246,17 @@ def render_dashboard(env_file: str = ".env") -> dict[str, Any]:
     thresholds = load_thresholds()
     database_metrics = collect_database_metrics(thresholds, env_file)
     python_metrics = collect_python_metrics(thresholds)
+    workflow_metrics = collect_workflow_metrics(thresholds)
+    workflow_observations = workflow_totals()["observations"]
     capacity_projection = build_capacity_projection(thresholds)
-    review = observability_results(database_metrics, python_metrics)
+    review = observability_results(database_metrics, python_metrics + workflow_metrics)
 
     context = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "database_metrics": database_metrics,
         "python_metrics": python_metrics,
+        "workflow_metrics": workflow_metrics,
+        "workflow_observations": workflow_observations,
         "capacity_projection": capacity_projection,
         "observability_results": review,
     }

@@ -1,0 +1,164 @@
+{
+  "generated_at": "2026-06-27T23:04:19+00:00",
+  "database_metrics": [
+    {
+      "metric_name": "Active Sessions",
+      "metric_value": 8,
+      "alert_level": "Normal",
+      "data_source": "Fallback DMV sample"
+    },
+    {
+      "metric_name": "Average Query Duration Ms",
+      "metric_value": 420,
+      "alert_level": "Normal",
+      "data_source": "Fallback Query Store sample"
+    },
+    {
+      "metric_name": "Database Size MB",
+      "metric_value": 750,
+      "alert_level": "Normal",
+      "data_source": "Fallback sys.master_files sample"
+    }
+  ],
+  "python_metrics": [
+    {
+      "metric_name": "Workflow Duration Seconds",
+      "metric_value": 0.0072,
+      "alert_level": "Normal",
+      "data_source": "cProfile summary"
+    },
+    {
+      "metric_name": "Peak Memory MB",
+      "metric_value": 0.7327,
+      "alert_level": "Normal",
+      "data_source": "tracemalloc summary"
+    },
+    {
+      "metric_name": "Python Error Count",
+      "metric_value": 0,
+      "alert_level": "Normal",
+      "data_source": "workflow log file"
+    }
+  ],
+  "workflow_metrics": [
+    {
+      "metric_name": "Observed Workflows",
+      "metric_value": 2,
+      "alert_level": "Normal",
+      "data_source": "Module 6 and Module 7 output summaries"
+    },
+    {
+      "metric_name": "Records Processed",
+      "metric_value": 415,
+      "alert_level": "Normal",
+      "data_source": "Workflow output artifacts"
+    },
+    {
+      "metric_name": "Quality Issue Count",
+      "metric_value": 0,
+      "alert_level": "Normal",
+      "data_source": "Module 7 quality gate alert"
+    }
+  ],
+  "workflow_observations": [
+    {
+      "workflow_name": "Module 6 WEO monthly reporting",
+      "source": "monthly_report_run_log.jsonl and weo_monthly_metrics_2026-06.json",
+      "status": "Succeeded",
+      "duration_seconds": 21.96,
+      "records_processed": 382,
+      "outputs_created": 3,
+      "quality_issue_count": 0,
+      "notification_status": "DryRunPreviewCreated"
+    },
+    {
+      "workflow_name": "Module 7 IMF/BIS external data integration",
+      "source": "external_integration_run_summary.json and external_data_quality_alert.json",
+      "status": "Succeeded",
+      "duration_seconds": 0.05,
+      "records_processed": 33,
+      "outputs_created": 3,
+      "quality_issue_count": 0,
+      "notification_status": "NoAlertRequired"
+    }
+  ],
+  "capacity_projection": [
+    {
+      "month_number": 1,
+      "projected_rows": 448,
+      "projected_storage_mb": 1.12
+    },
+    {
+      "month_number": 2,
+      "projected_rows": 484,
+      "projected_storage_mb": 1.21
+    },
+    {
+      "month_number": 3,
+      "projected_rows": 523,
+      "projected_storage_mb": 1.31
+    },
+    {
+      "month_number": 4,
+      "projected_rows": 565,
+      "projected_storage_mb": 1.41
+    },
+    {
+      "month_number": 5,
+      "projected_rows": 610,
+      "projected_storage_mb": 1.52
+    },
+    {
+      "month_number": 6,
+      "projected_rows": 659,
+      "projected_storage_mb": 1.65
+    },
+    {
+      "month_number": 7,
+      "projected_rows": 711,
+      "projected_storage_mb": 1.78
+    },
+    {
+      "month_number": 8,
+      "projected_rows": 768,
+      "projected_storage_mb": 1.92
+    },
+    {
+      "month_number": 9,
+      "projected_rows": 830,
+      "projected_storage_mb": 2.07
+    },
+    {
+      "month_number": 10,
+      "projected_rows": 896,
+      "projected_storage_mb": 2.24
+    },
+    {
+      "month_number": 11,
+      "projected_rows": 968,
+      "projected_storage_mb": 2.42
+    },
+    {
+      "month_number": 12,
+      "projected_rows": 1045,
+      "projected_storage_mb": 2.61
+    }
+  ],
+  "observability_results": [
+    {
+      "standard": "Dashboard includes database metrics",
+      "passed": true,
+      "evidence": "3 database metrics rendered."
+    },
+    {
+      "standard": "Dashboard includes Python workflow metrics",
+      "passed": true,
+      "evidence": "6 Python metrics rendered."
+    },
+    {
+      "standard": "Alert levels are assigned",
+      "passed": true,
+      "evidence": "0 warnings, 0 critical alerts."
+    }
+  ]
+}

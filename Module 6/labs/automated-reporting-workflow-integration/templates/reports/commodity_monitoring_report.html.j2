@@ -1,0 +1,60 @@
+{% extends "reports/base_report.html.j2" %}
+
+{% block content %}
+<section class="chart-grid">
+  <div class="chart-box">
+    <h3>Commodity Price Index Trends</h3>
+    <canvas id="commodityTrendChart"></canvas>
+  </div>
+</section>
+
+<section>
+  <h2>Latest Commodity Movements</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Indicator</th>
+        <th>{{ prior_year }} Index</th>
+        <th>{{ analysis_year }} Index</th>
+        <th>Change, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in commodity_rows %}
+      <tr>
+        <td>{{ row.display_name }}</td>
+        <td>{{ "%.1f"|format(row.prior_value) if row.prior_value is not none else "n/a" }}</td>
+        <td>{{ "%.1f"|format(row.current_value) if row.current_value is not none else "n/a" }}</td>
+        <td>{{ "%.1f"|format(row.change_pct) if row.change_pct is not none else "n/a" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const commodityLineData = {{ commodity_line_chart | tojson }};
+
+new Chart(document.getElementById("commodityTrendChart"), {
+  type: "line",
+  data: {
+    labels: commodityLineData.labels,
+    datasets: commodityLineData.datasets.map((item) => ({
+      label: item.label,
+      data: item.data,
+      borderWidth: 2,
+      tension: 0.2,
+      pointRadius: 3
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { tooltip: { mode: "index", intersect: false } },
+    scales: { y: { title: { display: true, text: "Index value" } } }
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+[
+  {
+    "SourceName":"Authorised Training HTML",
+    "ExternalSourceName":"IMF DataMapper API",
+    "SourceType":"REST JSON API",
+    "OwnerName":"International Monetary Fund",
+    "BaseUrl":"https:\/\/www.imf.org\/external\/datamapper\/api",
+    "PermissionStatus":"Approved for training",
+    "QualityStatus":"Accepted"
+  },
+  {
+    "SourceName":"Authorised Training HTML",
+    "ExternalSourceName":"BIS SDMX API",
+    "SourceType":"REST SDMX XML API",
+    "OwnerName":"Bank for International Settlements",
+    "BaseUrl":"https:\/\/stats.bis.org\/api\/v1",
+    "PermissionStatus":"Approved for training",
+    "QualityStatus":"Accepted"
+  },
+  {
+    "SourceName":"Authorised Training HTML",
+    "ExternalSourceName":"BIS CBPOL Bulk Files",
+    "SourceType":"Bulk CSV and SDMX XML files",
+    "OwnerName":"Bank for International Settlements",
+    "BaseUrl":"https:\/\/data.bis.org\/static\/bulk\/",
+    "PermissionStatus":"Approved for training",
+    "QualityStatus":"Accepted"
+  }
+]

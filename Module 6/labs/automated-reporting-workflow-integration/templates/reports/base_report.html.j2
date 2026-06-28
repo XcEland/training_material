@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ report_title }} - {{ analysis_year }}</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #526071;
+      --line: #cbd5e1;
+      --panel: #f8fafc;
+      --accent: #0f766e;
+      --accent-soft: #dff3ef;
+    }
+    body {
+      margin: 32px;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+      background: #ffffff;
+    }
+    header {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 16px;
+      margin-bottom: 22px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--accent);
+      margin-top: 28px;
+      font-size: 20px;
+    }
+    h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      display: grid;
+      gap: 3px;
+    }
+    .summary {
+      background: var(--panel);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      margin: 18px 0;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      background: #fff;
+    }
+    .card strong {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .card span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      margin: 14px 0;
+    }
+    .chart-box {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      height: 360px;
+    }
+    .chart-box canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+    }
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer {
+      margin-top: 34px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media print {
+      body { margin: 18mm; }
+      .chart-box { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{ report_title }}</h1>
+    <div class="meta">
+      <div>{{ central_bank_name }}</div>
+      <div>Audience: {{ audience }}</div>
+      <div>Reporting cycle: {{ report_month }} | Analysis year: {{ analysis_year }}</div>
+      <div>Data source: {{ data_source }}</div>
+      <div>WEO publication date: {{ metadata.publication_date }}</div>
+    </div>
+  </header>
+
+  <section class="summary">
+    <h2>Executive Summary</h2>
+    <ul>
+      {% for point in summary_points %}
+      <li>{{ point }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  {% block content %}{% endblock %}
+
+  <footer>
+    Training simulation output. Review before external distribution. Source workbook: {{ metadata.source_workbook }}
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

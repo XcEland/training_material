@@ -28,6 +28,7 @@ class Finding:
     file_path: str
     line_number: int
     rule_name: str
+    severity: str
     message: str
     evidence: str
 
@@ -71,6 +72,7 @@ def scan_file(file_path: Path, rules: dict) -> list[Finding]:
                         file_path=str(file_path),
                         line_number=line_number,
                         rule_name=rule["name"],
+                        severity=rule.get("severity", "Review"),
                         message=rule["message"],
                         evidence=line.strip()[:180],
                     )
@@ -88,12 +90,39 @@ def scan_path(root: Path, rules: dict) -> list[Finding]:
     return findings
 
 
+def summarize_findings(findings: list[Finding]) -> dict:
+    """Create summary counts for assessment reporting."""
+    by_severity: dict[str, int] = {}
+    by_rule: dict[str, int] = {}
+
+    for finding in findings:
+        by_severity[finding.severity] = by_severity.get(finding.severity, 0) + 1
+        by_rule[finding.rule_name] = by_rule.get(finding.rule_name, 0) + 1
+
+    return {
+        "finding_count": len(findings),
+        "by_severity": by_severity,
+        "by_rule": by_rule,
+        "release_recommendation": (
+            "Do not release until High findings are reviewed or remediated."
+            if by_severity.get("High", 0)
+            else "No High findings detected by this training scanner."
+        ),
+    }
+
+
 def write_report(findings: list[Finding], output_path: Path) -> None:
     """Write a JSON report that can be attached to review evidence."""
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
-        json.dumps([asdict(finding) for finding in findings], indent=2),
+        json.dumps(
+            {
+                "summary": summarize_findings(findings),
+                "findings": [asdict(finding) for finding in findings],
+            },
+            indent=2,
+        ),
         encoding="utf-8",
     )
 
@@ -101,11 +130,13 @@ def write_report(findings: list[Finding], output_path: Path) -> None:
 def print_summary(findings: list[Finding]) -> None:
     """Print a short terminal summary for classroom use."""
 
-    print(f"Security findings: {len(findings)}")
+    summary = summarize_findings(findings)
+    print(f"Security findings: {summary['finding_count']}")
+    print(f"By severity: {summary['by_severity']}")
     for finding in findings[:20]:
         print(
             f"- {finding.file_path}:{finding.line_number} "
-            f"[{finding.rule_name}] {finding.message}"
+            f"[{finding.severity} / {finding.rule_name}] {finding.message}"
         )
     if len(findings) > 20:
         print(f"- ... {len(findings) - 20} more findings written to the JSON report")

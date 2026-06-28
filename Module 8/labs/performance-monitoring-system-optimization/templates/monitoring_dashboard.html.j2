@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="refresh" content="60">
   <title>Module 8 Monitoring Dashboard</title>
   <style>
     body {
@@ -11,7 +12,7 @@
       line-height: 1.45;
     }
     h1, h2 {
-      color: #0f766e;
+      color: #17324d;
     }
     .grid {
       display: grid;
@@ -44,7 +45,11 @@
       text-align: left;
     }
     th {
-      background: #e2f3ef;
+      background: #e8eef7;
+    }
+    .source-note {
+      color: #475569;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -75,6 +80,45 @@
     </div>
     {% endfor %}
   </div>
+
+  <h2>Prior Module Workflow Metrics</h2>
+  <p class="source-note">These metrics come from the Module 6 WEO monthly reporting outputs and Module 7 IMF/BIS API integration outputs.</p>
+  <div class="grid">
+    {% for item in workflow_metrics %}
+    <div class="card {{ item.alert_level }}">
+      <strong>{{ item.metric_name }}</strong>
+      <div class="metric">{{ item.metric_value }}</div>
+      <div>Source: {{ item.data_source }}</div>
+      <div>Alert: {{ item.alert_level }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2>Workflow Run Details</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Workflow</th>
+        <th>Status</th>
+        <th>Duration Seconds</th>
+        <th>Records Processed</th>
+        <th>Quality Issues</th>
+        <th>Notification Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in workflow_observations %}
+      <tr>
+        <td>{{ row.workflow_name }}</td>
+        <td>{{ row.status }}</td>
+        <td>{{ row.duration_seconds }}</td>
+        <td>{{ row.records_processed }}</td>
+        <td>{{ row.quality_issue_count }}</td>
+        <td>{{ row.notification_status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
   <h2>Capacity Projection</h2>
   <table>

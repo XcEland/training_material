@@ -8,6 +8,8 @@ Use this checklist after generating `outputs/monitoring_dashboard.html`.
 | --- | --- | --- |
 | Includes database performance metrics | Active sessions, query duration, database size panels |  |
 | Includes Python workflow metrics | duration, peak memory, error count panels |  |
+| Includes prior module workflow metrics | Module 6 reporting and Module 7 API integration run details |  |
+| Includes quality gate status | Module 7 quality issue count and alert status |  |
 | Includes capacity planning output | 12-month projection table |  |
 | Includes alert levels | Normal / Warning / Critical labels |  |
 | Uses documented thresholds | `config/monitoring_thresholds.json` |  |

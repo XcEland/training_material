@@ -10,6 +10,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from monitoring_data_sources import MODULE6_OUTPUTS, MODULE7_OUTPUTS, workflow_totals
+
 
 LAB_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = LAB_DIR / "outputs"
@@ -42,23 +44,46 @@ def build_projection(
     return projection
 
 
+def folder_size_mb(path: Path) -> float:
+    """Measure current output storage for simple capacity planning."""
+    if not path.exists():
+        return 0.0
+    total_bytes = sum(file.stat().st_size for file in path.rglob("*") if file.is_file())
+    return round(total_bytes / 1024 / 1024, 4)
+
+
+def build_baseline_from_prior_modules() -> dict[str, float | int | str]:
+    """
+    Build a baseline from actual Module 6/7 artifacts.
+
+    A baseline is the starting measurement used for future comparison.
+    """
+    totals = workflow_totals()
+    output_storage_mb = folder_size_mb(MODULE6_OUTPUTS) + folder_size_mb(MODULE7_OUTPUTS)
+
+    return {
+        "source": "Module 6 WEO reporting outputs and Module 7 IMF/BIS integration outputs",
+        "workflow_count": totals["workflow_count"],
+        "current_rows": max(int(totals["total_records_processed"]), 1),
+        "current_storage_mb": round(max(output_storage_mb, 0.01), 4),
+        "avg_workflow_duration_seconds": round(
+            totals["total_duration_seconds"] / max(totals["workflow_count"], 1),
+            4,
+        ),
+        "quality_issue_count": totals["total_quality_issues"],
+    }
+
+
 def main() -> None:
     OUTPUT_DIR.mkdir(exist_ok=True)
     thresholds = load_thresholds()
 
-    # Fallback baseline values for classroom practice.
-    baseline = {
-        "current_rows": 500_000,
-        "current_storage_mb": 750.0,
-        "avg_query_duration_ms": 420.0,
-        "python_workflow_duration_seconds": 3.2,
-        "python_peak_memory_mb": 82.0,
-    }
+    baseline = build_baseline_from_prior_modules()
 
     capacity_config = thresholds["capacity"]
     projection = build_projection(
-        current_rows=baseline["current_rows"],
-        current_storage_mb=baseline["current_storage_mb"],
+        current_rows=int(baseline["current_rows"]),
+        current_storage_mb=float(baseline["current_storage_mb"]),
         monthly_growth_rate=capacity_config["monthly_growth_rate"],
         planning_months=capacity_config["planning_months"],
     )

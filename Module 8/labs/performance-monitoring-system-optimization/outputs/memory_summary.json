@@ -1,0 +1,12 @@
+[
+  {
+    "function": "inefficient_total",
+    "current_memory_mb": 0.0023,
+    "peak_memory_mb": 0.7327
+  },
+  {
+    "function": "optimized_total",
+    "current_memory_mb": 0.0,
+    "peak_memory_mb": 0.0003
+  }
+]

@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Global Macro Outlook Executive Brief - 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #526071;
+      --line: #cbd5e1;
+      --panel: #f8fafc;
+      --accent: #0f766e;
+      --accent-soft: #dff3ef;
+    }
+    body {
+      margin: 32px;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+      background: #ffffff;
+    }
+    header {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 16px;
+      margin-bottom: 22px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--accent);
+      margin-top: 28px;
+      font-size: 20px;
+    }
+    h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      display: grid;
+      gap: 3px;
+    }
+    .summary {
+      background: var(--panel);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      margin: 18px 0;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      background: #fff;
+    }
+    .card strong {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .card span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      margin: 14px 0;
+    }
+    .chart-box {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      height: 360px;
+    }
+    .chart-box canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+    }
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer {
+      margin-top: 34px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media print {
+      body { margin: 18mm; }
+      .chart-box { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Global Macro Outlook Executive Brief</h1>
+    <div class="meta">
+      <div>Central Bank Training Simulation</div>
+      <div>Audience: Executive Committee and Monetary Policy</div>
+      <div>Reporting cycle: 2026-06 | Analysis year: 2026</div>
+      <div>Data source: Excel fallback</div>
+      <div>WEO publication date: 2026-04-14T13:00:00Z</div>
+    </div>
+  </header>
+
+  <section class="summary">
+    <h2>Executive Summary</h2>
+    <ul>
+      
+      <li>World GDP growth is projected at 3.1% in 2026.</li>
+      
+      <li>Sub-Saharan Africa growth is projected at 4.3%.</li>
+      
+      <li>Emerging market and developing economies growth is projected at 3.9%.</li>
+      
+    </ul>
+  </section>
+
+  
+<section>
+  <h2>Group Outlook</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Economic Group</th>
+        <th>GDP Growth, %</th>
+        <th>Inflation, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>Advanced Economies</td>
+        <td>1.8</td>
+        <td>2.8</td>
+      </tr>
+      
+      <tr>
+        <td>Emerging Market and Developing Economies</td>
+        <td>3.9</td>
+        <td>5.5</td>
+      </tr>
+      
+      <tr>
+        <td>Sub-Saharan Africa (SSA)</td>
+        <td>4.3</td>
+        <td>8.8</td>
+      </tr>
+      
+      <tr>
+        <td>World</td>
+        <td>3.1</td>
+        <td>4.4</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+<section class="chart-grid">
+  <div class="chart-box">
+    <h3>GDP Growth Trend by WEO Group</h3>
+    <canvas id="growthTrendChart"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Top and Bottom Country Growth Rates</h3>
+    <canvas id="topBottomGrowthChart"></canvas>
+  </div>
+</section>
+
+<section>
+  <h2>Fastest Growing Economies</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Group</th>
+        <th>GDP Growth, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>Guyana</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>16.2</td>
+      </tr>
+      
+      <tr>
+        <td>Ethiopia, The Federal Democratic Republic of</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>9.2</td>
+      </tr>
+      
+      <tr>
+        <td>Guinea</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>8.7</td>
+      </tr>
+      
+      <tr>
+        <td>Uganda</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>7.5</td>
+      </tr>
+      
+      <tr>
+        <td>Bhutan</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>7.5</td>
+      </tr>
+      
+      <tr>
+        <td>Rwanda</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>7.2</td>
+      </tr>
+      
+      <tr>
+        <td>Vietnam</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>7.1</td>
+      </tr>
+      
+      <tr>
+        <td>Benin</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>7.0</td>
+      </tr>
+      
+      <tr>
+        <td>Niger</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>6.7</td>
+      </tr>
+      
+      <tr>
+        <td>Libya</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>6.7</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Weakest Growth Readings</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Group</th>
+        <th>GDP Growth, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>Qatar</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-8.6</td>
+      </tr>
+      
+      <tr>
+        <td>Iraq</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-6.8</td>
+      </tr>
+      
+      <tr>
+        <td>Iran, Islamic Republic of</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-6.1</td>
+      </tr>
+      
+      <tr>
+        <td>Bolivia</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-3.3</td>
+      </tr>
+      
+      <tr>
+        <td>Equatorial Guinea, Republic of</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-2.7</td>
+      </tr>
+      
+      <tr>
+        <td>Haiti</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-1.7</td>
+      </tr>
+      
+      <tr>
+        <td>Jamaica</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-1.2</td>
+      </tr>
+      
+      <tr>
+        <td>Kuwait</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-0.6</td>
+      </tr>
+      
+      <tr>
+        <td>Bahrain, Kingdom of</td>
+        <td>Emerging Market and Developing Economies</td>
+        <td>-0.5</td>
+      </tr>
+      
+      <tr>
+        <td>Liechtenstein, Principality of</td>
+        <td>Advanced Economies</td>
+        <td>-0.4</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+
+  <footer>
+    Training simulation output. Review before external distribution. Source workbook: /home/xceland/Desktop/Trainingcred Institute/Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx
+  </footer>
+
+  
+<script>
+const growthLineData = {"datasets": [{"data": [6.65, 3.77, 3.33, 3.42, 3.44, 3.06, 3.22, 3.24, 3.16, 3.07, 3.07], "label": "World"}, {"data": [6.12, 3.06, 1.7, 1.84, 1.94, 1.78, 1.7, 1.75, 1.61, 1.54, 1.51], "label": "Advanced Economies"}, {"data": [7.04, 4.28, 4.44, 4.47, 4.42, 3.87, 4.17, 4.15, 4.08, 3.97, 3.96], "label": "Emerging Market and Developing Economies"}, {"data": [3.93, 4.44, 3.76, 4.17, 4.49, 4.32, 4.45, 4.54, 4.67, 4.72, 4.7], "label": "Sub-Saharan Africa (SSA)"}], "labels": [2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031]};
+const topBottomData = {"labels": ["Guyana", "Ethiopia, The Federal Democratic Republic of", "Guinea", "Uganda", "Bhutan", "Rwanda", "Vietnam", "Benin", "Niger", "Libya", "Qatar", "Iraq", "Iran, Islamic Republic of", "Bolivia", "Equatorial Guinea, Republic of", "Haiti", "Jamaica", "Kuwait", "Bahrain, Kingdom of", "Liechtenstein, Principality of"], "values": [16.17, 9.2, 8.68, 7.51, 7.48, 7.23, 7.1, 6.97, 6.73, 6.72, -8.65, -6.77, -6.07, -3.29, -2.69, -1.7, -1.15, -0.56, -0.5, -0.4]};
+
+new Chart(document.getElementById("growthTrendChart"), {
+  type: "line",
+  data: {
+    labels: growthLineData.labels,
+    datasets: growthLineData.datasets.map((item) => ({
+      label: item.label,
+      data: item.data,
+      borderWidth: 2,
+      tension: 0.2,
+      pointRadius: 3
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { tooltip: { mode: "index", intersect: false } },
+    scales: { y: { title: { display: true, text: "GDP growth (%)" } } }
+  }
+});
+
+new Chart(document.getElementById("topBottomGrowthChart"), {
+  type: "bar",
+  data: {
+    labels: topBottomData.labels,
+    datasets: [{ label: "GDP growth (%)", data: topBottomData.values, borderWidth: 1 }]
+  },
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: { x: { title: { display: true, text: "GDP growth (%)" } } }
+  }
+});
+</script>
+
+</body>
+</html>

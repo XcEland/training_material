@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ report_pack_title }} - {{ report_month }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #172033; line-height: 1.45; }
+    h1 { color: #0f766e; font-size: 22px; }
+    h2 { color: #0f766e; font-size: 16px; margin-top: 22px; }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #dff3ef; }
+    .meta { color: #526071; font-size: 13px; }
+    .footer { color: #526071; font-size: 12px; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <h1>{{ report_pack_title }}</h1>
+  <p class="meta">Reporting cycle: {{ report_month }}</p>
+
+  <p>The monthly WEO executive report pack has been generated and is ready for review.</p>
+
+  <h2>Reports</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Report</th>
+        <th>Audience</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for report in reports %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ report.title }}</td>
+        <td>{{ report.audience }}</td>
+        <td>{{ report.data_source }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Release Tracking</h2>
+  <p>
+    Current WEO publication date: {{ release.current_publication_date }}<br>
+    Previous recorded publication date: {{ release.previous_publication_date or "not recorded" }}<br>
+    New release detected since last run: {{ release.release_changed_since_last_run }}
+  </p>
+
+  <p class="footer">Central Bank WEO Reporting Workflow</p>
+</body>
+</html>

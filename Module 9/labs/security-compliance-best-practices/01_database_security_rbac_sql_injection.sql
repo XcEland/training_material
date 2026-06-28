@@ -175,12 +175,86 @@ GRANT EXECUTE ON m9.usp_UpdateRiskReviewStatus TO m9_app_executor;
 GO
 
 /* -----------------------------------------------------------------------------
-   7. Test calls
+   7. Course case study: WEO report distribution audit
+   This links Module 9 security controls to the Module 6 automated reporting
+   system. Report distribution is sensitive because it shows who received
+   executive analytical outputs.
+----------------------------------------------------------------------------- */
+IF OBJECT_ID('m9.ReportDistributionAudit', 'U') IS NULL
+BEGIN
+    CREATE TABLE m9.ReportDistributionAudit
+    (
+        DistributionAuditID BIGINT IDENTITY(1,1) PRIMARY KEY,
+        EventTime DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+        ReportMonth CHAR(7) NOT NULL,
+        ReportName NVARCHAR(160) NOT NULL,
+        AudienceGroup NVARCHAR(160) NOT NULL,
+        RecipientCount INT NOT NULL,
+        DistributionStatus NVARCHAR(50) NOT NULL,
+        LoggedBy SYSNAME NOT NULL DEFAULT ORIGINAL_LOGIN()
+    );
+END;
+GO
+
+IF DATABASE_PRINCIPAL_ID('m9_compliance_auditor') IS NULL
+    CREATE ROLE m9_compliance_auditor;
+GO
+
+GRANT SELECT ON m9.ReportDistributionAudit TO m9_compliance_auditor;
+GO
+
+CREATE OR ALTER PROCEDURE m9.usp_LogReportDistribution
+    @ReportMonth CHAR(7),
+    @ReportName NVARCHAR(160),
+    @AudienceGroup NVARCHAR(160),
+    @RecipientCount INT,
+    @DistributionStatus NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @RecipientCount < 0
+    BEGIN
+        THROW 51001, 'Recipient count cannot be negative.', 1;
+    END;
+
+    IF @DistributionStatus NOT IN ('DryRunPreviewCreated', 'Sent', 'Failed', 'Cancelled')
+    BEGIN
+        THROW 51002, 'Invalid distribution status supplied.', 1;
+    END;
+
+    INSERT INTO m9.ReportDistributionAudit
+        (ReportMonth, ReportName, AudienceGroup, RecipientCount, DistributionStatus)
+    VALUES
+        (@ReportMonth, @ReportName, @AudienceGroup, @RecipientCount, @DistributionStatus);
+
+    INSERT INTO m9.SecurityAuditLog (ProcedureName, ActionTaken, FilterValue)
+    VALUES (
+        'm9.usp_LogReportDistribution',
+        'Logged WEO report distribution evidence',
+        CONCAT(@ReportMonth, '; ', @ReportName, '; ', @DistributionStatus)
+    );
+END;
+GO
+
+GRANT EXECUTE ON m9.usp_LogReportDistribution TO m9_app_executor;
+GO
+
+/* -----------------------------------------------------------------------------
+   8. Test calls
 ----------------------------------------------------------------------------- */
 EXEC m9.usp_SearchRiskProfiles_Safe @Country = 'Lesotho';
 GO
 
 EXEC m9.usp_UpdateRiskReviewStatus @CustomerID = 2, @ReviewStatus = 'Approved';
+GO
+
+EXEC m9.usp_LogReportDistribution
+    @ReportMonth = '2026-06',
+    @ReportName = 'WEO Macro Outlook Executive Brief',
+    @AudienceGroup = 'Executive Committee and Monetary Policy',
+    @RecipientCount = 6,
+    @DistributionStatus = 'DryRunPreviewCreated';
 GO
 
 SELECT TOP (20)
@@ -193,4 +267,17 @@ SELECT TOP (20)
     FilterValue
 FROM m9.SecurityAuditLog
 ORDER BY AuditID DESC;
+GO
+
+SELECT TOP (20)
+    DistributionAuditID,
+    EventTime,
+    ReportMonth,
+    ReportName,
+    AudienceGroup,
+    RecipientCount,
+    DistributionStatus,
+    LoggedBy
+FROM m9.ReportDistributionAudit
+ORDER BY DistributionAuditID DESC;
 GO

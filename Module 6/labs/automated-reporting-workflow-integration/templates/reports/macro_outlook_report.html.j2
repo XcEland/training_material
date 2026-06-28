@@ -1,0 +1,121 @@
+{% extends "reports/base_report.html.j2" %}
+
+{% block content %}
+<section>
+  <h2>Group Outlook</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Economic Group</th>
+        <th>GDP Growth, %</th>
+        <th>Inflation, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in group_rows %}
+      <tr>
+        <td>{{ row.country }}</td>
+        <td>{{ "%.1f"|format(row.gdp_growth_pct) if row.gdp_growth_pct is not none else "n/a" }}</td>
+        <td>{{ "%.1f"|format(row.inflation_pct) if row.inflation_pct is not none else "n/a" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="chart-grid">
+  <div class="chart-box">
+    <h3>GDP Growth Trend by WEO Group</h3>
+    <canvas id="growthTrendChart"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Top and Bottom Country Growth Rates</h3>
+    <canvas id="topBottomGrowthChart"></canvas>
+  </div>
+</section>
+
+<section>
+  <h2>Fastest Growing Economies</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Group</th>
+        <th>GDP Growth, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in top_growth_rows %}
+      <tr>
+        <td>{{ row.country }}</td>
+        <td>{{ row.economic_group }}</td>
+        <td>{{ "%.1f"|format(row.gdp_growth_pct) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Weakest Growth Readings</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Group</th>
+        <th>GDP Growth, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in bottom_growth_rows %}
+      <tr>
+        <td>{{ row.country }}</td>
+        <td>{{ row.economic_group }}</td>
+        <td>{{ "%.1f"|format(row.gdp_growth_pct) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const growthLineData = {{ growth_line_chart | tojson }};
+const topBottomData = {{ top_bottom_chart | tojson }};
+
+new Chart(document.getElementById("growthTrendChart"), {
+  type: "line",
+  data: {
+    labels: growthLineData.labels,
+    datasets: growthLineData.datasets.map((item) => ({
+      label: item.label,
+      data: item.data,
+      borderWidth: 2,
+      tension: 0.2,
+      pointRadius: 3
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { tooltip: { mode: "index", intersect: false } },
+    scales: { y: { title: { display: true, text: "GDP growth (%)" } } }
+  }
+});
+
+new Chart(document.getElementById("topBottomGrowthChart"), {
+  type: "bar",
+  data: {
+    labels: topBottomData.labels,
+    datasets: [{ label: "GDP growth (%)", data: topBottomData.values, borderWidth: 1 }]
+  },
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: { x: { title: { display: true, text: "GDP growth (%)" } } }
+  }
+});
+</script>
+{% endblock %}

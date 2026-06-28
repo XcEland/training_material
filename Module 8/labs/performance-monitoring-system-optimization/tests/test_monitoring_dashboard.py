@@ -40,6 +40,15 @@ def test_capacity_projection_grows_rows_and_storage():
     assert projection[-1]["projected_storage_mb"] > 50
 
 
+def test_prior_module_workflow_observations_have_common_shape():
+    sources = load_module("monitoring_data_sources.py", "sources_test")
+
+    observations = sources.build_workflow_observations()
+
+    assert len(observations) >= 2
+    assert {"workflow_name", "status", "duration_seconds", "records_processed"}.issubset(observations[0])
+
+
 def test_dashboard_renders_with_fallback_metrics(monkeypatch):
     dashboard = load_module("05_monitoring_dashboard.py", "dashboard_render_test")
     monkeypatch.setenv("DB_DRIVER", "Missing ODBC Driver")
@@ -48,5 +57,19 @@ def test_dashboard_renders_with_fallback_metrics(monkeypatch):
 
     assert len(context["database_metrics"]) >= 3
     assert len(context["python_metrics"]) >= 3
+    assert len(context["workflow_metrics"]) >= 3
+    assert len(context["workflow_observations"]) >= 2
     assert (LAB_DIR / "outputs" / "monitoring_dashboard.html").exists()
     assert (LAB_DIR / "outputs" / "monitoring_snapshot.json").exists()
+
+
+def test_dashboard_assessment_passes_after_render(monkeypatch):
+    dashboard = load_module("05_monitoring_dashboard.py", "dashboard_for_assessment_test")
+    assessment_module = load_module("06_dashboard_observability_assessment.py", "assessment_test")
+    monkeypatch.setenv("DB_DRIVER", "Missing ODBC Driver")
+
+    snapshot = dashboard.render_dashboard()
+    assessment = assessment_module.assess_snapshot(snapshot)
+
+    assert assessment["passed"] is True
+    assert assessment["passed_count"] == assessment["total_count"]

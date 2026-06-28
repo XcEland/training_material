@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-06-27T15:21:35+00:00",
+  "offline_mode": true,
+  "accepted_imf_rows": 24,
+  "accepted_bis_policy_rate_rows": 6,
+  "accepted_authorised_source_rows": 3,
+  "quality_issue_rows": 0,
+  "quality_gate_passed": true,
+  "quality_alert_path": "/home/xceland/Desktop/Trainingcred Institute/Module 7/labs/api-integration-external-data-sources/outputs/external_data_quality_alert.json",
+  "sql_load_attempted": false,
+  "sql_status": "SkippedByArgument",
+  "completed_at": "2026-06-27T15:21:35+00:00",
+  "duration_seconds": 0.05
+}

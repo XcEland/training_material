@@ -1,15 +1,18 @@
 # Module 7 Integration Test Plan
 
-Use this plan during the 14:00 - 15:00 data lab and the 15:00 - 15:30 exercise.
-
 ## Test Objectives
 
-1. Confirm JSON payloads map to relational rows.
-2. Confirm XML payloads map to the same relational shape.
-3. Confirm authorised HTML scraping extracts expected market-rate rows.
-4. Confirm validation rejects incomplete or duplicate records.
-5. Confirm the pipeline can run end-to-end without internet access.
-6. Confirm SQL Server loading is optional and does not block offline validation.
+1. Confirm IMF JSON payloads map to relational WEO indicator rows.
+2. Confirm BIS SDMX XML payloads map to relational policy-rate rows.
+3. Confirm beginner JSON-only and XML-only scripts run before the combined parser.
+4. Confirm beginner HTML loading and BeautifulSoup table extraction scripts run before the reusable parser.
+5. Confirm beginner Scrapy concepts are introduced before the optional spider structure.
+6. Confirm authorised HTML scraping extracts expected external source rows.
+7. Confirm validation rejects incomplete or duplicate records.
+8. Confirm the quality gate enforces completeness, validity, timeliness, and consistency.
+9. Confirm a failed quality gate creates a rejection entry and alert artifact.
+10. Confirm the pipeline can run end-to-end without internet access.
+11. Confirm SQL Server loading is optional and does not block offline validation.
 
 ## Test Commands
 
@@ -22,8 +25,13 @@ pytest -q
 
 ```bash
 python 01_beginner_requests_api.py --offline
+python 02a_json_only_imf_parsing.py
+python 02b_xml_only_bis_parsing.py
 python 02_json_xml_parsing.py
+python 03a_html_loading_basics.py
+python 03b_beautifulsoup_table_basics.py
 python 03_web_scraping_beautifulsoup.py
+python 04a_scrapy_concepts_basics.py
 python 04_optional_scrapy_spider.py
 python 05_external_data_integration_pipeline.py --offline --skip-sql
 ```
@@ -33,10 +41,15 @@ python 05_external_data_integration_pipeline.py --offline --skip-sql
 | Area | Acceptance criterion | Evidence |
 | --- | --- | --- |
 | REST API | Request code includes timeout, headers, status handling, and rate limiting | `01_beginner_requests_api.py` |
-| JSON parsing | Nested records become flat rows | pytest result |
-| XML parsing | Namespaced XML becomes flat rows | pytest result |
-| Web scraping | Only authorised sample source is scraped | pytest result |
+| JSON parsing | IMF nested indicator/country/year records become flat rows | pytest result |
+| XML/SDMX parsing | BIS SDMX XML observations become flat policy-rate rows | pytest result |
+| Teaching progression | Learners can run JSON-only and XML-only labs before the combined parser | manual smoke tests |
+| HTML loading | Learners can load an authorised HTML file and inspect its title, heading, and row count | manual smoke tests |
+| Table extraction | Learners can extract headers and rows before using the reusable scraper | manual smoke tests |
+| Web scraping | Only authorised sample source registry is scraped | pytest result |
+| Scrapy concepts | Learners can explain Spider, start URLs, Response, Item, and download delay | manual smoke tests |
 | Validation | Invalid values and duplicates are rejected before SQL load | pytest result and quality output JSON |
+| Quality gate | Dataset-level completeness, timeliness, and consistency checks run before SQL load | pytest result and `outputs/external_data_quality_alert.json` |
 | Integration | Offline pipeline completes and writes output files | pytest result and `outputs/` files |
 
 ## Production Discussion

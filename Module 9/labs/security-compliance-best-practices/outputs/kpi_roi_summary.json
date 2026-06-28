@@ -1,0 +1,22 @@
+{
+  "kpis": {
+    "reports_generated": 3,
+    "module6_pipeline_seconds": 21.96,
+    "module6_email_status": "DryRunPreviewCreated",
+    "module7_quality_gate_passed": true,
+    "module7_quality_issue_rows": 0,
+    "module7_duration_seconds": 0.05
+  },
+  "roi_assumptions": {
+    "hours_saved_per_month": 40,
+    "average_hourly_cost": 35,
+    "annual_operating_cost": 2000,
+    "implementation_cost": 6000
+  },
+  "roi": {
+    "annual_benefit": 16800,
+    "annual_net_benefit": 14800,
+    "roi_percentage": 246.67
+  },
+  "interpretation": "Use ROI together with security findings, audit readiness, and quality results."
+}

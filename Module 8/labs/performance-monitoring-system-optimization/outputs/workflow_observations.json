@@ -1,0 +1,22 @@
+[
+  {
+    "workflow_name": "Module 6 WEO monthly reporting",
+    "source": "monthly_report_run_log.jsonl and weo_monthly_metrics_2026-06.json",
+    "status": "Succeeded",
+    "duration_seconds": 21.96,
+    "records_processed": 382,
+    "outputs_created": 3,
+    "quality_issue_count": 0,
+    "notification_status": "DryRunPreviewCreated"
+  },
+  {
+    "workflow_name": "Module 7 IMF/BIS external data integration",
+    "source": "external_integration_run_summary.json and external_data_quality_alert.json",
+    "status": "Succeeded",
+    "duration_seconds": 0.05,
+    "records_processed": 33,
+    "outputs_created": 3,
+    "quality_issue_count": 0,
+    "notification_status": "NoAlertRequired"
+  }
+]

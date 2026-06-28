@@ -1,0 +1,29 @@
+Subject: {{ report_pack_title }} - {{ report_month }}
+
+Dear stakeholder,
+
+The {{ report_pack_title }} for {{ report_month }} has been generated.
+
+Executive report pack:
+{% for report in reports %}
+{{ loop.index }}. {{ report.title }} ({{ report.audience }})
+   Output: {{ report.html_path }}
+   PDF: {{ report.pdf_path if report.pdf_path else report.pdf_status }}
+   Source: {{ report.data_source }}
+{% endfor %}
+
+Release tracking:
+- Current WEO publication date: {{ release.current_publication_date }}
+- Previous recorded publication date: {{ release.previous_publication_date or "not recorded" }}
+- New release detected since last run: {{ release.release_changed_since_last_run }}
+
+Stakeholder distribution:
+{% for recipient in recipients %}
+- {{ recipient.group }}: {{ recipient.email }}
+{% endfor %}
+
+Distribution mode:
+{{ "Dry run preview only" if dry_run else "Email sent through configured SMTP server" }}
+
+Regards,
+Central Bank WEO Reporting Workflow

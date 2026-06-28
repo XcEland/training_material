@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message:GenericData
+  xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message"
+  xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic">
+  <message:Header>
+    <message:ID>TRAINING-CBPOL-SAMPLE</message:ID>
+    <message:Prepared>2026-06-24T07:35:38Z</message:Prepared>
+    <message:Sender id="BIS"/>
+  </message:Header>
+  <message:DataSet>
+    <generic:Series>
+      <generic:SeriesKey>
+        <generic:Value id="FREQ" value="D"/>
+        <generic:Value id="REF_AREA" value="GB"/>
+      </generic:SeriesKey>
+      <generic:Attributes>
+        <generic:Value id="TITLE" value="Central bank policy rates - United Kingdom - Daily - End of period"/>
+      </generic:Attributes>
+      <generic:Obs>
+        <generic:ObsDimension value="2026-01-02"/>
+        <generic:ObsValue value="3.75"/>
+        <generic:Attributes>
+          <generic:Value id="OBS_STATUS" value="A"/>
+        </generic:Attributes>
+      </generic:Obs>
+      <generic:Obs>
+        <generic:ObsDimension value="2026-01-05"/>
+        <generic:ObsValue value="3.75"/>
+        <generic:Attributes>
+          <generic:Value id="OBS_STATUS" value="A"/>
+        </generic:Attributes>
+      </generic:Obs>
+    </generic:Series>
+    <generic:Series>
+      <generic:SeriesKey>
+        <generic:Value id="FREQ" value="M"/>
+        <generic:Value id="REF_AREA" value="US"/>
+      </generic:SeriesKey>
+      <generic:Attributes>
+        <generic:Value id="TITLE" value="Central bank policy rates - United States - Monthly - End of period"/>
+      </generic:Attributes>
+      <generic:Obs>
+        <generic:ObsDimension value="2026-01"/>
+        <generic:ObsValue value="4.50"/>
+        <generic:Attributes>
+          <generic:Value id="OBS_STATUS" value="A"/>
+        </generic:Attributes>
+      </generic:Obs>
+      <generic:Obs>
+        <generic:ObsDimension value="2026-02"/>
+        <generic:ObsValue value="4.50"/>
+        <generic:Attributes>
+          <generic:Value id="OBS_STATUS" value="A"/>
+        </generic:Attributes>
+      </generic:Obs>
+    </generic:Series>
+    <generic:Series>
+      <generic:SeriesKey>
+        <generic:Value id="FREQ" value="M"/>
+        <generic:Value id="REF_AREA" value="ZA"/>
+      </generic:SeriesKey>
+      <generic:Attributes>
+        <generic:Value id="TITLE" value="Central bank policy rates - South Africa - Monthly - End of period"/>
+      </generic:Attributes>
+      <generic:Obs>
+        <generic:ObsDimension value="2026-01"/>
+        <generic:ObsValue value="7.00"/>
+        <generic:Attributes>
+          <generic:Value id="OBS_STATUS" value="A"/>
+        </generic:Attributes>
+      </generic:Obs>
+      <generic:Obs>
+        <generic:ObsDimension value="2026-02"/>
+        <generic:ObsValue value="7.00"/>
+        <generic:Attributes>
+          <generic:Value id="OBS_STATUS" value="A"/>
+        </generic:Attributes>
+      </generic:Obs>
+    </generic:Series>
+  </message:DataSet>
+</message:GenericData>
