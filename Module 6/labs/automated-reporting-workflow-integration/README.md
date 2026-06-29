@@ -16,21 +16,53 @@ The workflow is safe for training. If SQL Server is unavailable, the reports use
 
 ## Learning Order
 
-1. Review `scheduling_architecture_decision_log.md`.
+1. Review `00_scheduling_architecture_decision_log.md`.
 2. Review `.env.example` and `config/reporting_config.json`.
-3. Run the WEO report pack once.
-4. Review generated reports in `outputs/html/`.
-5. Review the stakeholder email preview in `outputs/email/`.
-6. Review `outputs/phase2_pipeline_evaluation_YYYY-MM.json`.
-7. Configure Windows Task Scheduler, cron, or the Python `schedule` demo.
+3. Run `02_windows_task_scheduler_smoke_test.py` once to confirm Python can write a scheduled-task log file.
+4. Complete `jinja-beginner-step-by-step/` to learn one Jinja2 idea at a time.
+5. Complete the `jinja-basics/` mini-lab before editing full report templates.
+6. Complete `email-core-concepts/` to learn plain emails, attachments, and Jinja2 HTML emails.
+7. Run the WEO report pack once.
+8. Review generated reports in `outputs/html/`.
+9. Review the stakeholder email preview in `outputs/email/`.
+10. Review `outputs/phase2_pipeline_evaluation_YYYY-MM.json`.
+11. Run `07_send_monthly_report_email_trigger.py --dry-run` to preview the single-recipient scheduled email lab.
+12. Complete `cron-in-code-basics/` to see cron-like triggers around Python functions.
+13. Configure Windows Task Scheduler, cron, or the Python `schedule` demo.
 
 ## Project Structure
 
 ```text
 automated-reporting-workflow-integration/
-├── monthly_reporting_pipeline.py
-├── scheduler_demo.py
+├── 00_scheduling_architecture_decision_log.md
 ├── 01_setup_monthly_reporting_dataset.sql
+├── 02_windows_task_scheduler_smoke_test.py
+├── 03_windows_task_scheduler_setup.md
+├── 04_cron_setup.md
+├── 05_scheduler_demo.py
+├── 06_monthly_reporting_pipeline.py
+├── 07_send_monthly_report_email_trigger.py
+├── 08_phase2_simulation_evaluation.md
+├── jinja-beginner-step-by-step/
+│   ├── 01_variables/
+│   ├── 02_loops/
+│   ├── 03_control_structures/
+│   └── outputs/
+├── jinja-basics/
+│   ├── 01_render_jinja_basics.py
+│   ├── templates/
+│   └── outputs/
+├── cron-in-code-basics/
+│   ├── 01_function_interval_scheduler.py
+│   ├── 02_function_daily_time_scheduler.py
+│   ├── 03_cron_expression_function_scheduler.py
+│   ├── 04_monthly_report_function_trigger.py
+│   └── outputs/
+├── email-core-concepts/
+│   ├── 01_plain_message/
+│   ├── 02_message_with_attachment/
+│   ├── 03_jinja_html_email/
+│   └── outputs/
 ├── config/
 │   ├── reporting_config.json
 │   └── settings.py
@@ -80,30 +112,80 @@ cd "Module 6/labs/automated-reporting-workflow-integration"
 cp .env.example .env
 ```
 
+Run the Jinja2 basics mini-lab:
+
+```bash
+../../../.venv/bin/python jinja-beginner-step-by-step/01_variables/render_variables.py
+../../../.venv/bin/python jinja-beginner-step-by-step/02_loops/render_loops.py
+../../../.venv/bin/python jinja-beginner-step-by-step/03_control_structures/render_control_structures.py
+```
+
+Then run the combined Jinja2 basics mini-lab:
+
+```bash
+../../../.venv/bin/python jinja-basics/01_render_jinja_basics.py
+```
+
+Open:
+
+```text
+jinja-basics/outputs/04_mini_macro_report.html
+```
+
+Run the beginner email basics mini-labs after confirming `REPORT_TO_EMAIL` and SMTP settings in `.env`:
+
+```bash
+../../../.venv/bin/python email-core-concepts/01_plain_message/send_plain_email.py
+../../../.venv/bin/python email-core-concepts/02_message_with_attachment/send_email_with_attachment.py
+../../../.venv/bin/python email-core-concepts/03_jinja_html_email/send_jinja_email.py
+```
+
+Run the safer `.env` preview pattern:
+
+```bash
+../../../.venv/bin/python email-core-concepts/04_env_preview_pattern/send_plain_email_env_preview.py
+```
+
+To actually send the Lesson 4 email to `REPORT_TO_EMAIL`, add `--send` after confirming SMTP settings in `.env`.
+
 Run the monthly report pack:
 
 ```bash
-../../../.venv/bin/python monthly_reporting_pipeline.py --report-month 2026-06 --dry-run-email
+../../../.venv/bin/python 06_monthly_reporting_pipeline.py --report-month 2026-06 --dry-run-email
 ```
 
 Run only one report:
 
 ```bash
-../../../.venv/bin/python monthly_reporting_pipeline.py --report-month 2026-06 --reports inflation_risk --dry-run-email
+../../../.venv/bin/python 06_monthly_reporting_pipeline.py --report-month 2026-06 --reports inflation_risk --dry-run-email
 ```
 
 Use a different email template for operations monitoring:
 
 ```bash
-../../../.venv/bin/python monthly_reporting_pipeline.py --report-month 2026-06 --email-template operations_status --dry-run-email
+../../../.venv/bin/python 06_monthly_reporting_pipeline.py --report-month 2026-06 --email-template operations_status --dry-run-email
 ```
 
 Email templates are configured in `config/reporting_config.json` under `email_templates`. Report order is configured in the same file with each report's `order` value.
 
+Run the single-recipient triggered email lab in preview mode:
+
+```bash
+../../../.venv/bin/python 07_send_monthly_report_email_trigger.py --dry-run
+```
+
+Send the Jinja2 monthly reporting pack to `REPORT_TO_EMAIL` using SMTP settings from `.env`:
+
+```bash
+../../../.venv/bin/python 07_send_monthly_report_email_trigger.py
+```
+
+The trigger lab uses SQL Server when available and refreshes the reporting tables before rendering. If SQL Server is unavailable in the local environment, the existing pipeline falls back to the WEO workbook and records the data source in the metrics output.
+
 Generate PDFs when WeasyPrint is installed on the machine:
 
 ```bash
-../../../.venv/bin/python monthly_reporting_pipeline.py --report-month 2026-06 --generate-pdf --dry-run-email
+../../../.venv/bin/python 06_monthly_reporting_pipeline.py --report-month 2026-06 --generate-pdf --dry-run-email
 ```
 
 If WeasyPrint is not installed, the pipeline still generates print-ready HTML reports and records `SkippedPdfDependencyMissing` in the metrics JSON.
@@ -119,7 +201,7 @@ sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 6/labs/aut
 Then run the pipeline with SQL refresh:
 
 ```bash
-../../../.venv/bin/python monthly_reporting_pipeline.py --report-month 2026-06 --refresh-data --dry-run-email
+../../../.venv/bin/python 06_monthly_reporting_pipeline.py --report-month 2026-06 --refresh-data --dry-run-email
 ```
 
 The report modules use T-SQL extraction from:
@@ -139,7 +221,7 @@ By default, the pipeline uses the existing Module 4 workbook:
 To download a workbook during a scheduled run, set `WEO_DOWNLOAD_URL` in `.env`, then run:
 
 ```bash
-../../../.venv/bin/python monthly_reporting_pipeline.py --download-weo --refresh-data --dry-run-email
+../../../.venv/bin/python 06_monthly_reporting_pipeline.py --download-weo --refresh-data --dry-run-email
 ```
 
 The release manifest is written to:
@@ -166,15 +248,18 @@ outputs/monthly_report_run_log.jsonl
 
 Use one of these guides:
 
-- `windows_task_scheduler_setup.md`
-- `cron_setup.md`
-- `scheduler_demo.py`
+- `02_windows_task_scheduler_smoke_test.py`
+- `03_windows_task_scheduler_setup.md`
+- `04_cron_setup.md`
+- `05_scheduler_demo.py`
+- `07_send_monthly_report_email_trigger.py`
+- `cron-in-code-basics/`
 
 The recommended production pattern is:
 
 ```text
 Scheduler
-  -> monthly_reporting_pipeline.py
+  -> 06_monthly_reporting_pipeline.py
       -> check/download WEO workbook
       -> transform and load SQL tables
       -> extract report datasets with T-SQL
@@ -187,8 +272,8 @@ Scheduler
 
 Submit:
 
-- completed `scheduling_architecture_decision_log.md`
+- completed `00_scheduling_architecture_decision_log.md`
 - generated WEO HTML reports from `outputs/html/`
 - generated email preview or proof of SMTP delivery
 - generated `phase2_pipeline_evaluation_YYYY-MM.json`
-- completed `phase2_simulation_evaluation.md`
+- completed `08_phase2_simulation_evaluation.md`

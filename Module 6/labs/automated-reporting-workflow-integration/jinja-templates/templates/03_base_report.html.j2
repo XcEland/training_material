@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Central Bank Report{% endblock %}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 28px;
+      color: #172033;
+      line-height: 1.45;
+    }
+    header {
+      border-bottom: 3px solid #17324d;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+    }
+    h1, h2 {
+      color: #17324d;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .metric-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+    .metric-value {
+      font-size: 26px;
+      font-weight: 700;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #e8eef7;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>{{ central_bank_name }}</strong>
+    <div>Report month: {{ report_month }}</div>
+  </header>
+  {% block content %}{% endblock %}
+</body>
+</html>

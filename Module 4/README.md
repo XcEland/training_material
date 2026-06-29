@@ -29,4 +29,4 @@ The primary exercises are notebooks:
 
 The WEO pandas and NumPy notebooks appear early because they teach DataFrame and array basics with the IMF WEO Excel dataset at `data/WEOApr2026all.xlsx`. Existing transaction-based notebooks remain available for ETL, validation, and load-back practice.
 
-The lab uses `TrainingDB` and creates objects under the `m4` schema when SQL Server is available. The notebooks also include CSV and built-in fallback data so students can run the pandas, NumPy, and file I/O sections in another IDE or Google Colab.
+The lab uses `TrainingDB` and creates objects under the `m4` schema when SQL Server is available. The notebooks also include CSV and built-in fallback data so the pandas, NumPy, and file I/O sections can run in another IDE or Google Colab.

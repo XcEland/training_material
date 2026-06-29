@@ -1,6 +1,6 @@
 {
   "report_month": "2026-06",
-  "pipeline_seconds": 21.96,
+  "pipeline_seconds": 23.19,
   "download": {
     "download_status": "UsingLocalWorkbook",
     "download_url": "not configured"
@@ -11,7 +11,7 @@
     "current_publication_date": "2026-04-14T13:00:00Z",
     "release_changed_since_last_run": false
   },
-  "sql_load_status": "SkippedByArgument",
+  "sql_load_status": "SkippedSqlUnavailable",
   "pdf_status": "NotRequested",
   "reports": [
     {
@@ -76,5 +76,5 @@
   ],
   "email_status": "DryRunPreviewCreated",
   "email_preview_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/email/weo_executive_email_preview_2026-06.txt",
-  "recipient_count": 6
+  "recipient_count": 1
 }

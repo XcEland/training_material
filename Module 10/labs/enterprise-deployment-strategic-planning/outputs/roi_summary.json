@@ -1,0 +1,32 @@
+[
+  {
+    "name": "conservative",
+    "monthly_time_saving_value": 2240,
+    "monthly_error_reduction_value": 720,
+    "monthly_gross_benefit": 2960,
+    "monthly_net_benefit": 1960,
+    "annual_net_benefit": 23520,
+    "payback_months": 9.18,
+    "roi_percent": 30.67
+  },
+  {
+    "name": "base_case",
+    "monthly_time_saving_value": 4160,
+    "monthly_error_reduction_value": 1800,
+    "monthly_gross_benefit": 5960,
+    "monthly_net_benefit": 4960,
+    "annual_net_benefit": 59520,
+    "payback_months": 3.63,
+    "roi_percent": 230.67
+  },
+  {
+    "name": "optimistic",
+    "monthly_time_saving_value": 6300,
+    "monthly_error_reduction_value": 3240,
+    "monthly_gross_benefit": 9540,
+    "monthly_net_benefit": 8540,
+    "annual_net_benefit": 102480,
+    "payback_months": 2.11,
+    "roi_percent": 469.33
+  }
+]

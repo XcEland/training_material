@@ -1,0 +1,80 @@
+{
+  "report_month": "2026-06",
+  "pipeline_seconds": 21.96,
+  "download": {
+    "download_status": "UsingLocalWorkbook",
+    "download_url": "not configured"
+  },
+  "release": {
+    "manifest_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/data/weo_release_manifest.json",
+    "previous_publication_date": "2026-04-14T13:00:00Z",
+    "current_publication_date": "2026-04-14T13:00:00Z",
+    "release_changed_since_last_run": false
+  },
+  "sql_load_status": "SkippedByArgument",
+  "pdf_status": "NotRequested",
+  "reports": [
+    {
+      "report_id": "macro_outlook",
+      "title": "Global Macro Outlook Executive Brief",
+      "audience": "Executive Committee and Monetary Policy",
+      "html_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_macro_outlook_2026.html",
+      "data_source": "Excel fallback",
+      "summary_points": [
+        "World GDP growth is projected at 3.1% in 2026.",
+        "Sub-Saharan Africa growth is projected at 4.3%.",
+        "Emerging market and developing economies growth is projected at 3.9%."
+      ],
+      "metrics": {
+        "analysis_year": 2026,
+        "country_rows": 191,
+        "trend_group_count": 4
+      },
+      "pdf_path": null,
+      "pdf_status": "NotRequested"
+    },
+    {
+      "report_id": "inflation_risk",
+      "title": "Inflation Risk Monitoring Report",
+      "audience": "Executive Committee, Monetary Policy, and Research",
+      "html_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_inflation_risk_2026.html",
+      "data_source": "Excel fallback",
+      "summary_points": [
+        "Average country inflation is 7.5% in 2026.",
+        "Median country inflation is 3.3%.",
+        "20 countries are at or above the 10.0% high-inflation monitoring threshold."
+      ],
+      "metrics": {
+        "analysis_year": 2026,
+        "country_rows": 191,
+        "high_inflation_country_count": 20,
+        "mean_inflation_pct": 7.54
+      },
+      "pdf_path": null,
+      "pdf_status": "NotRequested"
+    },
+    {
+      "report_id": "commodity_monitoring",
+      "title": "Commodity Price Monitoring Brief",
+      "audience": "Executive Committee, Markets, and Research",
+      "html_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_commodity_monitoring_2026.html",
+      "data_source": "Excel fallback",
+      "summary_points": [
+        "Oil price index movement from 2025 to 2026: 21.4%.",
+        "Food price index movement from 2025 to 2026: 6.0%.",
+        "Commodity trends are included because imported inflation and reserves management are sensitive to global price shocks."
+      ],
+      "metrics": {
+        "analysis_year": 2026,
+        "commodity_indicator_count": 5,
+        "oil_change_pct": 21.38,
+        "food_change_pct": 5.99
+      },
+      "pdf_path": null,
+      "pdf_status": "NotRequested"
+    }
+  ],
+  "email_status": "DryRunPreviewCreated",
+  "email_preview_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/email/weo_executive_email_preview_2026-06.txt",
+  "recipient_count": 6
+}

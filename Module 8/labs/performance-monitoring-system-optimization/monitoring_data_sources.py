@@ -5,8 +5,8 @@ The monitoring examples use real artifacts created in earlier modules:
 - Module 6 monthly WEO reporting outputs
 - Module 7 external API integration outputs
 
-If those files are missing, the helpers return safe classroom fallback values so
-students can still run the labs in isolation.
+If those files are missing, the helpers return fallback values so the labs can
+still run in isolation.
 """
 
 from __future__ import annotations

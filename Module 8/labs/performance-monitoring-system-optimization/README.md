@@ -2,7 +2,7 @@
 
 This Module 8 lab moves from basic monitoring concepts to a full operational dashboard. It includes SQL Server monitoring scripts, Python profiling demos, production logging patterns, capacity planning worksheets, and a dashboard generator.
 
-The scripts are safe for classroom use:
+The scripts are safe to run in a local lab environment:
 
 - SQL Server monitoring queries run when SQL Server is available.
 - Python scripts generate fallback sample metrics when SQL Server is unavailable.
@@ -11,8 +11,8 @@ The scripts are safe for classroom use:
 ## Learning Order
 
 1. Run `00_monitoring_data_walkthrough.py` to see how Module 6 and Module 7 outputs become monitoring data.
-2. Read `day8_facilitator_guide.md` for the full Day 8 teaching flow and final deliverable.
-3. Run `01a_beginner_sql_monitoring_walkthrough.sql` if SQL Server is available.
+2. Read `day8_learning_guide.md` for the full Day 8 flow and final deliverable.
+3. Run `01_beginner_sql_monitoring_walkthrough.sql` if SQL Server is available.
 4. Run the full SQL monitoring script if SQL Server is available.
 5. Complete the monitoring tool selection worksheet for DMVs, Query Store, and Extended Events.
 6. Run Python profiling and memory demos.
@@ -26,16 +26,15 @@ The scripts are safe for classroom use:
 ```text
 Module 8/labs/performance-monitoring-system-optimization/
 ├── README.md
-├── .env.example
-├── day8_facilitator_guide.md
 ├── 00_monitoring_data_walkthrough.py
-├── 01a_beginner_sql_monitoring_walkthrough.sql
-├── 01_database_monitoring_dmvs_query_store_xevents.sql
-├── 02_python_profiling_memory_demo.py
-├── 03_logging_error_tracking_demo.py
-├── 04_capacity_planning_baseline.py
-├── 05_monitoring_dashboard.py
-├── 06_dashboard_observability_assessment.py
+├── 01_beginner_sql_monitoring_walkthrough.sql
+├── 02_database_monitoring_dmvs_query_store_xevents.sql
+├── 03_python_profiling_memory_demo.py
+├── 04_logging_error_tracking_demo.py
+├── 05_capacity_planning_baseline.py
+├── 06_monitoring_dashboard.py
+├── 07_dashboard_observability_assessment.py
+├── day8_learning_guide.md
 ├── db_utils.py
 ├── monitoring_data_sources.py
 ├── monitoring_tool_selection.md
@@ -43,6 +42,7 @@ Module 8/labs/performance-monitoring-system-optimization/
 ├── worksheet_8_1_performance_baseline.md
 ├── worksheet_8_2_dashboard_architecture.md
 ├── operational_observability_review.md
+├── .env.example
 ├── config/
 │   └── monitoring_thresholds.json
 ├── templates/
@@ -90,8 +90,8 @@ pip install -r Setup/requirements.txt
 If SQL Server is available:
 
 ```bash
-sqlcmd -S localhost,1433 -U sa -P '<your-password>' -C -i "Module 8/labs/performance-monitoring-system-optimization/01a_beginner_sql_monitoring_walkthrough.sql"
-sqlcmd -S localhost,1433 -U sa -P '<your-password>' -C -i "Module 8/labs/performance-monitoring-system-optimization/01_database_monitoring_dmvs_query_store_xevents.sql"
+sqlcmd -S localhost,1433 -U sa -P '<your-password>' -C -i "Module 8/labs/performance-monitoring-system-optimization/01_beginner_sql_monitoring_walkthrough.sql"
+sqlcmd -S localhost,1433 -U sa -P '<your-password>' -C -i "Module 8/labs/performance-monitoring-system-optimization/02_database_monitoring_dmvs_query_store_xevents.sql"
 ```
 
 For Python SQL logging, copy `.env.example` to `.env` and enter your local SQL Server details. Do not commit real database passwords.
@@ -101,12 +101,12 @@ Run the Python labs:
 ```bash
 cd "Module 8/labs/performance-monitoring-system-optimization"
 python 00_monitoring_data_walkthrough.py
-python 02_python_profiling_memory_demo.py
-python 03_logging_error_tracking_demo.py
-python 03_logging_error_tracking_demo.py --level DEBUG
-python 04_capacity_planning_baseline.py
-python 05_monitoring_dashboard.py
-python 06_dashboard_observability_assessment.py
+python 03_python_profiling_memory_demo.py
+python 04_logging_error_tracking_demo.py
+python 04_logging_error_tracking_demo.py --level DEBUG
+python 05_capacity_planning_baseline.py
+python 06_monitoring_dashboard.py
+python 07_dashboard_observability_assessment.py
 pytest -q
 ```
 
@@ -115,7 +115,7 @@ pytest -q
 Yes, the monitoring output is a web page. Run:
 
 ```bash
-python 05_monitoring_dashboard.py
+python 06_monitoring_dashboard.py
 ```
 
 Then open:
@@ -139,7 +139,7 @@ Then open:
 http://localhost:8008/monitoring_dashboard.html
 ```
 
-Because this is a beginner-friendly static HTML dashboard, refresh the metrics by rerunning `05_monitoring_dashboard.py`. The page reloads every 60 seconds, so scheduled regeneration through Windows Task Scheduler or cron will appear in the browser automatically.
+Because this is a static HTML dashboard, refresh the metrics by rerunning `06_monitoring_dashboard.py`. The page reloads every 60 seconds, so scheduled regeneration through Windows Task Scheduler or cron will appear in the browser automatically.
 
 ## Expected Outputs
 

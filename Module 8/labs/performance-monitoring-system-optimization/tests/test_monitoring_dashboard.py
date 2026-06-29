@@ -18,7 +18,7 @@ def load_module(filename: str, module_name: str):
 
 
 def test_alert_level_classifies_normal_warning_critical():
-    dashboard = load_module("05_monitoring_dashboard.py", "dashboard_test")
+    dashboard = load_module("06_monitoring_dashboard.py", "dashboard_test")
 
     assert dashboard.alert_level(5, 10, 20) == "Normal"
     assert dashboard.alert_level(10, 10, 20) == "Warning"
@@ -26,7 +26,7 @@ def test_alert_level_classifies_normal_warning_critical():
 
 
 def test_capacity_projection_grows_rows_and_storage():
-    capacity = load_module("04_capacity_planning_baseline.py", "capacity_test")
+    capacity = load_module("05_capacity_planning_baseline.py", "capacity_test")
 
     projection = capacity.build_projection(
         current_rows=100,
@@ -50,7 +50,7 @@ def test_prior_module_workflow_observations_have_common_shape():
 
 
 def test_dashboard_renders_with_fallback_metrics(monkeypatch):
-    dashboard = load_module("05_monitoring_dashboard.py", "dashboard_render_test")
+    dashboard = load_module("06_monitoring_dashboard.py", "dashboard_render_test")
     monkeypatch.setenv("DB_DRIVER", "Missing ODBC Driver")
 
     context = dashboard.render_dashboard()
@@ -64,8 +64,8 @@ def test_dashboard_renders_with_fallback_metrics(monkeypatch):
 
 
 def test_dashboard_assessment_passes_after_render(monkeypatch):
-    dashboard = load_module("05_monitoring_dashboard.py", "dashboard_for_assessment_test")
-    assessment_module = load_module("06_dashboard_observability_assessment.py", "assessment_test")
+    dashboard = load_module("06_monitoring_dashboard.py", "dashboard_for_assessment_test")
+    assessment_module = load_module("07_dashboard_observability_assessment.py", "assessment_test")
     monkeypatch.setenv("DB_DRIVER", "Missing ODBC Driver")
 
     snapshot = dashboard.render_dashboard()

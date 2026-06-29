@@ -22,7 +22,7 @@ def load_module(filename: str, module_name: str):
 
 
 def test_imf_json_parser_maps_nested_records_to_relational_rows():
-    parser = load_module("02_json_xml_parsing.py", "parser_json_test")
+    parser = load_module("04_json_xml_combined_parsing.py", "parser_json_test")
     payload = json.loads((SAMPLE_DIR / "imf_datamapper_weo_inflation_sample.json").read_text(encoding="utf-8"))
 
     rows = parser.parse_imf_datamapper_json(payload)
@@ -34,7 +34,7 @@ def test_imf_json_parser_maps_nested_records_to_relational_rows():
 
 
 def test_beginner_json_only_parser_maps_one_indicator():
-    parser = load_module("02a_json_only_imf_parsing.py", "beginner_json_test")
+    parser = load_module("02_json_only_imf_parsing.py", "beginner_json_test")
     payload = json.loads((SAMPLE_DIR / "imf_datamapper_weo_inflation_sample.json").read_text(encoding="utf-8"))
 
     rows = parser.parse_imf_json_one_indicator(payload)
@@ -45,7 +45,7 @@ def test_beginner_json_only_parser_maps_one_indicator():
 
 
 def test_bis_sdmx_parser_maps_generic_xml_to_policy_rate_rows():
-    parser = load_module("02_json_xml_parsing.py", "parser_xml_test")
+    parser = load_module("04_json_xml_combined_parsing.py", "parser_xml_test")
     xml_text = (SAMPLE_DIR / "bis_cbpol_sdmx_generic_sample.xml").read_text(encoding="utf-8")
 
     rows = parser.parse_bis_cbpol_sdmx(xml_text)
@@ -56,7 +56,7 @@ def test_bis_sdmx_parser_maps_generic_xml_to_policy_rate_rows():
 
 
 def test_beginner_xml_only_parser_maps_policy_rate_rows():
-    parser = load_module("02b_xml_only_bis_parsing.py", "beginner_xml_test")
+    parser = load_module("03_xml_only_bis_parsing.py", "beginner_xml_test")
     root = parser.load_xml_file(SAMPLE_DIR / "bis_cbpol_sdmx_generic_sample.xml")
 
     rows = parser.parse_bis_policy_rate_xml(root)
@@ -67,7 +67,7 @@ def test_beginner_xml_only_parser_maps_policy_rate_rows():
 
 
 def test_beautifulsoup_scraper_extracts_authorised_sources():
-    scraper = load_module("03_web_scraping_beautifulsoup.py", "scraper_test")
+    scraper = load_module("07_web_scraping_beautifulsoup.py", "scraper_test")
     html_text = (SAMPLE_DIR / "authorised_external_sources_sample.html").read_text(encoding="utf-8")
 
     rows = scraper.parse_authorised_sources_html(html_text)
@@ -78,7 +78,7 @@ def test_beautifulsoup_scraper_extracts_authorised_sources():
 
 
 def test_beginner_html_loading_inspects_page():
-    scraper = load_module("03a_html_loading_basics.py", "beginner_html_loading_test")
+    scraper = load_module("05_html_loading_basics.py", "beginner_html_loading_test")
     html_text = (SAMPLE_DIR / "authorised_external_sources_sample.html").read_text(encoding="utf-8")
 
     page_info = scraper.inspect_html_page(html_text)
@@ -88,7 +88,7 @@ def test_beginner_html_loading_inspects_page():
 
 
 def test_beginner_beautifulsoup_table_extracts_records():
-    scraper = load_module("03b_beautifulsoup_table_basics.py", "beginner_bs_table_test")
+    scraper = load_module("06_beautifulsoup_table_basics.py", "beginner_bs_table_test")
     from bs4 import BeautifulSoup
 
     html_text = (SAMPLE_DIR / "authorised_external_sources_sample.html").read_text(encoding="utf-8")
@@ -104,7 +104,7 @@ def test_beginner_beautifulsoup_table_extracts_records():
 
 
 def test_beginner_scrapy_concepts_bridge_yields_items():
-    scraper = load_module("04a_scrapy_concepts_basics.py", "beginner_scrapy_concepts_test")
+    scraper = load_module("08_scrapy_concepts_basics.py", "beginner_scrapy_concepts_test")
     html_text = (SAMPLE_DIR / "authorised_external_sources_sample.html").read_text(encoding="utf-8")
 
     concepts = dict(scraper.explain_scrapy_concepts())
@@ -165,7 +165,7 @@ def test_validation_rejects_missing_values_and_duplicates():
 def test_quality_gate_passes_clean_offline_data():
     from data_quality_gate import run_quality_gate
 
-    pipeline = load_module("05_external_data_integration_pipeline.py", "pipeline_quality_gate_test")
+    pipeline = load_module("10_external_data_integration_pipeline.py", "pipeline_quality_gate_test")
     accepted_imf, accepted_policy, accepted_sources, _ = pipeline.prepare_external_rows(offline=True)
 
     passed, issues = run_quality_gate(
@@ -182,7 +182,7 @@ def test_quality_gate_passes_clean_offline_data():
 def test_quality_gate_fails_stale_policy_rates():
     from data_quality_gate import gate_issues_to_rejection_rows, run_quality_gate
 
-    pipeline = load_module("05_external_data_integration_pipeline.py", "pipeline_quality_gate_fail_test")
+    pipeline = load_module("10_external_data_integration_pipeline.py", "pipeline_quality_gate_fail_test")
     accepted_imf, accepted_policy, accepted_sources, _ = pipeline.prepare_external_rows(offline=True)
     accepted_policy["ObservationDate"] = "2020-01-01"
 
@@ -200,7 +200,7 @@ def test_quality_gate_fails_stale_policy_rates():
 
 
 def test_pipeline_runs_offline_without_sql():
-    pipeline = load_module("05_external_data_integration_pipeline.py", "pipeline_test")
+    pipeline = load_module("10_external_data_integration_pipeline.py", "pipeline_test")
 
     class Args:
         env = ".env"

@@ -3,7 +3,7 @@ import importlib.util
 import sys
 
 
-MODULE_PATH = Path(__file__).resolve().parents[1] / "03_security_assessment.py"
+MODULE_PATH = Path(__file__).resolve().parents[1] / "04_security_assessment.py"
 spec = importlib.util.spec_from_file_location("security_assessment", MODULE_PATH)
 security_assessment = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
@@ -67,7 +67,7 @@ def test_summary_counts_findings_by_severity(tmp_path):
 
 
 def test_audit_evidence_pack_has_events():
-    audit_demo = load_module("04_audit_compliance_evidence_demo.py", "audit_demo_test")
+    audit_demo = load_module("05_audit_compliance_evidence_demo.py", "audit_demo_test")
 
     events = audit_demo.build_audit_events()
     evidence_pack = audit_demo.build_evidence_pack(events)
@@ -77,7 +77,7 @@ def test_audit_evidence_pack_has_events():
 
 
 def test_roi_calculator_returns_positive_roi():
-    roi_demo = load_module("05_kpi_roi_calculator.py", "roi_demo_test")
+    roi_demo = load_module("06_kpi_roi_calculator.py", "roi_demo_test")
 
     result = roi_demo.calculate_roi(
         hours_saved_per_month=40,

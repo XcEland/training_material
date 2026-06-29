@@ -1,8 +1,8 @@
 """
-Beginner walkthrough: loading monitoring data from previous modules.
+Walkthrough: loading monitoring data from previous modules.
 
-Before building dashboards, students should understand how monitoring data is
-loaded. This script reads:
+Before building dashboards, inspect how monitoring data is loaded. This script
+reads:
 - JSON Lines from Module 6 scheduled WEO reporting runs
 - JSON summaries from Module 6 and Module 7
 - quality gate alerts from Module 7
@@ -34,7 +34,7 @@ OUTPUT_DIR = LAB_DIR / "outputs"
 def main() -> None:
     OUTPUT_DIR.mkdir(exist_ok=True)
 
-    # These paths show learners where the monitoring data comes from.
+    # These paths show where the monitoring data comes from.
     print("Module 6 outputs folder:", MODULE6_OUTPUTS)
     print("Module 7 outputs folder:", MODULE7_OUTPUTS)
 

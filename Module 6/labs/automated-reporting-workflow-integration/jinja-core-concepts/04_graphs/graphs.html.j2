@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ report_title }}</title>
+</head>
+<body>
+  <h1>{{ report_title }}</h1>
+
+  <p><strong>Report month:</strong> {{ report_month }}</p>
+
+  <h2>Chart</h2>
+  <img src="{{ chart_file }}" alt="Inflation bar chart" width="760">
+
+  <h2>Source data used for the chart</h2>
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Inflation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for country in countries %}
+      <tr>
+        <td>{{ country.name }}</td>
+        <td>{{ country.inflation }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Short interpretation</h2>
+  <p>
+    The highest inflation value in this sample is
+    <strong>{{ highest_country.name }}</strong> at
+    <strong>{{ highest_country.inflation }}%</strong>.
+  </p>
+
+  <hr>
+  <p>Beginner note: Python created the PNG chart. Jinja2 inserted it with an img tag.</p>
+</body>
+</html>

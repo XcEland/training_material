@@ -41,7 +41,7 @@ def run_quality_gate(
     """
     Apply dataset-level gate checks before SQL loading.
 
-    The checks are intentionally simple and readable for teaching:
+    The checks are explicit and readable:
     - completeness: required columns should be at least 95% non-null
     - timeliness: IMF/BIS observations should not be too old
     - consistency: cross-field formats should still make sense after parsing
