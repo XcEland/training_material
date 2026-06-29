@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Commodity Price Monitoring Brief - 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #526071;
+      --line: #cbd5e1;
+      --panel: #f8fafc;
+      --accent: #0f766e;
+      --accent-soft: #dff3ef;
+    }
+    body {
+      margin: 32px;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+      background: #ffffff;
+    }
+    header {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 16px;
+      margin-bottom: 22px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--accent);
+      margin-top: 28px;
+      font-size: 20px;
+    }
+    h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      display: grid;
+      gap: 3px;
+    }
+    .summary {
+      background: var(--panel);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      margin: 18px 0;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      background: #fff;
+    }
+    .card strong {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .card span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      margin: 14px 0;
+    }
+    .chart-box {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      height: 360px;
+    }
+    .chart-box canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+    }
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer {
+      margin-top: 34px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media print {
+      body { margin: 18mm; }
+      .chart-box { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Commodity Price Monitoring Brief</h1>
+    <div class="meta">
+      <div>Central Bank Training Simulation</div>
+      <div>Audience: Executive Committee, Markets, and Research</div>
+      <div>Reporting cycle: 2026-06 | Analysis year: 2026</div>
+      <div>Data source: Excel fallback</div>
+      <div>WEO publication date: 2026-04-14T13:00:00Z</div>
+    </div>
+  </header>
+
+  <section class="summary">
+    <h2>Executive Summary</h2>
+    <ul>
+      
+      <li>Oil price index movement from 2025 to 2026: 21.4%.</li>
+      
+      <li>Food price index movement from 2025 to 2026: 6.0%.</li>
+      
+      <li>Commodity trends are included because imported inflation and reserves management are sensitive to global price shocks.</li>
+      
+    </ul>
+  </section>
+
+  
+<section class="chart-grid">
+  <div class="chart-box">
+    <h3>Commodity Price Index Trends</h3>
+    <canvas id="commodityTrendChart"></canvas>
+  </div>
+</section>
+
+<section>
+  <h2>Latest Commodity Movements</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Indicator</th>
+        <th>2025 Index</th>
+        <th>2026 Index</th>
+        <th>Change, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>All commodities index</td>
+        <td>166.9</td>
+        <td>201.4</td>
+        <td>20.6</td>
+      </tr>
+      
+      <tr>
+        <td>Average petroleum spot price</td>
+        <td>67.7</td>
+        <td>82.2</td>
+        <td>21.4</td>
+      </tr>
+      
+      <tr>
+        <td>Coal price index</td>
+        <td>149.4</td>
+        <td>178.8</td>
+        <td>19.7</td>
+      </tr>
+      
+      <tr>
+        <td>Food price index</td>
+        <td>127.1</td>
+        <td>134.7</td>
+        <td>6.0</td>
+      </tr>
+      
+      <tr>
+        <td>Natural gas price index</td>
+        <td>192.8</td>
+        <td>224.9</td>
+        <td>16.6</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+
+  <footer>
+    Training simulation output. Review before external distribution. Source workbook: /home/xceland/Desktop/Trainingcred Institute/Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx
+  </footer>
+
+  
+<script>
+const commodityLineData = {"datasets": [{"data": [69.25, 96.36, 80.59, 79.17, 67.74, 82.22, 75.97, 74.23, 73.91, 73.69, 73.31], "label": "Average petroleum spot price"}, {"data": [128.37, 147.4, 137.43, 133.14, 127.08, 134.69, 135.57, 135.34, 133.36, 133.39, 133.39], "label": "Food price index"}, {"data": [253.67, 521.58, 193.86, 167.43, 192.84, 224.91, 196.13, 157.17, 143.92, 141.85, 141.88], "label": "Natural gas price index"}, {"data": [199.94, 484.5, 227.81, 184.2, 149.4, 178.84, 190.72, 189.94, 190.01, 190.21, 190.3], "label": "Coal price index"}, {"data": [161.5, 215.92, 165.65, 164.82, 166.95, 201.39, 197.78, 193.87, 191.88, 191.54, 191.31], "label": "All commodities index"}], "labels": [2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031]};
+
+new Chart(document.getElementById("commodityTrendChart"), {
+  type: "line",
+  data: {
+    labels: commodityLineData.labels,
+    datasets: commodityLineData.datasets.map((item) => ({
+      label: item.label,
+      data: item.data,
+      borderWidth: 2,
+      tension: 0.2,
+      pointRadius: 3
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { tooltip: { mode: "index", intersect: false } },
+    scales: { y: { title: { display: true, text: "Index value" } } }
+  }
+});
+</script>
+
+</body>
+</html>

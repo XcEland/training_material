@@ -10,7 +10,13 @@ This script demonstrates three beginner-friendly practices:
 from __future__ import annotations
 
 import os
+import json
 from dataclasses import dataclass
+from pathlib import Path
+
+
+LAB_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = LAB_DIR / "outputs"
 
 
 @dataclass(frozen=True)
@@ -88,9 +94,16 @@ def validate_security_posture(settings: DatabaseSettings) -> list[str]:
 
 
 def main() -> None:
+    OUTPUT_DIR.mkdir(exist_ok=True)
     settings = load_database_settings()
     safe_settings = describe_settings(settings)
     warnings = validate_security_posture(settings)
+    review = {
+        "safe_settings": safe_settings,
+        "warning_count": len(warnings),
+        "warnings": warnings,
+        "production_rule": "Use environment variables or a secret manager; never hardcode database passwords in Python scripts.",
+    }
 
     print("Safe connection settings for review:")
     for key, value in safe_settings.items():
@@ -102,6 +115,10 @@ def main() -> None:
             print(f"- WARNING: {warning}")
     else:
         print("- No warnings found.")
+
+    output_path = OUTPUT_DIR / "python_security_posture_review.json"
+    output_path.write_text(json.dumps(review, indent=2), encoding="utf-8")
+    print(f"\nReview written to: {output_path}")
 
 
 if __name__ == "__main__":

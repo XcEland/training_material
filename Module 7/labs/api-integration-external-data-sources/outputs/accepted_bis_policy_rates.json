@@ -1,0 +1,62 @@
+[
+  {
+    "SourceName":"BIS CBPOL SDMX Sample",
+    "Frequency":"D",
+    "ReferenceArea":"GB",
+    "SeriesTitle":"Central bank policy rates - United Kingdom - Daily - End of period",
+    "ObservationDate":"2026-01-02",
+    "PolicyRate":3.75,
+    "ObservationStatus":"A",
+    "QualityStatus":"Accepted"
+  },
+  {
+    "SourceName":"BIS CBPOL SDMX Sample",
+    "Frequency":"D",
+    "ReferenceArea":"GB",
+    "SeriesTitle":"Central bank policy rates - United Kingdom - Daily - End of period",
+    "ObservationDate":"2026-01-05",
+    "PolicyRate":3.75,
+    "ObservationStatus":"A",
+    "QualityStatus":"Accepted"
+  },
+  {
+    "SourceName":"BIS CBPOL SDMX Sample",
+    "Frequency":"M",
+    "ReferenceArea":"US",
+    "SeriesTitle":"Central bank policy rates - United States - Monthly - End of period",
+    "ObservationDate":"2026-01-01",
+    "PolicyRate":4.5,
+    "ObservationStatus":"A",
+    "QualityStatus":"Accepted"
+  },
+  {
+    "SourceName":"BIS CBPOL SDMX Sample",
+    "Frequency":"M",
+    "ReferenceArea":"US",
+    "SeriesTitle":"Central bank policy rates - United States - Monthly - End of period",
+    "ObservationDate":"2026-02-01",
+    "PolicyRate":4.5,
+    "ObservationStatus":"A",
+    "QualityStatus":"Accepted"
+  },
+  {
+    "SourceName":"BIS CBPOL SDMX Sample",
+    "Frequency":"M",
+    "ReferenceArea":"ZA",
+    "SeriesTitle":"Central bank policy rates - South Africa - Monthly - End of period",
+    "ObservationDate":"2026-01-01",
+    "PolicyRate":7.0,
+    "ObservationStatus":"A",
+    "QualityStatus":"Accepted"
+  },
+  {
+    "SourceName":"BIS CBPOL SDMX Sample",
+    "Frequency":"M",
+    "ReferenceArea":"ZA",
+    "SeriesTitle":"Central bank policy rates - South Africa - Monthly - End of period",
+    "ObservationDate":"2026-02-01",
+    "PolicyRate":7.0,
+    "ObservationStatus":"A",
+    "QualityStatus":"Accepted"
+  }
+]

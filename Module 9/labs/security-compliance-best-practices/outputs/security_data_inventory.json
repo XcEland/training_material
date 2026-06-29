@@ -1,0 +1,34 @@
+[
+  {
+    "asset_name": "Module 6 WEO executive reports",
+    "source_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html",
+    "data_type": "HTML analytical reports",
+    "classification": "Internal Analytical Data",
+    "minimum_access_need": "Executive, monetary policy, research, and reporting teams",
+    "recommended_control": "least privilege role, audit trail, and no hardcoded credentials"
+  },
+  {
+    "asset_name": "Module 6 report email preview",
+    "source_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/email",
+    "data_type": "stakeholder notification preview; recipients=6",
+    "classification": "Confidential",
+    "minimum_access_need": "Only reporting operations staff and approved distribution owners",
+    "recommended_control": "least privilege role, audit trail, and no hardcoded credentials"
+  },
+  {
+    "asset_name": "Module 7 IMF/BIS accepted external data",
+    "source_path": "/home/xceland/Desktop/Trainingcred Institute/Module 7/labs/api-integration-external-data-sources/outputs",
+    "data_type": "accepted rows: IMF=24, BIS=6",
+    "classification": "Internal Analytical Data",
+    "minimum_access_need": "ETL service account, economists, and database reviewers",
+    "recommended_control": "least privilege role, audit trail, and no hardcoded credentials"
+  },
+  {
+    "asset_name": "Module 8 monitoring dashboard snapshot",
+    "source_path": "/home/xceland/Desktop/Trainingcred Institute/Module 8/labs/performance-monitoring-system-optimization/outputs/monitoring_snapshot.json",
+    "data_type": "database metrics=3; python metrics=3",
+    "classification": "Internal Analytical Data",
+    "minimum_access_need": "Operations, DBA, and automation support teams",
+    "recommended_control": "least privilege role, audit trail, and no hardcoded credentials"
+  }
+]

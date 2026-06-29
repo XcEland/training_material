@@ -1,0 +1,16 @@
+{
+  "safe_settings": {
+    "server": "localhost,1433",
+    "database": "TrainingDB",
+    "username": "<integrated/security token>",
+    "password": "<not set>",
+    "driver": "ODBC Driver 18 for SQL Server",
+    "encrypt": "yes",
+    "trust_server_certificate": "yes"
+  },
+  "warning_count": 1,
+  "warnings": [
+    "DB_TRUST_SERVER_CERTIFICATE=yes is acceptable for local labs, but production should validate certificates."
+  ],
+  "production_rule": "Use environment variables or a secret manager; never hardcode database passwords in Python scripts."
+}

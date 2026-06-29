@@ -34,3 +34,20 @@ Central Bank systems must show who accessed or changed sensitive data, when the 
 3. Can we prove the change was made through an approved procedure?
 4. Can we detect failed or suspicious attempts?
 5. Can we produce the record for internal or external audit?
+
+## Module 9 Evidence Pack
+
+Run:
+
+```bash
+python 04_audit_compliance_evidence_demo.py
+```
+
+Review:
+
+```text
+outputs/audit_trail_sample.json
+outputs/compliance_evidence_pack.json
+```
+
+These files demonstrate how reporting, external data integration, and monitoring outputs can be packaged as compliance evidence without storing passwords, tokens, or full personal identifiers.

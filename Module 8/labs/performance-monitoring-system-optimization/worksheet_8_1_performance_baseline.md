@@ -12,6 +12,9 @@ Record each metric, its current measured value, the acceptable operating range, 
 | Python workflow duration | `cProfile` |  | <5 sec | >5 sec warning, >15 sec critical | Profile bottleneck functions |
 | Python peak memory | `tracemalloc` |  | <100 MB | >100 MB warning, >250 MB critical | Review data structures and chunking |
 | Python error count | log file/database log |  | 0 | >=1 warning, >=3 critical | Investigate exceptions and alert owner |
+| Module 6 reporting runtime | Module 6 run log / dashboard snapshot |  | agreed reporting SLA | breach of monthly reporting SLA | Notify reporting owner |
+| Module 7 quality issue count | Module 7 quality gate alert |  | 0 unresolved issues | >=1 warning, >=3 critical | Reject load and alert data owner |
+| Output storage size | Module 6/7 output folders |  | depends on retention policy | projected breach within planning window | Review retention and archive policy |
 
 ## Baseline Notes
 

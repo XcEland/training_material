@@ -1,0 +1,69 @@
+{
+  "api": {
+    "source": "IMF DataMapper API",
+    "dataset": "World Economic Outlook",
+    "note": "Offline teaching sample shaped like the IMF DataMapper indicator/country/year response."
+  },
+  "indicators": {
+    "PCPIPCH": {
+      "label": "Inflation, average consumer prices",
+      "unit": "Percent change"
+    },
+    "NGDP_RPCH": {
+      "label": "Gross domestic product, constant prices",
+      "unit": "Percent change"
+    }
+  },
+  "countries": {
+    "LSO": "Lesotho",
+    "ZAF": "South Africa",
+    "BWA": "Botswana",
+    "USA": "United States"
+  },
+  "values": {
+    "PCPIPCH": {
+      "LSO": {
+        "2024": 6.4,
+        "2025": 5.9,
+        "2026": 5.4
+      },
+      "ZAF": {
+        "2024": 4.4,
+        "2025": 4.0,
+        "2026": 4.3
+      },
+      "BWA": {
+        "2024": 3.0,
+        "2025": 3.5,
+        "2026": 4.2
+      },
+      "USA": {
+        "2024": 2.9,
+        "2025": 3.0,
+        "2026": 2.5
+      }
+    },
+    "NGDP_RPCH": {
+      "LSO": {
+        "2024": 2.4,
+        "2025": 2.5,
+        "2026": 2.7
+      },
+      "ZAF": {
+        "2024": 0.6,
+        "2025": 1.0,
+        "2026": 1.3
+      },
+      "BWA": {
+        "2024": 1.0,
+        "2025": 3.3,
+        "2026": 4.0
+      },
+      "USA": {
+        "2024": 2.8,
+        "2025": 1.8,
+        "2026": 1.7
+      }
+    }
+  }
+}

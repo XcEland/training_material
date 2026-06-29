@@ -19,12 +19,17 @@ except Exception:  # pragma: no cover - depends on optional classroom package
 
 if scrapy is not None:
 
-    class MarketRatesSpider(scrapy.Spider):
-        """Example spider structure for an authorised market-rates page."""
+    class ExternalSourcesSpider(scrapy.Spider):
+        """Example spider structure for an authorised external-source registry."""
 
-        name = "market_rates"
+        # The spider name is how Scrapy identifies this crawler.
+        name = "external_sources"
+
+        # allowed_domains prevents the spider from wandering to other domains.
         allowed_domains = ["example.org"]
-        start_urls = ["https://example.org/authorised-market-rates"]
+
+        # start_urls are the first pages Scrapy would request.
+        start_urls = ["https://example.org/authorised-external-sources"]
 
         custom_settings = {
             # Be polite to source systems. Do not overload external websites.
@@ -33,15 +38,19 @@ if scrapy is not None:
         }
 
         def parse(self, response):
-            for row in response.css("table#market-rates tbody tr"):
+            # Scrapy response.css() works like CSS selectors in BeautifulSoup.
+            for row in response.css("table#external-data-sources tbody tr"):
                 cells = [text.strip() for text in row.css("td::text").getall()]
-                if len(cells) != 4:
+                if len(cells) != 5:
                     continue
+
+                # yield sends each extracted item into Scrapy's output pipeline.
                 yield {
-                    "RateDate": cells[0],
-                    "CurrencyCode": cells[1],
-                    "BuyRate": cells[2],
-                    "SellRate": cells[3],
+                    "ExternalSourceName": cells[0],
+                    "SourceType": cells[1],
+                    "OwnerName": cells[2],
+                    "BaseUrl": cells[3],
+                    "PermissionStatus": cells[4],
                 }
 
 
@@ -49,9 +58,9 @@ def main() -> None:
     if scrapy is None:
         print("Scrapy is not installed. This is expected for the base setup.")
         print("For larger scraping projects, install it with: pip install scrapy")
-        print("Then create a Scrapy project and move the spider class into spiders/market_rates.py")
+        print("Then create a Scrapy project and move the spider class into spiders/external_sources.py")
     else:
-        print("Scrapy is installed. This file defines MarketRatesSpider for study/reference.")
+        print("Scrapy is installed. This file defines ExternalSourcesSpider for study/reference.")
 
 
 if __name__ == "__main__":

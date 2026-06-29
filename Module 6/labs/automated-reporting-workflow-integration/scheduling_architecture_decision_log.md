@@ -10,7 +10,7 @@ Windows Task Scheduler is appropriate for simple, single-machine workflows where
 
 Python scheduling libraries such as `schedule` or APScheduler are preferable when workflow logic itself needs to determine execution timing, handle failures gracefully, or run across multiple environments.
 
-For production Central Bank systems, always pair any scheduler with logging that records execution start time, completion time, and outcome.
+For production Central Bank systems, always pair any scheduler with logging that records execution start time, completion time, outcome, generated report paths, WEO release status, and notification status.
 
 ## Comparison Table
 
@@ -29,7 +29,9 @@ Your pipeline must record:
 - completion time
 - status
 - report month
-- generated output path
+- WEO workbook publication date
+- SQL refresh status
+- generated output paths
 - email status
 - error message when failed
 

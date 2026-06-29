@@ -37,6 +37,7 @@ def run_monthly_report(report_month: str) -> None:
         str(PIPELINE),
         "--report-month",
         report_month,
+        "--refresh-data",
         "--dry-run-email",
     ]
     completed = subprocess.run(command, cwd=LAB_DIR, text=True, capture_output=True, check=False)

@@ -1,0 +1,25 @@
+Subject: Operations Status - Monthly WEO Executive Reporting Pack - 2026-06
+
+Operations team,
+
+The automated WEO reporting job completed for 2026-06.
+
+Run outputs:
+
+- macro_outlook: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_macro_outlook_2026.html
+
+- inflation_risk: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_inflation_risk_2026.html
+
+- commodity_monitoring: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_commodity_monitoring_2026.html
+
+
+Data release status:
+- Current publication date: 2026-04-14T13:00:00Z
+- Previous publication date: 2026-04-14T13:00:00Z
+- Release changed: False
+
+Delivery mode:
+Dry run preview only
+
+Regards,
+Central Bank Reporting Automation

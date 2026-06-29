@@ -13,6 +13,7 @@ Use this checklist before any SQL or Python automation is promoted beyond develo
 | Sensitive writes are audited |  |  |
 | Error handling uses `TRY...CATCH` where needed |  |  |
 | Deployment script is repeatable or clearly versioned |  |  |
+| Security scanner report has no unresolved High findings |  | `outputs/security_assessment_report.json` |
 
 ## Python Review
 
@@ -25,6 +26,7 @@ Use this checklist before any SQL or Python automation is promoted beyond develo
 | File paths are configurable |  |  |
 | Tests cover validation and failure paths |  |  |
 | Dependencies are documented |  |  |
+| Security posture review was generated and reviewed |  | `outputs/python_security_posture_review.json` |
 
 ## Approval Record
 

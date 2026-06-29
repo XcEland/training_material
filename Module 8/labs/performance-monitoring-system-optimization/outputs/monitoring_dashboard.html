@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="60">
+  <title>Module 8 Monitoring Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 28px;
+      color: #172033;
+      line-height: 1.45;
+    }
+    h1, h2 {
+      color: #17324d;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+    .metric {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .Normal { border-left: 6px solid #0f766e; }
+    .Warning { border-left: 6px solid #f59e0b; }
+    .Critical { border-left: 6px solid #dc2626; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #e8eef7;
+    }
+    .source-note {
+      color: #475569;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Monitoring Dashboard</h1>
+  <p>Generated at: 2026-06-27T23:04:19+00:00</p>
+
+  <h2>Database Performance</h2>
+  <div class="grid">
+    
+    <div class="card Normal">
+      <strong>Active Sessions</strong>
+      <div class="metric">8</div>
+      <div>Source: Fallback DMV sample</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+    <div class="card Normal">
+      <strong>Average Query Duration Ms</strong>
+      <div class="metric">420</div>
+      <div>Source: Fallback Query Store sample</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+    <div class="card Normal">
+      <strong>Database Size MB</strong>
+      <div class="metric">750</div>
+      <div>Source: Fallback sys.master_files sample</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+  </div>
+
+  <h2>Python Workflow Execution</h2>
+  <div class="grid">
+    
+    <div class="card Normal">
+      <strong>Workflow Duration Seconds</strong>
+      <div class="metric">0.0072</div>
+      <div>Source: cProfile summary</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+    <div class="card Normal">
+      <strong>Peak Memory MB</strong>
+      <div class="metric">0.7327</div>
+      <div>Source: tracemalloc summary</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+    <div class="card Normal">
+      <strong>Python Error Count</strong>
+      <div class="metric">0</div>
+      <div>Source: workflow log file</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+  </div>
+
+  <h2>Prior Module Workflow Metrics</h2>
+  <p class="source-note">These metrics come from the Module 6 WEO monthly reporting outputs and Module 7 IMF/BIS API integration outputs.</p>
+  <div class="grid">
+    
+    <div class="card Normal">
+      <strong>Observed Workflows</strong>
+      <div class="metric">2</div>
+      <div>Source: Module 6 and Module 7 output summaries</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+    <div class="card Normal">
+      <strong>Records Processed</strong>
+      <div class="metric">415</div>
+      <div>Source: Workflow output artifacts</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+    <div class="card Normal">
+      <strong>Quality Issue Count</strong>
+      <div class="metric">0</div>
+      <div>Source: Module 7 quality gate alert</div>
+      <div>Alert: Normal</div>
+    </div>
+    
+  </div>
+
+  <h2>Workflow Run Details</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Workflow</th>
+        <th>Status</th>
+        <th>Duration Seconds</th>
+        <th>Records Processed</th>
+        <th>Quality Issues</th>
+        <th>Notification Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>Module 6 WEO monthly reporting</td>
+        <td>Succeeded</td>
+        <td>21.96</td>
+        <td>382</td>
+        <td>0</td>
+        <td>DryRunPreviewCreated</td>
+      </tr>
+      
+      <tr>
+        <td>Module 7 IMF/BIS external data integration</td>
+        <td>Succeeded</td>
+        <td>0.05</td>
+        <td>33</td>
+        <td>0</td>
+        <td>NoAlertRequired</td>
+      </tr>
+      
+    </tbody>
+  </table>
+
+  <h2>Capacity Projection</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Projected Rows</th>
+        <th>Projected Storage MB</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>1</td>
+        <td>448</td>
+        <td>1.12</td>
+      </tr>
+      
+      <tr>
+        <td>2</td>
+        <td>484</td>
+        <td>1.21</td>
+      </tr>
+      
+      <tr>
+        <td>3</td>
+        <td>523</td>
+        <td>1.31</td>
+      </tr>
+      
+      <tr>
+        <td>4</td>
+        <td>565</td>
+        <td>1.41</td>
+      </tr>
+      
+      <tr>
+        <td>5</td>
+        <td>610</td>
+        <td>1.52</td>
+      </tr>
+      
+      <tr>
+        <td>6</td>
+        <td>659</td>
+        <td>1.65</td>
+      </tr>
+      
+      <tr>
+        <td>7</td>
+        <td>711</td>
+        <td>1.78</td>
+      </tr>
+      
+      <tr>
+        <td>8</td>
+        <td>768</td>
+        <td>1.92</td>
+      </tr>
+      
+      <tr>
+        <td>9</td>
+        <td>830</td>
+        <td>2.07</td>
+      </tr>
+      
+      <tr>
+        <td>10</td>
+        <td>896</td>
+        <td>2.24</td>
+      </tr>
+      
+      <tr>
+        <td>11</td>
+        <td>968</td>
+        <td>2.42</td>
+      </tr>
+      
+      <tr>
+        <td>12</td>
+        <td>1045</td>
+        <td>2.61</td>
+      </tr>
+      
+    </tbody>
+  </table>
+
+  <h2>Operational Review</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Standard</th>
+        <th>Result</th>
+        <th>Evidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>Dashboard includes database metrics</td>
+        <td>Pass</td>
+        <td>3 database metrics rendered.</td>
+      </tr>
+      
+      <tr>
+        <td>Dashboard includes Python workflow metrics</td>
+        <td>Pass</td>
+        <td>6 Python metrics rendered.</td>
+      </tr>
+      
+      <tr>
+        <td>Alert levels are assigned</td>
+        <td>Pass</td>
+        <td>0 warnings, 0 critical alerts.</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</body>
+</html>

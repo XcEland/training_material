@@ -26,7 +26,7 @@ def build_odbc_connection_string() -> str:
     server = os.getenv("DB_SERVER", "localhost,1433")
     database = os.getenv("DB_NAME", "TrainingDB")
     user = os.getenv("DB_USER", "sa")
-    password = os.getenv("DB_PASSWORD", "StrongPassw0rd!2026")
+    password = os.getenv("DB_PASSWORD", "")
     trusted = os.getenv("DB_TRUSTED", "no").lower() in ("yes", "true", "1")
 
     parts = [

@@ -19,13 +19,15 @@ import time
 import tracemalloc
 from pathlib import Path
 
+from monitoring_data_sources import build_workflow_observations
+
 
 LAB_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = LAB_DIR / "outputs"
 
 
 def build_training_rows(row_count: int = 25_000) -> list[dict[str, float]]:
-    """Create predictable training data."""
+    """Create predictable fallback training data."""
     return [
         {
             "row_id": i,
@@ -34,6 +36,31 @@ def build_training_rows(row_count: int = 25_000) -> list[dict[str, float]]:
         }
         for i in range(row_count)
     ]
+
+
+def build_rows_from_prior_modules(repeat_per_workflow: int = 12_000) -> list[dict[str, float]]:
+    """
+    Convert Module 6/7 monitoring observations into rows for profiling.
+
+    We repeat each workflow observation so the profiler has enough work to
+    measure. In production, these rows would already be large ETL result sets.
+    """
+    observations = build_workflow_observations()
+    rows: list[dict[str, float]] = []
+
+    for workflow_index, observation in enumerate(observations):
+        records_processed = max(float(observation["records_processed"]), 1.0)
+        duration_seconds = max(float(observation["duration_seconds"]), 0.01)
+        for i in range(repeat_per_workflow):
+            rows.append(
+                {
+                    "row_id": float((workflow_index * repeat_per_workflow) + i),
+                    "amount": records_processed + float(i % 100),
+                    "risk_weight": 1.0 + (duration_seconds / 100.0),
+                }
+            )
+
+    return rows or build_training_rows()
 
 
 def inefficient_total(rows: list[dict[str, float]]) -> float:
@@ -88,9 +115,33 @@ def trace_memory(function, rows: list[dict[str, float]]) -> dict[str, object]:
     }
 
 
+def build_beginner_summary(profile_results: list[dict[str, object]], memory_results: list[dict[str, object]]) -> dict[str, object]:
+    """Create a short interpretation for learners."""
+    inefficient_profile = next(item for item in profile_results if item["function"] == "inefficient_total")
+    optimized_profile = next(item for item in profile_results if item["function"] == "optimized_total")
+    inefficient_memory = next(item for item in memory_results if item["function"] == "inefficient_total")
+    optimized_memory = next(item for item in memory_results if item["function"] == "optimized_total")
+
+    duration_saved = float(inefficient_profile["duration_seconds"]) - float(optimized_profile["duration_seconds"])
+    memory_saved = float(inefficient_memory["peak_memory_mb"]) - float(optimized_memory["peak_memory_mb"])
+
+    return {
+        "lesson": "Avoid building intermediate lists when a generator expression is enough.",
+        "inefficient_function": inefficient_profile["function"],
+        "optimized_function": optimized_profile["function"],
+        "duration_seconds_saved": round(duration_saved, 6),
+        "peak_memory_mb_saved": round(memory_saved, 4),
+        "how_to_read_this": [
+            "Open profile_summary.json to see which function consumed time.",
+            "Open memory_summary.json to compare peak memory use.",
+            "Open this file to explain the result in plain language.",
+        ],
+    }
+
+
 def main() -> None:
     OUTPUT_DIR.mkdir(exist_ok=True)
-    rows = build_training_rows()
+    rows = build_rows_from_prior_modules()
 
     profile_results = [
         profile_function(inefficient_total, rows),
@@ -100,14 +151,32 @@ def main() -> None:
         trace_memory(inefficient_total, rows),
         trace_memory(optimized_total, rows),
     ]
+    beginner_summary = build_beginner_summary(profile_results, memory_results)
 
     (OUTPUT_DIR / "profile_summary.json").write_text(json.dumps(profile_results, indent=2), encoding="utf-8")
     (OUTPUT_DIR / "memory_summary.json").write_text(json.dumps(memory_results, indent=2), encoding="utf-8")
+    (OUTPUT_DIR / "optimization_beginner_summary.json").write_text(
+        json.dumps(beginner_summary, indent=2),
+        encoding="utf-8",
+    )
+    (OUTPUT_DIR / "profile_source_summary.json").write_text(
+        json.dumps(
+            {
+                "source": "Module 6 and Module 7 monitoring outputs",
+                "row_count_used_for_demo": len(rows),
+                "note": "Rows are repeated from prior workflow observations so cProfile and tracemalloc have measurable work.",
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
     print("Profile results:")
     print(json.dumps(profile_results, indent=2))
     print("Memory results:")
     print(json.dumps(memory_results, indent=2))
+    print("Beginner summary:")
+    print(json.dumps(beginner_summary, indent=2))
 
 
 if __name__ == "__main__":

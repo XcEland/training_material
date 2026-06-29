@@ -10,11 +10,13 @@ Module 9/labs/security-compliance-best-practices/
 
 The lab covers:
 
+- beginner security orientation using existing Module 6-8 outputs
 - role-based access control using SQL Server database roles
 - SQL injection prevention with `sp_executesql` and parameters
 - insecure dynamic SQL examples and corrected versions
 - Python credential management and secure coding checks
 - audit trail and compliance documentation structures
+- audit evidence generation from reporting, integration, and monitoring outputs
 - code review and quality assurance standards
 - deployment gates, rollback planning, KPIs, and ROI tracking
 - a hands-on security assessment of SQL and Python files

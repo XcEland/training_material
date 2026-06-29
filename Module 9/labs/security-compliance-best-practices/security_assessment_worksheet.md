@@ -23,6 +23,7 @@ Use this worksheet for the hands-on exercise: assess existing database procedure
 ## Acceptance Criteria
 
 - Critical and high findings are fixed before release.
+- `outputs/security_assessment_report.json` is attached to the review record.
 - Medium findings have an approved remediation plan.
 - Audit logging exists for sensitive data changes.
 - Dynamic SQL uses parameters.

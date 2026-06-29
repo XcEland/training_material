@@ -1,0 +1,74 @@
+{
+  "baseline": {
+    "source": "Module 6 WEO reporting outputs and Module 7 IMF/BIS integration outputs",
+    "workflow_count": 2,
+    "current_rows": 415,
+    "current_storage_mb": 0.0656,
+    "avg_workflow_duration_seconds": 11.005,
+    "quality_issue_count": 0
+  },
+  "monthly_growth_rate": 0.08,
+  "projection": [
+    {
+      "month_number": 1,
+      "projected_rows": 448,
+      "projected_storage_mb": 0.07
+    },
+    {
+      "month_number": 2,
+      "projected_rows": 484,
+      "projected_storage_mb": 0.08
+    },
+    {
+      "month_number": 3,
+      "projected_rows": 523,
+      "projected_storage_mb": 0.08
+    },
+    {
+      "month_number": 4,
+      "projected_rows": 565,
+      "projected_storage_mb": 0.09
+    },
+    {
+      "month_number": 5,
+      "projected_rows": 610,
+      "projected_storage_mb": 0.1
+    },
+    {
+      "month_number": 6,
+      "projected_rows": 659,
+      "projected_storage_mb": 0.1
+    },
+    {
+      "month_number": 7,
+      "projected_rows": 711,
+      "projected_storage_mb": 0.11
+    },
+    {
+      "month_number": 8,
+      "projected_rows": 768,
+      "projected_storage_mb": 0.12
+    },
+    {
+      "month_number": 9,
+      "projected_rows": 830,
+      "projected_storage_mb": 0.13
+    },
+    {
+      "month_number": 10,
+      "projected_rows": 896,
+      "projected_storage_mb": 0.14
+    },
+    {
+      "month_number": 11,
+      "projected_rows": 968,
+      "projected_storage_mb": 0.15
+    },
+    {
+      "month_number": 12,
+      "projected_rows": 1045,
+      "projected_storage_mb": 0.17
+    }
+  ],
+  "interpretation": "Use the projection to decide when storage, indexing, or job runtime will need review."
+}

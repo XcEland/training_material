@@ -1,0 +1,94 @@
+{% extends "reports/base_report.html.j2" %}
+
+{% block content %}
+<section class="cards">
+  <div class="card">
+    <strong>Mean Inflation</strong>
+    <span>{{ "%.1f"|format(mean_inflation) }}%</span>
+  </div>
+  <div class="card">
+    <strong>Median Inflation</strong>
+    <span>{{ "%.1f"|format(median_inflation) }}%</span>
+  </div>
+  <div class="card">
+    <strong>Above Threshold</strong>
+    <span>{{ high_count }}</span>
+  </div>
+</section>
+
+<section class="chart-grid">
+  <div class="chart-box">
+    <h3>Inflation Distribution</h3>
+    <canvas id="inflationDistributionChart"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Inflation vs GDP Growth</h3>
+    <canvas id="inflationScatterChart"></canvas>
+  </div>
+</section>
+
+<section>
+  <h2>Highest Inflation Readings</h2>
+  <p class="note">Monitoring threshold: {{ "%.1f"|format(threshold) }}%.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Group</th>
+        <th>Inflation, %</th>
+        <th>GDP Growth, %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in top_inflation_rows %}
+      <tr>
+        <td>{{ row.country }}</td>
+        <td>{{ row.economic_group }}</td>
+        <td>{{ "%.1f"|format(row.inflation_pct) }}</td>
+        <td>{{ "%.1f"|format(row.gdp_growth_pct) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const distributionData = {{ distribution_chart | tojson }};
+const scatterData = {{ scatter_chart | tojson }};
+
+new Chart(document.getElementById("inflationDistributionChart"), {
+  type: "bar",
+  data: {
+    labels: distributionData.labels,
+    datasets: [{ label: "Country count", data: distributionData.values, borderWidth: 1 }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: { y: { title: { display: true, text: "Countries" } } }
+  }
+});
+
+new Chart(document.getElementById("inflationScatterChart"), {
+  type: "scatter",
+  data: scatterData,
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context) => `${context.raw.country}: inflation ${context.raw.x}%, growth ${context.raw.y}%`
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: "Inflation (%)" } },
+      y: { title: { display: true, text: "GDP growth (%)" } }
+    }
+  }
+});
+</script>
+{% endblock %}

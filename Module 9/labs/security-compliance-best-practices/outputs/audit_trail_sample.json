@@ -1,0 +1,29 @@
+[
+  {
+    "event_time": "2026-06-28T14:59:32+00:00",
+    "system": "Module 6 WEO monthly reporting",
+    "action": "Generated executive analytical reports",
+    "entity": "WEO reports",
+    "entity_count": 3,
+    "control_result": "DryRunPreviewCreated",
+    "evidence_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/weo_monthly_metrics_2026-06.json"
+  },
+  {
+    "event_time": "2026-06-28T14:59:32+00:00",
+    "system": "Module 7 external data integration",
+    "action": "Validated IMF/BIS external data quality gate",
+    "entity": "Accepted external data rows",
+    "entity_count": 30,
+    "control_result": "Passed",
+    "evidence_path": "/home/xceland/Desktop/Trainingcred Institute/Module 7/labs/api-integration-external-data-sources/outputs/external_integration_run_summary.json"
+  },
+  {
+    "event_time": "2026-06-28T14:59:32+00:00",
+    "system": "Module 8 monitoring dashboard",
+    "action": "Assessed observability dashboard against standards",
+    "entity": "Dashboard standards",
+    "entity_count": 6,
+    "control_result": "Passed",
+    "evidence_path": "/home/xceland/Desktop/Trainingcred Institute/Module 8/labs/performance-monitoring-system-optimization/outputs/dashboard_observability_assessment.json"
+  }
+]

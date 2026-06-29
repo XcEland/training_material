@@ -25,7 +25,7 @@ Manual test:
 
 ```powershell
 cd $WorkDir
-& $PythonPath $ScriptPath --report-month 2026-06 --env .env.windows --dry-run-email
+& $PythonPath $ScriptPath --report-month 2026-06 --env .env.windows --refresh-data --dry-run-email
 ```
 
 ## Create a Scheduled Task
@@ -33,7 +33,7 @@ cd $WorkDir
 ```powershell
 $Action = New-ScheduledTaskAction `
     -Execute $PythonPath `
-    -Argument "`"$ScriptPath`" --report-month 2026-06 --env .env.windows --dry-run-email" `
+    -Argument "`"$ScriptPath`" --env .env.windows --refresh-data --dry-run-email" `
     -WorkingDirectory $WorkDir
 
 $Trigger = New-ScheduledTaskTrigger `
@@ -54,4 +54,6 @@ Register-ScheduledTask `
 - Confirm the task account has access to the project folder.
 - Confirm the task account has SQL Server access if SQL extraction is required.
 - Confirm `outputs/monthly_report_run_log.jsonl` is updated after each run.
+- Confirm generated reports appear in `outputs/html/`.
+- Confirm the stakeholder email preview appears in `outputs/email/` when `SEND_EMAILS=false`.
 - Configure email alerts in the script or monitoring tool for production use.

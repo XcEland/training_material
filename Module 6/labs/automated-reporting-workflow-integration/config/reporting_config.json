@@ -1,10 +1,68 @@
 {
-  "report_title": "Monthly Financial Stability Executive Report",
+  "report_pack_title": "Monthly WEO Executive Reporting Pack",
   "central_bank_name": "Central Bank Training Simulation",
   "default_report_month": "2026-06",
+  "analysis": {
+    "analysis_year": 2026,
+    "trend_start_year": 2021,
+    "trend_end_year": 2031,
+    "high_inflation_threshold_pct": 10.0
+  },
+  "weo_dataset": {
+    "local_workbook_path": "../../../Module 4/labs/python-data-manipulation-database-connectivity/data/WEOApr2026all.xlsx",
+    "download_url": "",
+    "refresh_data_on_run": true,
+    "trend_groups": [
+      "World",
+      "Advanced Economies",
+      "Emerging Market and Developing Economies",
+      "Sub-Saharan Africa (SSA)"
+    ],
+    "commodity_indicator_labels": {
+      "POILAPSP": "Average petroleum spot price",
+      "PFOODW": "Food price index",
+      "PNGASW": "Natural gas price index",
+      "PCOALW": "Coal price index",
+      "PALLFNFW": "All commodities index"
+    }
+  },
+  "reports": [
+    {
+      "id": "macro_outlook",
+      "order": 1,
+      "enabled": true
+    },
+    {
+      "id": "inflation_risk",
+      "order": 2,
+      "enabled": true
+    },
+    {
+      "id": "commodity_monitoring",
+      "order": 3,
+      "enabled": true
+    }
+  ],
+  "email_templates": {
+    "selected": "executive_report_pack",
+    "available": {
+      "executive_report_pack": {
+        "text_template": "emails/executive_report_pack.txt.j2",
+        "html_template": "emails/executive_report_pack.html.j2",
+        "preview_prefix": "weo_executive_email_preview"
+      },
+      "operations_status": {
+        "text_template": "emails/operations_status.txt.j2",
+        "preview_prefix": "weo_operations_email_preview"
+      }
+    }
+  },
+  "output_formats": {
+    "generate_pdf": false
+  },
   "output_quality_thresholds": {
-    "minimum_institution_rows": 6,
-    "maximum_stress_rate": 0.5,
+    "minimum_report_count": 3,
+    "maximum_pipeline_seconds": 120,
     "minimum_required_sections": 5
   },
   "stakeholder_groups": [
@@ -16,10 +74,17 @@
       ]
     },
     {
-      "group": "Financial Supervision",
+      "group": "Monetary Policy and Research",
       "recipients": [
-        "bank.supervision@example.org",
-        "risk.analytics@example.org"
+        "monetary.policy@example.org",
+        "research.department@example.org"
+      ]
+    },
+    {
+      "group": "Markets and Financial Stability",
+      "recipients": [
+        "markets.desk@example.org",
+        "financial.stability@example.org"
       ]
     }
   ],

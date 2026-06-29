@@ -3,16 +3,19 @@
     "high_risk_patterns": [
       {
         "name": "dynamic_sql_exec_string",
+        "severity": "High",
         "pattern": "EXEC\\s*\\(@",
         "message": "Dynamic SQL executed from a string variable. Prefer sp_executesql with parameters."
       },
       {
         "name": "sql_concatenates_input",
+        "severity": "High",
         "pattern": "SET\\s+@\\w+\\s*=.*\\+\\s*@\\w+",
         "message": "SQL text appears to concatenate a variable. Review for SQL injection risk."
       },
       {
         "name": "broad_db_owner_reference",
+        "severity": "High",
         "pattern": "db_owner|sysadmin",
         "message": "Broad privileged role detected. Confirm this is documentation, not a grant."
       }
@@ -22,16 +25,19 @@
     "high_risk_patterns": [
       {
         "name": "hardcoded_password",
+        "severity": "High",
         "pattern": "password\\s*=\\s*['\\\"][^'\\\"]+['\\\"]",
         "message": "Possible hardcoded password. Use environment variables or a secret manager."
       },
       {
         "name": "unsafe_sql_f_string",
+        "severity": "High",
         "pattern": "f['\\\"].*(SELECT|INSERT|UPDATE|DELETE).*\\{",
         "message": "Possible SQL built with an f-string. Use bound parameters."
       },
       {
         "name": "unsafe_shell",
+        "severity": "Medium",
         "pattern": "shell\\s*=\\s*True",
         "message": "shell=True can execute unintended commands. Avoid unless strictly controlled."
       }

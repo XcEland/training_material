@@ -4,21 +4,31 @@ This Module 9 lab moves from beginner security concepts to a practical assessmen
 
 ## Learning Order
 
-1. Run `01_database_security_rbac_sql_injection.sql` to study roles, permissions, unsafe dynamic SQL, safe dynamic SQL, and audit logging.
-2. Review `02_python_secure_coding_credentials.py` to understand environment variables, connection-string redaction, and secure configuration checks.
-3. Complete `python_security_threat_model.md` to connect Python coding choices to realistic database application risks.
-4. Run `03_security_assessment.py` against the Module 9 sample files, then against earlier course modules.
-5. Complete the compliance, code review, deployment, and KPI worksheets.
-6. Run the tests.
+1. Run `00_security_orientation_walkthrough.py` to identify what Module 9 is securing from Modules 6-8.
+2. Run `01a_beginner_rbac_sql_injection_walkthrough.sql` if SQL Server is available.
+3. Run `01_database_security_rbac_sql_injection.sql` to study roles, permissions, unsafe dynamic SQL, safe dynamic SQL, WEO distribution audit logging, and compliance access.
+4. Review `02_python_secure_coding_credentials.py` to understand environment variables, connection-string redaction, and secure configuration checks.
+5. Complete `python_security_threat_model.md` to connect Python coding choices to realistic database application risks.
+6. Run `03_security_assessment.py` against the Module 9 sample vulnerable files, then against earlier course modules.
+7. Run `04_audit_compliance_evidence_demo.py` to build a compliance evidence pack.
+8. Run `05_kpi_roi_calculator.py` to connect security and automation work to measurable value.
+9. Complete the compliance, code review, deployment, and KPI worksheets.
+10. Run the tests.
 
 ## Files
 
 ```text
 Module 9/labs/security-compliance-best-practices/
 ├── README.md
+├── .env.example
+├── day9_facilitator_guide.md
+├── 00_security_orientation_walkthrough.py
+├── 01a_beginner_rbac_sql_injection_walkthrough.sql
 ├── 01_database_security_rbac_sql_injection.sql
 ├── 02_python_secure_coding_credentials.py
 ├── 03_security_assessment.py
+├── 04_audit_compliance_evidence_demo.py
+├── 05_kpi_roi_calculator.py
 ├── compliance_audit_trail_framework.md
 ├── python_security_threat_model.md
 ├── code_review_quality_assurance_checklist.md
@@ -27,6 +37,10 @@ Module 9/labs/security-compliance-best-practices/
 ├── security_assessment_worksheet.md
 ├── config/
 │   └── security_rules.json
+├── sample_assessment_targets/
+│   ├── secure_report_export.py
+│   ├── vulnerable_dynamic_sql.sql
+│   └── vulnerable_report_export.py
 ├── tests/
 │   └── test_security_assessment.py
 └── outputs/
@@ -37,6 +51,16 @@ Module 9/labs/security-compliance-best-practices/
 In SQL Server, the principle of least privilege means every database role receives only the permissions required for its function. Application service accounts should not use `db_owner` or `sysadmin`.
 
 For dynamic SQL, use `sp_executesql` with parameters instead of string concatenation. This is the main SQL injection prevention pattern in T-SQL.
+
+## Dataset And System Linkage
+
+The labs use artifacts from the earlier course build:
+
+- Module 6 WEO report outputs, email preview status, and monthly run metrics
+- Module 7 IMF/BIS integration summary and quality gate result
+- Module 8 monitoring dashboard and observability assessment
+
+This lets students assess security around the actual reporting and integration workflows they have already built.
 
 ## Deployment Discipline
 
@@ -52,8 +76,11 @@ Every change should pass four gates:
 From this folder:
 
 ```bash
+python 00_security_orientation_walkthrough.py
 python 02_python_secure_coding_credentials.py
-python 03_security_assessment.py --path .
+python 03_security_assessment.py --path sample_assessment_targets
+python 04_audit_compliance_evidence_demo.py
+python 05_kpi_roi_calculator.py
 pytest -q
 ```
 
@@ -62,3 +89,29 @@ To scan a wider area of the repository:
 ```bash
 python 03_security_assessment.py --path "../../.."
 ```
+
+## Expected Outputs
+
+```text
+outputs/security_data_inventory.json
+outputs/python_security_posture_review.json
+outputs/security_assessment_report.json
+outputs/audit_trail_sample.json
+outputs/compliance_evidence_pack.json
+outputs/kpi_roi_summary.json
+```
+
+## Exercise Deliverable
+
+Submit:
+
+- generated security data inventory
+- SQL RBAC and SQL injection prevention walkthrough notes
+- Python security posture review
+- security assessment JSON report
+- compliance evidence pack
+- completed threat model
+- completed security assessment worksheet
+- completed code review checklist
+- completed deployment/change plan
+- completed KPI/ROI framework

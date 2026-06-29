@@ -1,0 +1,21 @@
+Subject: Operations Status - {{ report_pack_title }} - {{ report_month }}
+
+Operations team,
+
+The automated WEO reporting job completed for {{ report_month }}.
+
+Run outputs:
+{% for report in reports %}
+- {{ report.report_id }}: {{ report.html_path }}
+{% endfor %}
+
+Data release status:
+- Current publication date: {{ release.current_publication_date }}
+- Previous publication date: {{ release.previous_publication_date or "not recorded" }}
+- Release changed: {{ release.release_changed_since_last_run }}
+
+Delivery mode:
+{{ "Dry run preview only" if dry_run else "SMTP email sent" }}
+
+Regards,
+Central Bank Reporting Automation
