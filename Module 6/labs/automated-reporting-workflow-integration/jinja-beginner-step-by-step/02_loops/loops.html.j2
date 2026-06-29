@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ report_title }}</title>
+</head>
+<body>
+  <h1>{{ report_title }}</h1>
+
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Inflation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for country in countries %}
+      <tr>
+        <td>{{ country.name }}</td>
+        <td>{{ country.inflation }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr>
+  <p>Beginner note: the for-loop repeats one table row for every country.</p>
+</body>
+</html>
