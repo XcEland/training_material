@@ -40,7 +40,7 @@ Central Bank systems must show who accessed or changed sensitive data, when the 
 Run:
 
 ```bash
-python 04_audit_compliance_evidence_demo.py
+python 05_audit_compliance_evidence_demo.py
 ```
 
 Review:

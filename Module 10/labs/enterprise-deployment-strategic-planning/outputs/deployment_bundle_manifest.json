@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-06-28T15:17:50+00:00",
+  "published_artifacts_dir": "/home/xceland/Desktop/Trainingcred Institute/Module 10/labs/enterprise-deployment-strategic-planning/deployment/published_artifacts",
+  "copied_count": 7,
+  "missing_count": 0,
+  "copied": [
+    {
+      "label": "Module 6 WEO reporting metrics",
+      "filename": "module6_weo_monthly_metrics.json",
+      "source": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/weo_monthly_metrics_2026-06.json",
+      "size_bytes": 3333
+    },
+    {
+      "label": "Module 6 reporting run log",
+      "filename": "module6_monthly_report_run_log.jsonl",
+      "source": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/monthly_report_run_log.jsonl",
+      "size_bytes": 10730
+    },
+    {
+      "label": "Module 8 monitoring dashboard",
+      "filename": "module8_monitoring_dashboard.html",
+      "source": "/home/xceland/Desktop/Trainingcred Institute/Module 8/labs/performance-monitoring-system-optimization/outputs/monitoring_dashboard.html",
+      "size_bytes": 6180
+    },
+    {
+      "label": "Module 8 monitoring snapshot",
+      "filename": "module8_monitoring_snapshot.json",
+      "source": "/home/xceland/Desktop/Trainingcred Institute/Module 8/labs/performance-monitoring-system-optimization/outputs/monitoring_snapshot.json",
+      "size_bytes": 4077
+    },
+    {
+      "label": "Module 9 security assessment",
+      "filename": "module9_security_assessment_report.json",
+      "source": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/outputs/security_assessment_report.json",
+      "size_bytes": 2141
+    },
+    {
+      "label": "Module 9 compliance evidence pack",
+      "filename": "module9_compliance_evidence_pack.json",
+      "source": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/outputs/compliance_evidence_pack.json",
+      "size_bytes": 1872
+    },
+    {
+      "label": "Module 9 KPI and ROI summary",
+      "filename": "module9_kpi_roi_summary.json",
+      "source": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/outputs/kpi_roi_summary.json",
+      "size_bytes": 621
+    }
+  ],
+  "missing": [],
+  "deployment_target": "DigitalOcean Droplet or DigitalOcean App Platform"
+}

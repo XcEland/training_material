@@ -25,15 +25,15 @@ pytest -q
 
 ```bash
 python 01_beginner_requests_api.py --offline
-python 02a_json_only_imf_parsing.py
-python 02b_xml_only_bis_parsing.py
-python 02_json_xml_parsing.py
-python 03a_html_loading_basics.py
-python 03b_beautifulsoup_table_basics.py
-python 03_web_scraping_beautifulsoup.py
-python 04a_scrapy_concepts_basics.py
-python 04_optional_scrapy_spider.py
-python 05_external_data_integration_pipeline.py --offline --skip-sql
+python 02_json_only_imf_parsing.py
+python 03_xml_only_bis_parsing.py
+python 04_json_xml_combined_parsing.py
+python 05_html_loading_basics.py
+python 06_beautifulsoup_table_basics.py
+python 07_web_scraping_beautifulsoup.py
+python 08_scrapy_concepts_basics.py
+python 09_optional_scrapy_spider.py
+python 10_external_data_integration_pipeline.py --offline --skip-sql
 ```
 
 ## Acceptance Criteria

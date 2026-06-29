@@ -29,17 +29,7 @@ Release tracking:
 
 Stakeholder distribution:
 
-- Executive Committee: governor.office@example.org
-
-- Executive Committee: deputy.governor@example.org
-
-- Monetary Policy and Research: monetary.policy@example.org
-
-- Monetary Policy and Research: research.department@example.org
-
-- Markets and Financial Stability: markets.desk@example.org
-
-- Markets and Financial Stability: financial.stability@example.org
+- Triggered Monthly Reporting Lab Recipient: findyandx@gmail.com
 
 
 Distribution mode:

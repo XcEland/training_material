@@ -1,7 +1,7 @@
 """
 Shared SQL Server helpers for Module 7.
 
-The functions are deliberately small and explicit for teaching purposes.
+The functions are small and explicit so each connection step is visible.
 They read environment variables, build an ODBC connection string, and return
 a SQLAlchemy engine that pandas can use for `to_sql`.
 """

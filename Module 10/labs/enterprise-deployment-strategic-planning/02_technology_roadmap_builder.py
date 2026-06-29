@@ -4,8 +4,8 @@ Module 10: Strategic technology roadmap builder.
 Each option receives a simple priority score:
 business value + security value + risk reduction - implementation effort.
 
-This keeps the exercise transparent for beginners while still encouraging
-students to compare strategic options using measurable criteria.
+This keeps the exercise transparent while comparing strategic options using
+measurable criteria.
 """
 
 from __future__ import annotations

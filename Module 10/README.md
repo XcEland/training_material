@@ -12,6 +12,8 @@ The lab covers:
 
 - deployment planning and environment management
 - release procedures and rollback planning
+- Docker deployment packaging for a capstone evidence portal
+- DigitalOcean deployment options using Docker on Droplets or a container image on App Platform
 - user training and adoption planning
 - KPI definition and ROI calculation
 - conservative, base-case, and optimistic ROI scenarios

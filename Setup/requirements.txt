@@ -5,12 +5,17 @@ sqlalchemy
 python-dotenv
 openpyxl
 jupyterlab
+ipykernel
+ipython
 matplotlib
 seaborn
 scipy
 scikit-learn
+joblib
 requests
 beautifulsoup4
 jinja2
 schedule
+scrapy
+weasyprint
 pytest

@@ -1,6 +1,6 @@
 # API Integration and External Data Sources
 
-This Module 7 lab builds an external-data integration solution for Central Bank style analysis. The main classroom datasets are:
+This Module 7 lab builds an external-data integration solution for Central Bank style analysis. The main datasets are:
 
 - IMF DataMapper / WEO JSON for inflation and GDP growth indicators
 - BIS CBPOL central bank policy-rate SDMX XML
@@ -26,7 +26,7 @@ The pipeline validates all external rows before SQL Server insertion and writes 
 | BIS CBPOL bulk files | CSV and SDMX XML ZIP files | Discussion of bulk ingestion and larger source files |
 | Authorised local HTML | HTML table | BeautifulSoup scraping fundamentals |
 
-The live IMF endpoint may block some classroom networks. The lab therefore includes local sample payloads so learners can complete the exercise offline.
+The live IMF endpoint may block some corporate networks. The lab therefore includes local sample payloads so the exercise can be completed offline.
 
 ## Security and Rate Limits
 
@@ -69,21 +69,21 @@ https://www.imf.org/external/datamapper/api/v2/PCPIPCH/LSO/ZAF/BWA/USA?periods=2
 https://stats.bis.org/api/v1/data/WS_CBPOL/all/all?startPeriod=2026-01&endPeriod=2026-03
 ```
 
-For Postman headers, use `Accept: application/json` for IMF and `Accept: application/xml` for BIS. IMF may return HTTP 403 on some classroom networks; use the local JSON sample in that case.
+For Postman headers, use `Accept: application/json` for IMF and `Accept: application/xml` for BIS. IMF may return HTTP 403 on some corporate networks; use the local JSON sample in that case.
 
 ## Learning Order
 
 1. Run the SQL setup script when SQL Server is available.
 2. Run `01_beginner_requests_api.py --offline` to learn API requests, headers, authentication placeholders, timeouts, and rate limiting.
-3. Run `02a_json_only_imf_parsing.py` to learn JSON parsing from one source only.
-4. Run `02b_xml_only_bis_parsing.py` to learn XML/SDMX parsing from one source only.
-5. Run `02_json_xml_parsing.py` to combine IMF JSON and BIS SDMX XML into relational rows.
-6. Run `03a_html_loading_basics.py` to learn how to load and inspect an HTML page.
-7. Run `03b_beautifulsoup_table_basics.py` to extract one HTML table step by step.
-8. Run `03_web_scraping_beautifulsoup.py` to use a reusable BeautifulSoup parser.
-9. Run `04a_scrapy_concepts_basics.py` to understand Scrapy terms before installing Scrapy.
-10. Review `04_optional_scrapy_spider.py` for a Scrapy-style spider structure.
-11. Run `05_external_data_integration_pipeline.py --offline --skip-sql` to validate and write accepted output files.
+3. Run `02_json_only_imf_parsing.py` to learn JSON parsing from one source only.
+4. Run `03_xml_only_bis_parsing.py` to learn XML/SDMX parsing from one source only.
+5. Run `04_json_xml_combined_parsing.py` to combine IMF JSON and BIS SDMX XML into relational rows.
+6. Run `05_html_loading_basics.py` to learn how to load and inspect an HTML page.
+7. Run `06_beautifulsoup_table_basics.py` to extract one HTML table step by step.
+8. Run `07_web_scraping_beautifulsoup.py` to use a reusable BeautifulSoup parser.
+9. Run `08_scrapy_concepts_basics.py` to understand Scrapy terms before installing Scrapy.
+10. Review `09_optional_scrapy_spider.py` for a Scrapy-style spider structure.
+11. Run `10_external_data_integration_pipeline.py --offline --skip-sql` to validate and write accepted output files.
 12. Run pytest integration tests.
 
 ## Files
@@ -91,17 +91,17 @@ For Postman headers, use `Accept: application/json` for IMF and `Accept: applica
 ```text
 Module 7/labs/api-integration-external-data-sources/
 ├── README.md
-├── 01_setup_external_data_schema.sql
+├── 00_setup_external_data_schema.sql
 ├── 01_beginner_requests_api.py
-├── 02a_json_only_imf_parsing.py
-├── 02b_xml_only_bis_parsing.py
-├── 02_json_xml_parsing.py
-├── 03a_html_loading_basics.py
-├── 03b_beautifulsoup_table_basics.py
-├── 03_web_scraping_beautifulsoup.py
-├── 04a_scrapy_concepts_basics.py
-├── 04_optional_scrapy_spider.py
-├── 05_external_data_integration_pipeline.py
+├── 02_json_only_imf_parsing.py
+├── 03_xml_only_bis_parsing.py
+├── 04_json_xml_combined_parsing.py
+├── 05_html_loading_basics.py
+├── 06_beautifulsoup_table_basics.py
+├── 07_web_scraping_beautifulsoup.py
+├── 08_scrapy_concepts_basics.py
+├── 09_optional_scrapy_spider.py
+├── 10_external_data_integration_pipeline.py
 ├── db_utils.py
 ├── validation_rules.py
 ├── .env.example
@@ -132,7 +132,7 @@ pip install -r Setup/requirements.txt
 If SQL Server is available:
 
 ```bash
-sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 7/labs/api-integration-external-data-sources/01_setup_external_data_schema.sql"
+sqlcmd -S localhost,1433 -U sa -P 'StrongPassw0rd!2026' -C -i "Module 7/labs/api-integration-external-data-sources/00_setup_external_data_schema.sql"
 ```
 
 Create a local environment file:
@@ -146,15 +146,15 @@ cp .env.example .env
 
 ```bash
 python 01_beginner_requests_api.py --offline
-python 02a_json_only_imf_parsing.py
-python 02b_xml_only_bis_parsing.py
-python 02_json_xml_parsing.py
-python 03a_html_loading_basics.py
-python 03b_beautifulsoup_table_basics.py
-python 03_web_scraping_beautifulsoup.py
-python 04a_scrapy_concepts_basics.py
-python 04_optional_scrapy_spider.py
-python 05_external_data_integration_pipeline.py --offline --skip-sql
+python 02_json_only_imf_parsing.py
+python 03_xml_only_bis_parsing.py
+python 04_json_xml_combined_parsing.py
+python 05_html_loading_basics.py
+python 06_beautifulsoup_table_basics.py
+python 07_web_scraping_beautifulsoup.py
+python 08_scrapy_concepts_basics.py
+python 09_optional_scrapy_spider.py
+python 10_external_data_integration_pipeline.py --offline --skip-sql
 pytest -q
 ```
 
@@ -162,7 +162,7 @@ To try live API calls:
 
 ```bash
 python 01_beginner_requests_api.py
-python 05_external_data_integration_pipeline.py --skip-sql
+python 10_external_data_integration_pipeline.py --skip-sql
 ```
 
 If a live API blocks the request, the final pipeline falls back to the local sample and records the accepted rows in `outputs/`.
@@ -174,11 +174,11 @@ cd "$HOME\Desktop\Trainingcred Institute"
 .\.venv\Scripts\Activate.ps1
 pip install -r Setup\requirements.txt
 
-sqlcmd -S localhost -E -C -i "Module 7\labs\api-integration-external-data-sources\01_setup_external_data_schema.sql"
+sqlcmd -S localhost -E -C -i "Module 7\labs\api-integration-external-data-sources\00_setup_external_data_schema.sql"
 
 cd "Module 7\labs\api-integration-external-data-sources"
 copy .env.windows.example .env.windows
-python 05_external_data_integration_pipeline.py --env .env.windows --offline
+python 10_external_data_integration_pipeline.py --env .env.windows --offline
 ```
 
 ## SQL Tables

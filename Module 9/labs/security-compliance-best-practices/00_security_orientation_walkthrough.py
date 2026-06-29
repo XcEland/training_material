@@ -1,5 +1,5 @@
 """
-Beginner walkthrough: what are we securing in Module 9?
+Walkthrough: what are we securing in Module 9?
 
 This script builds a small data inventory from the systems created earlier:
 - Module 6 WEO report outputs and email preview status
@@ -26,7 +26,7 @@ MODULE8_OUTPUTS = REPO_ROOT / "Module 8" / "labs" / "performance-monitoring-syst
 
 
 def read_json(path: Path, fallback: dict[str, Any]) -> dict[str, Any]:
-    """Read JSON if the file exists; otherwise return a classroom fallback."""
+    """Read JSON if the file exists; otherwise return fallback data."""
     if not path.exists():
         return fallback
     return json.loads(path.read_text(encoding="utf-8"))
@@ -36,7 +36,6 @@ def classify_data_asset(name: str, source_path: Path, data_type: str, access_nee
     """
     Build one data inventory row.
 
-    Beginner note:
     A data inventory is a list of assets, their sensitivity, and who should
     access them. Security controls come after this inventory.
     """
@@ -58,7 +57,7 @@ def classify_data_asset(name: str, source_path: Path, data_type: str, access_nee
 
 
 def build_inventory() -> list[dict[str, str]]:
-    """Create a beginner-friendly security inventory from prior modules."""
+    """Create a security inventory from prior modules."""
     module6_metrics = read_json(
         MODULE6_OUTPUTS / "weo_monthly_metrics_2026-06.json",
         {"recipient_count": 0, "reports": []},

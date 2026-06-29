@@ -1,0 +1,7 @@
+Mini Macro Outlook Report
+Report month: 2026-06
+Institution: Central Bank Training Simulation
+Prepared by: Training Analyst
+
+Beginner note:
+The double braces print a value from Python's context dictionary.

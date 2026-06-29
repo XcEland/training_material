@@ -34,7 +34,7 @@ The primary notebooks are:
 04_time_series_and_report.ipynb
 ```
 
-The beginner notebooks introduce SciPy, charting, and Scikit-learn with a small CSV dataset and heavily commented code before learners move into the existing integrated Module 5 notebooks.
+The introductory notebooks introduce SciPy, charting, and Scikit-learn with a small CSV dataset and heavily commented code before the integrated Module 5 notebooks.
 
 The WEO notebooks and Quarto report use the Module 4 Excel workbook to teach macroeconomic data preparation from multiple sheets, SciPy statistics, Matplotlib/Seaborn EDA, dedicated beginner Seaborn charting, commodity trend charts, a simple next-year GDP growth prediction model, and a rendered dashboard/report workflow.
 

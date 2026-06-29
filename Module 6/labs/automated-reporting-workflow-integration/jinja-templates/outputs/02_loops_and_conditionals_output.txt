@@ -1,0 +1,31 @@
+Mini Macro Outlook Report - Country Inflation Watch
+
+Summary points:
+
+- World GDP growth is projected at 3.1 percent.
+
+- Sub-Saharan Africa growth is projected above the global average.
+
+- Inflation monitoring remains important for policy communication.
+
+
+Country observations:
+
+- Lesotho: 5.2%
+  
+  Action: Continue routine monitoring.
+  
+
+- South Africa: 4.6%
+  
+  Action: Continue routine monitoring.
+  
+
+- Zimbabwe: 28.4%
+  
+  Action: Review required because inflation is above 10.0%.
+  
+
+
+Beginner note:
+Use loops when you have many rows. Use conditionals when the output depends on a rule.

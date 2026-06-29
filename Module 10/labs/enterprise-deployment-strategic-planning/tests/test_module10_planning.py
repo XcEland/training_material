@@ -16,8 +16,9 @@ def load_module(name: str, filename: str):
     return module
 
 
-roi = load_module("roi_calculator", "01_roi_kpi_calculator.py")
+roi = load_module("roi_calculator", "01_kpi_roi_calculator.py")
 roadmap = load_module("roadmap_builder", "02_technology_roadmap_builder.py")
+bundle = load_module("deployment_bundle", "03_prepare_deployment_bundle.py")
 
 
 def test_roi_calculation_returns_positive_payback():
@@ -61,3 +62,17 @@ def test_roadmap_priorities_sort_within_horizon():
     priorities = roadmap.build_priorities([lower, higher])
 
     assert priorities[0].name == "A"
+
+
+def test_deployment_bundle_manifest_has_expected_keys(tmp_path, monkeypatch):
+    published_dir = tmp_path / "published_artifacts"
+    output_path = tmp_path / "deployment_bundle_manifest.json"
+    monkeypatch.setattr(bundle, "PUBLISHED_DIR", published_dir)
+    monkeypatch.setattr(bundle, "OUTPUT_PATH", output_path)
+    monkeypatch.setattr(bundle, "ARTIFACTS", [])
+
+    manifest = bundle.copy_artifacts()
+
+    assert manifest["copied_count"] == 0
+    assert manifest["missing_count"] == 0
+    assert (published_dir / "artifact_manifest.json").exists()

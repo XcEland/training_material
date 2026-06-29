@@ -1,17 +1,17 @@
 # Security, Compliance, and Best Practices
 
-This Module 9 lab moves from beginner security concepts to a practical assessment exercise. It is intentionally simple enough for beginners, but it introduces the same habits expected in production Central Bank systems.
+This Module 9 lab moves from core security concepts to a practical assessment exercise. It uses readable examples while introducing the same habits expected in production Central Bank systems.
 
 ## Learning Order
 
 1. Run `00_security_orientation_walkthrough.py` to identify what Module 9 is securing from Modules 6-8.
-2. Run `01a_beginner_rbac_sql_injection_walkthrough.sql` if SQL Server is available.
-3. Run `01_database_security_rbac_sql_injection.sql` to study roles, permissions, unsafe dynamic SQL, safe dynamic SQL, WEO distribution audit logging, and compliance access.
-4. Review `02_python_secure_coding_credentials.py` to understand environment variables, connection-string redaction, and secure configuration checks.
+2. Run `01_beginner_rbac_sql_injection_walkthrough.sql` if SQL Server is available.
+3. Run `02_database_security_rbac_sql_injection.sql` to study roles, permissions, unsafe dynamic SQL, safe dynamic SQL, WEO distribution audit logging, and compliance access.
+4. Review `03_python_secure_coding_credentials.py` to understand environment variables, connection-string redaction, and secure configuration checks.
 5. Complete `python_security_threat_model.md` to connect Python coding choices to realistic database application risks.
-6. Run `03_security_assessment.py` against the Module 9 sample vulnerable files, then against earlier course modules.
-7. Run `04_audit_compliance_evidence_demo.py` to build a compliance evidence pack.
-8. Run `05_kpi_roi_calculator.py` to connect security and automation work to measurable value.
+6. Run `04_security_assessment.py` against the Module 9 sample vulnerable files, then against earlier course modules.
+7. Run `05_audit_compliance_evidence_demo.py` to build a compliance evidence pack.
+8. Run `06_kpi_roi_calculator.py` to connect security and automation work to measurable value.
 9. Complete the compliance, code review, deployment, and KPI worksheets.
 10. Run the tests.
 
@@ -20,21 +20,21 @@ This Module 9 lab moves from beginner security concepts to a practical assessmen
 ```text
 Module 9/labs/security-compliance-best-practices/
 ├── README.md
-├── .env.example
-├── day9_facilitator_guide.md
 ├── 00_security_orientation_walkthrough.py
-├── 01a_beginner_rbac_sql_injection_walkthrough.sql
-├── 01_database_security_rbac_sql_injection.sql
-├── 02_python_secure_coding_credentials.py
-├── 03_security_assessment.py
-├── 04_audit_compliance_evidence_demo.py
-├── 05_kpi_roi_calculator.py
+├── 01_beginner_rbac_sql_injection_walkthrough.sql
+├── 02_database_security_rbac_sql_injection.sql
+├── 03_python_secure_coding_credentials.py
+├── 04_security_assessment.py
+├── 05_audit_compliance_evidence_demo.py
+├── 06_kpi_roi_calculator.py
+├── day9_learning_guide.md
 ├── compliance_audit_trail_framework.md
 ├── python_security_threat_model.md
 ├── code_review_quality_assurance_checklist.md
 ├── deployment_change_management_plan.md
 ├── kpi_roi_framework.md
 ├── security_assessment_worksheet.md
+├── .env.example
 ├── config/
 │   └── security_rules.json
 ├── sample_assessment_targets/
@@ -77,17 +77,17 @@ From this folder:
 
 ```bash
 python 00_security_orientation_walkthrough.py
-python 02_python_secure_coding_credentials.py
-python 03_security_assessment.py --path sample_assessment_targets
-python 04_audit_compliance_evidence_demo.py
-python 05_kpi_roi_calculator.py
+python 03_python_secure_coding_credentials.py
+python 04_security_assessment.py --path sample_assessment_targets
+python 05_audit_compliance_evidence_demo.py
+python 06_kpi_roi_calculator.py
 pytest -q
 ```
 
 To scan a wider area of the repository:
 
 ```bash
-python 03_security_assessment.py --path "../../.."
+python 04_security_assessment.py --path "../../.."
 ```
 
 ## Expected Outputs
