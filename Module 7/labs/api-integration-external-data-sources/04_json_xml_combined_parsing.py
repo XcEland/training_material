@@ -13,7 +13,7 @@ Postman URLs:
 - IMF JSON:
   GET https://www.imf.org/external/datamapper/api/v2/PCPIPCH/LSO/ZAF/BWA/USA?periods=2024,2025,2026
 - BIS XML/SDMX:
-  GET https://stats.bis.org/api/v1/data/WS_CBPOL/all/all?startPeriod=2026-01&endPeriod=2026-03
+  GET https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.ZA?startPeriod=2024-01&endPeriod=2024-12&detail=full
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ SAMPLE_BIS_XML = LAB_DIR / "sample_data" / "bis_cbpol_sdmx_generic_sample.xml"
 # These URLs can be pasted into Postman. Set the request method to GET.
 # IMF may return HTTP 403 on some networks, so the lab keeps a local sample.
 POSTMAN_IMF_URL = "https://www.imf.org/external/datamapper/api/v2/PCPIPCH/LSO/ZAF/BWA/USA?periods=2024,2025,2026"
-POSTMAN_BIS_URL = "https://stats.bis.org/api/v1/data/WS_CBPOL/all/all?startPeriod=2026-01&endPeriod=2026-03"
+POSTMAN_BIS_URL = "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.ZA?startPeriod=2024-01&endPeriod=2024-12&detail=full"
 
 
 def parse_imf_datamapper_json(payload: dict[str, Any], source_name: str = "IMF DataMapper API") -> list[dict[str, Any]]:
@@ -107,8 +107,8 @@ def _parse_bis_generic_sdmx(root: ET.Element, source_name: str) -> list[dict[str
 
 def _parse_bis_structure_specific_sdmx(root: ET.Element, source_name: str) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for series in root.findall(".//Series"):
-        for obs in series.findall("./Obs"):
+    for series in root.findall(".//{*}Series"):
+        for obs in series.findall("./{*}Obs"):
             rows.append(
                 _policy_rate_row(
                     source_name=source_name,

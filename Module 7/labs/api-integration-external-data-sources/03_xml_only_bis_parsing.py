@@ -9,7 +9,7 @@ Local sample file to open in VS Code:
 sample_data/bis_cbpol_sdmx_generic_sample.xml
 
 Postman/browser URL represented by this sample:
-GET https://stats.bis.org/api/v1/data/WS_CBPOL/all/all?startPeriod=2026-01&endPeriod=2026-03
+GET https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.ZA?startPeriod=2024-01&endPeriod=2024-12&detail=full
 
 This lab intentionally avoids JSON, web scraping, SQL loading, and validation.
 It focuses only on the basic XML parsing pattern.
@@ -30,7 +30,7 @@ SAMPLE_XML = LAB_DIR / "sample_data" / "bis_cbpol_sdmx_generic_sample.xml"
 # Use this URL in Postman to see a live BIS CBPOL XML/SDMX response.
 # Method: GET
 # Headers: Accept: application/xml
-POSTMAN_BIS_URL = "https://stats.bis.org/api/v1/data/WS_CBPOL/all/all?startPeriod=2026-01&endPeriod=2026-03"
+POSTMAN_BIS_URL = "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.ZA?startPeriod=2024-01&endPeriod=2024-12&detail=full"
 
 # Optional BIS bulk files for discussion or larger ingestion exercises:
 # https://data.bis.org/static/bulk/WS_CBPOL_csv_flat.zip

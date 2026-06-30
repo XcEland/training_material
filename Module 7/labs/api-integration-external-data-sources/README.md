@@ -66,25 +66,35 @@ Use these GET URLs in Postman when internet access allows it:
 
 ```text
 https://www.imf.org/external/datamapper/api/v2/PCPIPCH/LSO/ZAF/BWA/USA?periods=2024,2025,2026
-https://stats.bis.org/api/v1/data/WS_CBPOL/all/all?startPeriod=2026-01&endPeriod=2026-03
+https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.ZA?startPeriod=2024-01&endPeriod=2024-12&detail=full
 ```
 
 For Postman headers, use `Accept: application/json` for IMF and `Accept: application/xml` for BIS. IMF may return HTTP 403 on some corporate networks; use the local JSON sample in that case.
 
+BIS policy-rate URLs use the dataflow `BIS,WS_CBPOL,1.0`. The frequency belongs in the series key:
+
+```text
+M.CA = monthly Canada
+D.US = daily United States
+M.JP = monthly Japan
+M.ZA = monthly South Africa
+```
+
 ## Learning Order
 
 1. Run the SQL setup script when SQL Server is available.
-2. Run `01_beginner_requests_api.py --offline` to learn API requests, headers, authentication placeholders, timeouts, and rate limiting.
-3. Run `02_json_only_imf_parsing.py` to learn JSON parsing from one source only.
-4. Run `03_xml_only_bis_parsing.py` to learn XML/SDMX parsing from one source only.
-5. Run `04_json_xml_combined_parsing.py` to combine IMF JSON and BIS SDMX XML into relational rows.
-6. Run `05_html_loading_basics.py` to learn how to load and inspect an HTML page.
-7. Run `06_beautifulsoup_table_basics.py` to extract one HTML table step by step.
-8. Run `07_web_scraping_beautifulsoup.py` to use a reusable BeautifulSoup parser.
-9. Run `08_scrapy_concepts_basics.py` to understand Scrapy terms before installing Scrapy.
-10. Review `09_optional_scrapy_spider.py` for a Scrapy-style spider structure.
-11. Run `10_external_data_integration_pipeline.py --offline --skip-sql` to validate and write accepted output files.
-12. Run pytest integration tests.
+2. Complete `beginner-first-steps/` to practise API GET requests, headers, JSON parsing, XML parsing, BeautifulSoup extraction, validation, and optional SQL loading one idea at a time.
+3. Run `01_beginner_requests_api.py --offline` to learn API requests, headers, authentication placeholders, timeouts, and rate limiting in the main lab structure.
+4. Run `02_json_only_imf_parsing.py` to learn JSON parsing from one source only.
+5. Run `03_xml_only_bis_parsing.py` to learn XML/SDMX parsing from one source only.
+6. Run `04_json_xml_combined_parsing.py` to combine IMF JSON and BIS SDMX XML into relational rows.
+7. Run `05_html_loading_basics.py` to learn how to load and inspect an HTML page.
+8. Run `06_beautifulsoup_table_basics.py` to extract one HTML table step by step.
+9. Run `07_web_scraping_beautifulsoup.py` to use a reusable BeautifulSoup parser.
+10. Run `08_scrapy_concepts_basics.py` to understand Scrapy terms before installing Scrapy.
+11. Review `09_optional_scrapy_spider.py` for a Scrapy-style spider structure.
+12. Run `10_external_data_integration_pipeline.py --offline --skip-sql` to validate and write accepted output files.
+13. Run pytest integration tests.
 
 ## Files
 
@@ -92,6 +102,16 @@ For Postman headers, use `Accept: application/json` for IMF and `Accept: applica
 Module 7/labs/api-integration-external-data-sources/
 ├── README.md
 ├── 00_setup_external_data_schema.sql
+├── beginner-first-steps/
+│   ├── 01_basic_api_get.py
+│   ├── 02_api_with_headers_auth_rate_limit.py
+│   ├── 03_parse_imf_json.py
+│   ├── 04_parse_bis_xml.py
+│   ├── 05_beautifulsoup_authorised_scraping.py
+│   ├── 06_validate_before_database.py
+│   ├── 07_load_to_sql_server.py
+│   ├── 08_full_pipeline_beginner.py
+│   └── outputs/
 ├── 01_beginner_requests_api.py
 ├── 02_json_only_imf_parsing.py
 ├── 03_xml_only_bis_parsing.py
@@ -143,6 +163,22 @@ cp .env.example .env
 ```
 
 ## Run the Labs
+
+Run the first-level scripts:
+
+```bash
+cd beginner-first-steps
+python 01_basic_api_get.py
+python 02_api_with_headers_auth_rate_limit.py
+python 03_parse_imf_json.py
+python 04_parse_bis_xml.py
+python 05_beautifulsoup_authorised_scraping.py
+python 06_validate_before_database.py
+python 08_full_pipeline_beginner.py --offline
+cd ..
+```
+
+Run the main Module 7 lab sequence:
 
 ```bash
 python 01_beginner_requests_api.py --offline

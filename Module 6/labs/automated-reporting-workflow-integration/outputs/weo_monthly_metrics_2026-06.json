@@ -1,6 +1,6 @@
 {
   "report_month": "2026-06",
-  "pipeline_seconds": 23.19,
+  "pipeline_seconds": 24.91,
   "download": {
     "download_status": "UsingLocalWorkbook",
     "download_url": "not configured"
@@ -11,15 +11,15 @@
     "current_publication_date": "2026-04-14T13:00:00Z",
     "release_changed_since_last_run": false
   },
-  "sql_load_status": "SkippedSqlUnavailable",
-  "pdf_status": "NotRequested",
+  "sql_load_status": "LoadedToSql",
+  "pdf_status": "Generated",
   "reports": [
     {
       "report_id": "macro_outlook",
       "title": "Global Macro Outlook Executive Brief",
       "audience": "Executive Committee and Monetary Policy",
       "html_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_macro_outlook_2026.html",
-      "data_source": "Excel fallback",
+      "data_source": "T-SQL from m6.WEOGroupIndicatorLong",
       "summary_points": [
         "World GDP growth is projected at 3.1% in 2026.",
         "Sub-Saharan Africa growth is projected at 4.3%.",
@@ -30,15 +30,15 @@
         "country_rows": 191,
         "trend_group_count": 4
       },
-      "pdf_path": null,
-      "pdf_status": "NotRequested"
+      "pdf_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_macro_outlook_2026.pdf",
+      "pdf_status": "Generated"
     },
     {
       "report_id": "inflation_risk",
       "title": "Inflation Risk Monitoring Report",
       "audience": "Executive Committee, Monetary Policy, and Research",
       "html_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_inflation_risk_2026.html",
-      "data_source": "Excel fallback",
+      "data_source": "T-SQL from m6.WEOCountryMacro",
       "summary_points": [
         "Average country inflation is 7.5% in 2026.",
         "Median country inflation is 3.3%.",
@@ -50,15 +50,15 @@
         "high_inflation_country_count": 20,
         "mean_inflation_pct": 7.54
       },
-      "pdf_path": null,
-      "pdf_status": "NotRequested"
+      "pdf_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_inflation_risk_2026.pdf",
+      "pdf_status": "Generated"
     },
     {
       "report_id": "commodity_monitoring",
       "title": "Commodity Price Monitoring Brief",
       "audience": "Executive Committee, Markets, and Research",
       "html_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_commodity_monitoring_2026.html",
-      "data_source": "Excel fallback",
+      "data_source": "T-SQL from m6.WEOCommodityIndicatorLong",
       "summary_points": [
         "Oil price index movement from 2025 to 2026: 21.4%.",
         "Food price index movement from 2025 to 2026: 6.0%.",
@@ -70,11 +70,22 @@
         "oil_change_pct": 21.38,
         "food_change_pct": 5.99
       },
-      "pdf_path": null,
-      "pdf_status": "NotRequested"
+      "pdf_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_commodity_monitoring_2026.pdf",
+      "pdf_status": "Generated"
     }
   ],
-  "email_status": "DryRunPreviewCreated",
+  "email_status": "Sent",
   "email_preview_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/email/weo_executive_email_preview_2026-06.txt",
-  "recipient_count": 1
+  "recipient_count": 1,
+  "html_report_paths": [
+    "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_macro_outlook_2026.html",
+    "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_inflation_risk_2026.html",
+    "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_commodity_monitoring_2026.html"
+  ],
+  "pdf_report_paths": [
+    "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_macro_outlook_2026.pdf",
+    "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_inflation_risk_2026.pdf",
+    "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_commodity_monitoring_2026.pdf"
+  ],
+  "stage_log_path": "/home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/monthly_report_stage_log.jsonl"
 }

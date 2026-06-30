@@ -90,6 +90,12 @@
       width: 100% !important;
       height: 300px !important;
     }
+    .static-chart {
+      display: none;
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
@@ -119,6 +125,8 @@
     @media print {
       body { margin: 18mm; }
       .chart-box { break-inside: avoid; }
+      .chart-box canvas { display: none !important; }
+      .static-chart { display: block; }
     }
   </style>
 </head>

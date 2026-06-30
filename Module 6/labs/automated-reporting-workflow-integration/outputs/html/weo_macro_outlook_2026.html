@@ -90,6 +90,12 @@
       width: 100% !important;
       height: 300px !important;
     }
+    .static-chart {
+      display: none;
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
@@ -119,6 +125,8 @@
     @media print {
       body { margin: 18mm; }
       .chart-box { break-inside: avoid; }
+      .chart-box canvas { display: none !important; }
+      .static-chart { display: block; }
     }
   </style>
 </head>
@@ -129,7 +137,7 @@
       <div>Central Bank Training Simulation</div>
       <div>Audience: Executive Committee and Monetary Policy</div>
       <div>Reporting cycle: 2026-06 | Analysis year: 2026</div>
-      <div>Data source: Excel fallback</div>
+      <div>Data source: T-SQL from m6.WEOGroupIndicatorLong</div>
       <div>WEO publication date: 2026-04-14T13:00:00Z</div>
     </div>
   </header>
@@ -191,10 +199,12 @@
 <section class="chart-grid">
   <div class="chart-box">
     <h3>GDP Growth Trend by WEO Group</h3>
+    <img class="static-chart" src="../charts/macro_growth_trend.png" alt="GDP growth trend by WEO group">
     <canvas id="growthTrendChart"></canvas>
   </div>
   <div class="chart-box">
     <h3>Top and Bottom Country Growth Rates</h3>
+    <img class="static-chart" src="../charts/macro_top_bottom_growth.png" alt="Top and bottom country growth rates">
     <canvas id="topBottomGrowthChart"></canvas>
   </div>
 </section>

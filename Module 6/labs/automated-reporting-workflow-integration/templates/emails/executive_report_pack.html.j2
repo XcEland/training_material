@@ -27,6 +27,7 @@
         <th>#</th>
         <th>Report</th>
         <th>Audience</th>
+        <th>Distribution file</th>
         <th>Source</th>
       </tr>
     </thead>
@@ -36,6 +37,7 @@
         <td>{{ loop.index }}</td>
         <td>{{ report.title }}</td>
         <td>{{ report.audience }}</td>
+        <td>{{ report.pdf_path if report.pdf_path else report.pdf_status }}</td>
         <td>{{ report.data_source }}</td>
       </tr>
       {% endfor %}
