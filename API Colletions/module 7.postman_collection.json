@@ -1,0 +1,422 @@
+{
+	"info": {
+		"_postman_id": "4ae2f483-ffef-43d1-a86f-f9304c4e59e2",
+		"name": "module 7",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33819277",
+		"_collection_link": "https://managedengine-api.postman.co/workspace/0000~83cbb21d-2f37-479b-8457-ab0ddb29ac0f/collection/33819277-4ae2f483-ffef-43d1-a86f-f9304c4e59e2?action=share&source=collection_link&creator=33819277"
+	},
+	"item": [
+		{
+			"name": "json",
+			"item": [
+				{
+					"name": "imf",
+					"item": [
+						{
+							"name": "IMF Metadata — List Available Indicators",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://www.imf.org/external/datamapper/api/v2/indicators",
+									"protocol": "https",
+									"host": [
+										"www",
+										"imf",
+										"org"
+									],
+									"path": [
+										"external",
+										"datamapper",
+										"api",
+										"v2",
+										"indicators"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "IMF Metadata — List Available Countries",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://www.imf.org/external/datamapper/api/v2/countries",
+									"protocol": "https",
+									"host": [
+										"www",
+										"imf",
+										"org"
+									],
+									"path": [
+										"external",
+										"datamapper",
+										"api",
+										"v2",
+										"countries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "IMF JSON API — Inflation Data",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "// This gets inflation data for:\n// LSO = Lesotho\n// ZAF = South Africa\n// BWA = Botswana\n// USA = United States",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://www.imf.org/external/datamapper/api/v2/PCPIPCH/LSO/ZAF/BWA/USA?periods=2024,2025,2026",
+									"protocol": "https",
+									"host": [
+										"www",
+										"imf",
+										"org"
+									],
+									"path": [
+										"external",
+										"datamapper",
+										"api",
+										"v2",
+										"PCPIPCH",
+										"LSO",
+										"ZAF",
+										"BWA",
+										"USA"
+									],
+									"query": [
+										{
+											"key": "periods",
+											"value": "2024,2025,2026"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "IMF JSON API — Real GDP Growth",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://www.imf.org/external/datamapper/api/v2/NGDP_RPCH/LSO/ZAF/BWA/USA?periods=2024,2025,2026",
+									"protocol": "https",
+									"host": [
+										"www",
+										"imf",
+										"org"
+									],
+									"path": [
+										"external",
+										"datamapper",
+										"api",
+										"v2",
+										"NGDP_RPCH",
+										"LSO",
+										"ZAF",
+										"BWA",
+										"USA"
+									],
+									"query": [
+										{
+											"key": "periods",
+											"value": "2024,2025,2026"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "xml",
+			"item": [
+				{
+					"name": "bis",
+					"item": [
+						{
+							"name": "BIS XML API — Central Bank Policy Rates",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/xml",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "// M = Monthly frequency\n// ZA = South Africa",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL_M,1.0/M.ZA/all?startPeriod=2024-01&endPeriod=2024-12&detail=full",
+									"protocol": "https",
+									"host": [
+										"stats",
+										"bis",
+										"org"
+									],
+									"path": [
+										"api",
+										"v1",
+										"data",
+										"BIS,WS_CBPOL_M,1.0",
+										"M.ZA",
+										"all"
+									],
+									"query": [
+										{
+											"key": "startPeriod",
+											"value": "2024-01"
+										},
+										{
+											"key": "endPeriod",
+											"value": "2024-12"
+										},
+										{
+											"key": "detail",
+											"value": "full"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "BIS XML API — United States Policy Rate",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/xml",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/D.US?startPeriod=2024-01&endPeriod=2024-12&detail=full",
+									"protocol": "https",
+									"host": [
+										"stats",
+										"bis",
+										"org"
+									],
+									"path": [
+										"api",
+										"v1",
+										"data",
+										"BIS,WS_CBPOL,1.0",
+										"D.US"
+									],
+									"query": [
+										{
+											"key": "startPeriod",
+											"value": "2024-01"
+										},
+										{
+											"key": "endPeriod",
+											"value": "2024-12"
+										},
+										{
+											"key": "detail",
+											"value": "full"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "BIS XML API — Japan Monthly Policy Rate",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/xml",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.JP?startPeriod=2024-01&endPeriod=2024-12&detail=full",
+									"protocol": "https",
+									"host": [
+										"stats",
+										"bis",
+										"org"
+									],
+									"path": [
+										"api",
+										"v1",
+										"data",
+										"BIS,WS_CBPOL,1.0",
+										"M.JP"
+									],
+									"query": [
+										{
+											"key": "startPeriod",
+											"value": "2024-01"
+										},
+										{
+											"key": "endPeriod",
+											"value": "2024-12"
+										},
+										{
+											"key": "detail",
+											"value": "full"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Canada Monthly Policy Rate",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.CA?startPeriod=2024-01&endPeriod=2024-12&detail=full",
+									"protocol": "https",
+									"host": [
+										"stats",
+										"bis",
+										"org"
+									],
+									"path": [
+										"api",
+										"v1",
+										"data",
+										"BIS,WS_CBPOL,1.0",
+										"M.CA"
+									],
+									"query": [
+										{
+											"key": "startPeriod",
+											"value": "2024-01"
+										},
+										{
+											"key": "endPeriod",
+											"value": "2024-12"
+										},
+										{
+											"key": "detail",
+											"value": "full"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/{{FREQUENCY}}.{{COUNTRY_CODE}}",
+									"protocol": "https",
+									"host": [
+										"stats",
+										"bis",
+										"org"
+									],
+									"path": [
+										"api",
+										"v1",
+										"data",
+										"BIS,WS_CBPOL,1.0",
+										"{{FREQUENCY}}.{{COUNTRY_CODE}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get available frequencies for WS_CBPOL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://stats.bis.org/api/v1/availableconstraint/BIS,WS_CBPOL,1.0/all/all/FREQ?detail=full",
+									"protocol": "https",
+									"host": [
+										"stats",
+										"bis",
+										"org"
+									],
+									"path": [
+										"api",
+										"v1",
+										"availableconstraint",
+										"BIS,WS_CBPOL,1.0",
+										"all",
+										"all",
+										"FREQ"
+									],
+									"query": [
+										{
+											"key": "detail",
+											"value": "full"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
