@@ -1,5 +1,11 @@
 {
-  "generated_at": "2026-06-28T17:16:39+00:00",
+  "generated_at": "2026-06-30T22:50:48+00:00",
+  "metric_summary": {
+    "total": 9,
+    "normal": 9,
+    "warning": 0,
+    "critical": 0
+  },
   "database_metrics": [
     {
       "metric_name": "Active Sessions",
@@ -23,13 +29,13 @@
   "python_metrics": [
     {
       "metric_name": "Workflow Duration Seconds",
-      "metric_value": 0.0072,
+      "metric_value": 0.0654,
       "alert_level": "Normal",
       "data_source": "cProfile summary"
     },
     {
       "metric_name": "Peak Memory MB",
-      "metric_value": 0.7327,
+      "metric_value": 1.76,
       "alert_level": "Normal",
       "data_source": "tracemalloc summary"
     },
@@ -65,11 +71,11 @@
       "workflow_name": "Module 6 WEO monthly reporting",
       "source": "monthly_report_run_log.jsonl and weo_monthly_metrics_2026-06.json",
       "status": "Succeeded",
-      "duration_seconds": 21.96,
+      "duration_seconds": 24.91,
       "records_processed": 382,
       "outputs_created": 3,
       "quality_issue_count": 0,
-      "notification_status": "DryRunPreviewCreated"
+      "notification_status": "Sent"
     },
     {
       "workflow_name": "Module 7 IMF/BIS external data integration",

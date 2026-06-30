@@ -2,162 +2,365 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="refresh" content="60">
   <title>Module 8 Monitoring Dashboard</title>
   <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #d7dee8;
+      --surface: #ffffff;
+      --soft: #f5f7fa;
+      --navy: #17324d;
+      --teal: #0f766e;
+      --amber: #b45309;
+      --red: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 28px;
-      color: #172033;
+      margin: 0;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
       line-height: 1.45;
     }
-    h1, h2 {
-      color: #17324d;
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 22px 28px;
     }
-    .grid {
+
+    main {
+      padding: 22px 28px 36px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 28px;
+    }
+
+    h2 {
+      margin: 30px 0 12px;
+      color: var(--navy);
+      font-size: 19px;
+    }
+
+    .meta {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 12px;
-      margin: 18px 0;
+      margin-top: 18px;
     }
-    .card {
-      border: 1px solid #cbd5e1;
+
+    .summary-box,
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
       border-radius: 6px;
-      padding: 12px;
-      background: #f8fafc;
+      padding: 13px;
     }
-    .metric {
-      font-size: 24px;
+
+    .summary-label,
+    .source,
+    .alert {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .summary-value,
+    .metric-value {
+      margin-top: 3px;
+      font-size: 25px;
       font-weight: 700;
     }
-    .Normal { border-left: 6px solid #0f766e; }
-    .Warning { border-left: 6px solid #f59e0b; }
-    .Critical { border-left: 6px solid #dc2626; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .metric-card {
+      border-left-width: 6px;
+      min-height: 128px;
+    }
+
+    .Normal {
+      border-left-color: var(--teal);
+    }
+
+    .Warning {
+      border-left-color: var(--amber);
+    }
+
+    .Critical {
+      border-left-color: var(--red);
+    }
+
+    .metric-name {
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
     table {
-      border-collapse: collapse;
       width: 100%;
-      margin-top: 12px;
+      min-width: 760px;
+      border-collapse: collapse;
       font-size: 13px;
     }
-    th, td {
-      border: 1px solid #cbd5e1;
-      padding: 8px;
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 9px 10px;
       text-align: left;
+      vertical-align: top;
     }
+
     th {
-      background: #e8eef7;
+      background: #eef3f8;
+      color: #24364f;
+      font-weight: 700;
     }
-    .source-note {
-      color: #475569;
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status-pill {
+      display: inline-block;
+      min-width: 72px;
+      border-radius: 999px;
+      padding: 2px 9px;
+      color: #ffffff;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .pill-Normal,
+    .pill-Pass,
+    .pill-Succeeded,
+    .pill-Sent,
+    .pill-NoAlertRequired {
+      background: var(--teal);
+    }
+
+    .pill-Warning,
+    .pill-Fallback,
+    .pill-AlertRequired {
+      background: var(--amber);
+    }
+
+    .pill-Critical,
+    .pill-Fail,
+    .pill-QualityGateFailed,
+    .pill-Error {
+      background: var(--red);
+    }
+
+    .source-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
       font-size: 13px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .links a {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 860px) {
+      header,
+      main {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .summary,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Monitoring Dashboard</h1>
-  <p>Generated at: {{ generated_at }}</p>
-
-  <h2>Database Performance</h2>
-  <div class="grid">
-    {% for item in database_metrics %}
-    <div class="card {{ item.alert_level }}">
-      <strong>{{ item.metric_name }}</strong>
-      <div class="metric">{{ item.metric_value }}</div>
-      <div>Source: {{ item.data_source }}</div>
-      <div>Alert: {{ item.alert_level }}</div>
+  <header>
+    <h1>Module 8 Monitoring Dashboard</h1>
+    <div class="meta">Generated at {{ generated_at }}. The page refreshes every 60 seconds.</div>
+    <div class="links">
+      <a href="/metrics.json">Metrics JSON</a>
+      <a href="/monitoring_snapshot.json">Rendered data JSON</a>
     </div>
-    {% endfor %}
-  </div>
 
-  <h2>Python Workflow Execution</h2>
-  <div class="grid">
-    {% for item in python_metrics %}
-    <div class="card {{ item.alert_level }}">
-      <strong>{{ item.metric_name }}</strong>
-      <div class="metric">{{ item.metric_value }}</div>
-      <div>Source: {{ item.data_source }}</div>
-      <div>Alert: {{ item.alert_level }}</div>
+    <section class="summary" aria-label="Metric summary">
+      <div class="summary-box">
+        <div class="summary-label">Total Metrics</div>
+        <div class="summary-value">{{ metric_summary.total }}</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Normal</div>
+        <div class="summary-value">{{ metric_summary.normal }}</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Warning</div>
+        <div class="summary-value">{{ metric_summary.warning }}</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Critical</div>
+        <div class="summary-value">{{ metric_summary.critical }}</div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <h2>Database Performance</h2>
+    <section class="metric-grid" aria-label="Database metrics">
+      {% for item in database_metrics %}
+      <article class="metric-card {{ item.alert_level }}">
+        <div class="metric-name">{{ item.metric_name }}</div>
+        <div class="metric-value">{{ item.metric_value }}</div>
+        <div class="alert">Alert: <span class="status-pill pill-{{ item.alert_level }}">{{ item.alert_level }}</span></div>
+        <div class="source">Source: {{ item.data_source }}</div>
+      </article>
+      {% endfor %}
+    </section>
+
+    <h2>Python Workflow Execution</h2>
+    <section class="metric-grid" aria-label="Python workflow metrics">
+      {% for item in python_metrics %}
+      <article class="metric-card {{ item.alert_level }}">
+        <div class="metric-name">{{ item.metric_name }}</div>
+        <div class="metric-value">{{ item.metric_value }}</div>
+        <div class="alert">Alert: <span class="status-pill pill-{{ item.alert_level }}">{{ item.alert_level }}</span></div>
+        <div class="source">Source: {{ item.data_source }}</div>
+      </article>
+      {% endfor %}
+    </section>
+
+    <h2>End-to-End Workflow Metrics</h2>
+    <ul class="source-list">
+      <li>Module 6: WEO monthly reporting run logs, report metrics, email preview status.</li>
+      <li>Module 7: IMF/BIS external integration summary and quality gate alert.</li>
+      <li>Module 8: profiling, memory, logging, SQL Server metrics, and capacity planning.</li>
+    </ul>
+    <section class="metric-grid" aria-label="Workflow rollup metrics">
+      {% for item in workflow_metrics %}
+      <article class="metric-card {{ item.alert_level }}">
+        <div class="metric-name">{{ item.metric_name }}</div>
+        <div class="metric-value">{{ item.metric_value }}</div>
+        <div class="alert">Alert: <span class="status-pill pill-{{ item.alert_level }}">{{ item.alert_level }}</span></div>
+        <div class="source">Source: {{ item.data_source }}</div>
+      </article>
+      {% endfor %}
+    </section>
+
+    <h2>Workflow Run Details</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Workflow</th>
+            <th>Status</th>
+            <th>Duration Seconds</th>
+            <th>Records Processed</th>
+            <th>Outputs</th>
+            <th>Quality Issues</th>
+            <th>Notification</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in workflow_observations %}
+          <tr>
+            <td>{{ row.workflow_name }}</td>
+            <td><span class="status-pill pill-{{ row.status }}">{{ row.status }}</span></td>
+            <td>{{ row.duration_seconds }}</td>
+            <td>{{ row.records_processed }}</td>
+            <td>{{ row.outputs_created }}</td>
+            <td>{{ row.quality_issue_count }}</td>
+            <td><span class="status-pill pill-{{ row.notification_status }}">{{ row.notification_status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    {% endfor %}
-  </div>
 
-  <h2>Prior Module Workflow Metrics</h2>
-  <p class="source-note">These metrics come from the Module 6 WEO monthly reporting outputs and Module 7 IMF/BIS API integration outputs.</p>
-  <div class="grid">
-    {% for item in workflow_metrics %}
-    <div class="card {{ item.alert_level }}">
-      <strong>{{ item.metric_name }}</strong>
-      <div class="metric">{{ item.metric_value }}</div>
-      <div>Source: {{ item.data_source }}</div>
-      <div>Alert: {{ item.alert_level }}</div>
+    <h2>Capacity Projection</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Projected Rows</th>
+            <th>Projected Storage MB</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in capacity_projection %}
+          <tr>
+            <td>{{ row.month_number }}</td>
+            <td>{{ row.projected_rows }}</td>
+            <td>{{ row.projected_storage_mb }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    {% endfor %}
-  </div>
 
-  <h2>Workflow Run Details</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Workflow</th>
-        <th>Status</th>
-        <th>Duration Seconds</th>
-        <th>Records Processed</th>
-        <th>Quality Issues</th>
-        <th>Notification Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in workflow_observations %}
-      <tr>
-        <td>{{ row.workflow_name }}</td>
-        <td>{{ row.status }}</td>
-        <td>{{ row.duration_seconds }}</td>
-        <td>{{ row.records_processed }}</td>
-        <td>{{ row.quality_issue_count }}</td>
-        <td>{{ row.notification_status }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <h2>Capacity Projection</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Month</th>
-        <th>Projected Rows</th>
-        <th>Projected Storage MB</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in capacity_projection %}
-      <tr>
-        <td>{{ row.month_number }}</td>
-        <td>{{ row.projected_rows }}</td>
-        <td>{{ row.projected_storage_mb }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <h2>Operational Review</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Standard</th>
-        <th>Result</th>
-        <th>Evidence</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in observability_results %}
-      <tr>
-        <td>{{ item.standard }}</td>
-        <td>{{ "Pass" if item.passed else "Fail" }}</td>
-        <td>{{ item.evidence }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <h2>Operational Review</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Standard</th>
+            <th>Result</th>
+            <th>Evidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in observability_results %}
+          <tr>
+            <td>{{ item.standard }}</td>
+            <td><span class="status-pill pill-{{ 'Pass' if item.passed else 'Fail' }}">{{ "Pass" if item.passed else "Fail" }}</span></td>
+            <td>{{ item.evidence }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
 </body>
 </html>

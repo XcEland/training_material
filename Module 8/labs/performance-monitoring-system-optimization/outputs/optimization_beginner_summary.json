@@ -1,12 +1,5 @@
 {
-  "lesson": "Avoid building intermediate lists when a generator expression is enough.",
-  "inefficient_function": "inefficient_total",
-  "optimized_function": "optimized_total",
-  "duration_seconds_saved": 0.001342,
-  "peak_memory_mb_saved": 0.7324,
-  "how_to_read_this": [
-    "Open profile_summary.json to see which function consumed time.",
-    "Open memory_summary.json to compare peak memory use.",
-    "Open this file to explain the result in plain language."
-  ]
+  "lesson": "Profile first, then optimize the slow or memory-heavy step.",
+  "slow_pattern": "Builds an unnecessary list before summing.",
+  "better_pattern": "Uses a generator expression and avoids the extra list."
 }

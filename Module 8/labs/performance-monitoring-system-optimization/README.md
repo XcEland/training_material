@@ -34,6 +34,7 @@ Module 8/labs/performance-monitoring-system-optimization/
 ├── 05_capacity_planning_baseline.py
 ├── 06_monitoring_dashboard.py
 ├── 07_dashboard_observability_assessment.py
+├── 08_web_dashboard_server.py
 ├── day8_learning_guide.md
 ├── db_utils.py
 ├── monitoring_data_sources.py
@@ -75,7 +76,9 @@ Use Python's built-in `logging` module with these severity rules:
 Production scripts should write logs to both:
 
 - a rotating file handler
-- a database logging table or audit store
+- `dbo.PythonWorkflowLog` for database audit logging
+
+Dashboard metrics can also be saved to `dbo.MonitoringMetric`. The metric table uses `MetricID` and `RecordedAt` field names.
 
 ## Local Setup
 
@@ -94,19 +97,22 @@ sqlcmd -S localhost,1433 -U sa -P '<your-password>' -C -i "Module 8/labs/perform
 sqlcmd -S localhost,1433 -U sa -P '<your-password>' -C -i "Module 8/labs/performance-monitoring-system-optimization/02_database_monitoring_dmvs_query_store_xevents.sql"
 ```
 
-For Python SQL logging, copy `.env.example` to `.env` and enter your local SQL Server details. Do not commit real database passwords.
+You can also open the SQL files in SQL Server Management Studio or Azure Data Studio and execute them in a query window.
+
+For Python SQL logging and metric history, copy `.env.example` to `.env` and enter your local SQL Server details. Do not commit real database passwords.
 
 Run the Python labs:
 
 ```bash
 cd "Module 8/labs/performance-monitoring-system-optimization"
-python 00_monitoring_data_walkthrough.py
-python 03_python_profiling_memory_demo.py
-python 04_logging_error_tracking_demo.py
-python 04_logging_error_tracking_demo.py --level DEBUG
-python 05_capacity_planning_baseline.py
-python 06_monitoring_dashboard.py
-python 07_dashboard_observability_assessment.py
+python3 00_monitoring_data_walkthrough.py
+python3 03_python_profiling_memory_demo.py
+python3 04_logging_error_tracking_demo.py
+python3 04_logging_error_tracking_demo.py --level DEBUG
+python3 05_capacity_planning_baseline.py
+python3 06_monitoring_dashboard.py
+python3 07_dashboard_observability_assessment.py
+python3 08_web_dashboard_server.py
 pytest -q
 ```
 
@@ -115,7 +121,7 @@ pytest -q
 Yes, the monitoring output is a web page. Run:
 
 ```bash
-python 06_monitoring_dashboard.py
+python3 06_monitoring_dashboard.py
 ```
 
 Then open:
@@ -126,20 +132,23 @@ outputs/monitoring_dashboard.html
 
 The HTML file includes database performance panels, Python profiling metrics, Module 6 reporting status, Module 7 quality gate status, workflow run details, capacity projections, and pass/fail observability checks.
 
-For a browser URL during class:
+For a browser URL during class, run the local dashboard server:
 
 ```bash
-cd outputs
-python -m http.server 8008
+python3 08_web_dashboard_server.py
 ```
 
 Then open:
 
 ```text
-http://localhost:8008/monitoring_dashboard.html
+http://localhost:8008/
 ```
 
-Because this is a static HTML dashboard, refresh the metrics by rerunning `06_monitoring_dashboard.py`. The page reloads every 60 seconds, so scheduled regeneration through Windows Task Scheduler or cron will appear in the browser automatically.
+The server regenerates the dashboard whenever the page is loaded. The page also refreshes every 60 seconds. The raw dashboard data is available at:
+
+```text
+http://localhost:8008/metrics.json
+```
 
 ## Expected Outputs
 

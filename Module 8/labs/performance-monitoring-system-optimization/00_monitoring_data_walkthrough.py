@@ -8,7 +8,7 @@ reads:
 - quality gate alerts from Module 7
 
 Run:
-    python 00_monitoring_data_walkthrough.py
+    python3 00_monitoring_data_walkthrough.py
 """
 
 from __future__ import annotations

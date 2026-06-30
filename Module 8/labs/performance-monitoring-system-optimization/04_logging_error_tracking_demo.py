@@ -1,143 +1,138 @@
 """
-Python logging framework and error tracking demo.
+Python logging and error tracking demo.
 
-Production standard used in this lab:
-- DEBUG: detailed diagnostics during development
-- INFO: successful stage completion
-- WARNING: data quality anomalies that do not halt execution
-- ERROR: caught exceptions that are handled
-- CRITICAL: failures that halt the pipeline
+Run:
+    python3 04_logging_error_tracking_demo.py
+    python3 04_logging_error_tracking_demo.py --force-failure
 
-The script writes to a rotating file handler. It also attempts optional SQL
-logging to m8.PythonWorkflowExecutionLog when SQL Server is available.
+The script writes:
+- file logs to outputs/python_workflow.log
+- optional SQL logs to dbo.PythonWorkflowLog when .env is configured
 """
 
 from __future__ import annotations
 
 import argparse
 import logging
-import logging.handlers
+from logging.handlers import RotatingFileHandler
 import os
 import time
 from pathlib import Path
 
 from sqlalchemy import text
 
-from db_utils import get_sqlalchemy_engine, load_environment
+from db_utils import can_reach_sql_server, get_sqlalchemy_engine, load_environment
 from monitoring_data_sources import build_workflow_observations
 
 
-LAB_DIR = Path(__file__).resolve().parent
-OUTPUT_DIR = LAB_DIR / "outputs"
+OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 LOG_PATH = OUTPUT_DIR / "python_workflow.log"
 
 
-def configure_logging(level: str = "INFO") -> logging.Logger:
+def configure_logger(level: str) -> logging.Logger:
+    """Create a small rotating file logger."""
     OUTPUT_DIR.mkdir(exist_ok=True)
-    logger = logging.getLogger("module8.workflow")
+
+    logger = logging.getLogger("etl_monitor")
     logger.setLevel(getattr(logging, level.upper(), logging.INFO))
     logger.handlers.clear()
 
-    formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
+    handler = RotatingFileHandler(LOG_PATH, maxBytes=100_000, backupCount=3, encoding="utf-8")
+    handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    logger.addHandler(handler)
 
-    file_handler = logging.handlers.RotatingFileHandler(
-        LOG_PATH,
-        maxBytes=100_000,
-        backupCount=3,
-        encoding="utf-8",
-    )
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    console = logging.StreamHandler()
+    console.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    logger.addHandler(console)
     return logger
 
 
-def try_log_to_database(env_file: str, severity: str, stage: str, message: str, duration_ms: int | None = None) -> None:
-    """Optional database logging for audit trails."""
+def write_log_to_sql(
+    env_file: str,
+    step_name: str,
+    severity: str,
+    message: str,
+    rows_processed: int | None = None,
+    duration_seconds: float | None = None,
+) -> None:
+    """Write one log row to SQL Server when database settings are available."""
     load_environment(env_file)
     trusted = os.getenv("DB_TRUSTED", "no").lower() in ("yes", "true", "1")
     if not trusted and not os.getenv("DB_PASSWORD"):
-        logging.getLogger("module8.workflow").info("Database logging skipped: DB_PASSWORD is not configured.")
+        return
+    if not can_reach_sql_server():
         return
 
+    engine = get_sqlalchemy_engine(env_file)
+    with engine.begin() as conn:
+        conn.execute(
+            text(
+                """
+                INSERT INTO dbo.PythonWorkflowLog
+                    (JobID, WorkflowName, StepName, Severity, Message, RowsProcessed, DurationSeconds)
+                VALUES
+                    (:job_id, :workflow_name, :step_name, :severity, :message, :rows_processed, :duration_seconds);
+                """
+            ),
+            {
+                "job_id": "M8-PY-LOG-001",
+                "workflow_name": "Module 8 Python Logging Demo",
+                "step_name": step_name,
+                "severity": severity,
+                "message": message,
+                "rows_processed": rows_processed,
+                "duration_seconds": duration_seconds,
+            },
+        )
+
+
+def safe_sql_log(logger: logging.Logger, env_file: str, *args) -> None:
+    """Keep the workflow running even if SQL logging is not available."""
     try:
-        engine = get_sqlalchemy_engine(env_file)
-        with engine.begin() as conn:
-            conn.execute(
-                text(
-                    """
-                    INSERT INTO m8.PythonWorkflowExecutionLog
-                        (WorkflowName, Severity, StageName, Message, DurationMs, RowsProcessed)
-                    VALUES
-                        ('Module8LoggingDemo', :severity, :stage, :message, :duration_ms, NULL);
-                    """
-                ),
-                {
-                    "severity": severity,
-                    "stage": stage,
-                    "message": message,
-                    "duration_ms": duration_ms,
-                },
-            )
+        write_log_to_sql(env_file, *args)
     except Exception as exc:
-        # Database logging failure should not hide the original workflow event.
-        logging.getLogger("module8.workflow").warning("Database logging skipped: %s", exc)
+        logger.warning("SQL logging skipped: %s", exc)
 
 
-def run_workflow(env_file: str, force_failure: bool = False, log_level: str = "INFO") -> None:
-    logger = configure_logging(log_level)
-    started = time.perf_counter()
+def run_workflow(env_file: str, level: str, force_failure: bool) -> None:
+    logger = configure_logger(level)
+    start = time.perf_counter()
+
     logger.info("Workflow started")
-    try_log_to_database(env_file, "INFO", "start", "Workflow started")
+    safe_sql_log(logger, env_file, "Start", "INFO", "Workflow started")
 
     try:
-        logger.debug("Loading monitoring observations from Module 6 and Module 7 outputs")
         rows = build_workflow_observations()
-        logger.info("Source monitoring observations loaded with %s rows", len(rows))
+        rows_processed = sum(row["records_processed"] for row in rows)
 
-        # WARNING is used when the workflow can continue, but the monitoring
-        # team should still review an anomaly.
-        issue_rows = [row for row in rows if row["quality_issue_count"] > 0]
-        if issue_rows:
-            logger.warning("Data quality anomaly: %s workflow rows have quality issues", len(issue_rows))
-            try_log_to_database(env_file, "WARNING", "validation", "Workflow quality issues detected")
+        logger.info("Loaded %s workflow rows", len(rows))
 
-        failed_rows = [row for row in rows if row["status"] not in ("Succeeded", "Fallback")]
-        if failed_rows:
-            logger.error("Handled workflow status exception: %s workflow rows did not succeed", len(failed_rows))
-            try_log_to_database(env_file, "ERROR", "status_check", "One or more monitored workflows did not succeed")
+        issue_count = sum(row["quality_issue_count"] for row in rows)
+        if issue_count > 0:
+            logger.warning("Data quality warning detected: %s issues", issue_count)
 
         if force_failure:
-            raise RuntimeError("Forced failure for CRITICAL logging demonstration")
+            raise RuntimeError("Forced failure for logging practice")
 
-        total_records = sum(row["records_processed"] for row in rows)
-        duration_ms = int((time.perf_counter() - started) * 1000)
-        logger.info("Workflow completed successfully; total_records=%s duration_ms=%s", total_records, duration_ms)
-        try_log_to_database(env_file, "INFO", "complete", "Workflow completed successfully", duration_ms)
+        duration = round(time.perf_counter() - start, 2)
+        logger.info("Workflow completed in %.2f seconds", duration)
+        safe_sql_log(logger, env_file, "Complete", "INFO", "Workflow completed", rows_processed, duration)
 
-    except ValueError as exc:
-        logger.error("Handled validation error: %s", exc)
-        try_log_to_database(env_file, "ERROR", "validation", str(exc))
     except Exception as exc:
-        logger.critical("Workflow halted: %s", exc)
-        try_log_to_database(env_file, "CRITICAL", "halt", str(exc))
+        duration = round(time.perf_counter() - start, 2)
+        logger.error("An error occurred during processing: %s", exc)
+        safe_sql_log(logger, env_file, "Error", "ERROR", str(exc), None, duration)
         raise
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run Module 8 logging demo.")
+    parser = argparse.ArgumentParser(description="Run the Module 8 logging demo.")
     parser.add_argument("--env", default=".env")
-    parser.add_argument("--level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
+    parser.add_argument("--level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     parser.add_argument("--force-failure", action="store_true")
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    run_workflow(args.env, args.force_failure, args.level)
+    run_workflow(args.env, args.level, args.force_failure)

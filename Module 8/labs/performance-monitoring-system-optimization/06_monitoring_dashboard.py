@@ -21,7 +21,7 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from sqlalchemy import text
 
-from db_utils import get_sqlalchemy_engine, load_environment
+from db_utils import can_reach_sql_server, get_sqlalchemy_engine, load_environment
 from monitoring_data_sources import workflow_totals
 
 
@@ -78,6 +78,9 @@ def collect_database_metrics(thresholds: dict[str, Any], env_file: str = ".env")
     trusted = os.getenv("DB_TRUSTED", "no").lower() in ("yes", "true", "1")
     if not trusted and not os.getenv("DB_PASSWORD"):
         print("Using fallback database metrics: DB_PASSWORD is not configured.")
+        return fallback_database_metrics(thresholds)
+    if not can_reach_sql_server():
+        print("Using fallback database metrics: SQL Server is not reachable.")
         return fallback_database_metrics(thresholds)
 
     try:
@@ -241,7 +244,48 @@ def observability_results(database_metrics: list[dict[str, Any]], python_metrics
     ]
 
 
-def render_dashboard(env_file: str = ".env") -> dict[str, Any]:
+def metric_summary(metrics: list[dict[str, Any]]) -> dict[str, int]:
+    """Count metrics by alert level for the dashboard header."""
+    return {
+        "total": len(metrics),
+        "normal": sum(1 for item in metrics if item["alert_level"] == "Normal"),
+        "warning": sum(1 for item in metrics if item["alert_level"] == "Warning"),
+        "critical": sum(1 for item in metrics if item["alert_level"] == "Critical"),
+    }
+
+
+def save_metric_history(env_file: str, metrics: list[dict[str, Any]]) -> None:
+    """Optionally save rendered dashboard metrics to dbo.MonitoringMetric."""
+    load_environment(env_file)
+    trusted = os.getenv("DB_TRUSTED", "no").lower() in ("yes", "true", "1")
+    if not trusted and not os.getenv("DB_PASSWORD"):
+        return
+
+    try:
+        engine = get_sqlalchemy_engine(env_file)
+        with engine.begin() as conn:
+            for metric in metrics:
+                conn.execute(
+                    text(
+                        """
+                        INSERT INTO dbo.MonitoringMetric
+                            (MetricName, MetricValue, WarningThreshold, CriticalThreshold, Status, SourceSystem)
+                        VALUES
+                            (:metric_name, :metric_value, NULL, NULL, :status, :source_system);
+                        """
+                    ),
+                    {
+                        "metric_name": metric["metric_name"],
+                        "metric_value": float(metric["metric_value"]),
+                        "status": metric["alert_level"],
+                        "source_system": metric["data_source"],
+                    },
+                )
+    except Exception as exc:
+        print("Metric history skipped:", exc)
+
+
+def render_dashboard(env_file: str = ".env", save_history: bool = True) -> dict[str, Any]:
     OUTPUT_DIR.mkdir(exist_ok=True)
     thresholds = load_thresholds()
     database_metrics = collect_database_metrics(thresholds, env_file)
@@ -250,9 +294,17 @@ def render_dashboard(env_file: str = ".env") -> dict[str, Any]:
     workflow_observations = workflow_totals()["observations"]
     capacity_projection = build_capacity_projection(thresholds)
     review = observability_results(database_metrics, python_metrics + workflow_metrics)
+    all_metrics = database_metrics + python_metrics + workflow_metrics
+    used_fallback_database_metrics = any(
+        str(metric["data_source"]).startswith("Fallback")
+        for metric in database_metrics
+    )
+    if save_history and not used_fallback_database_metrics:
+        save_metric_history(env_file, all_metrics)
 
     context = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "metric_summary": metric_summary(all_metrics),
         "database_metrics": database_metrics,
         "python_metrics": python_metrics,
         "workflow_metrics": workflow_metrics,
