@@ -104,8 +104,6 @@ Slide 3: https://1drv.ms/p/c/86b2518f75840e31/IQD3RZBnejBISJpW3ApT9hY5AYmAu9i8ug
 drive link: https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
 https://drive.google.com/drive/folders/1thgDnguXjQzKlCNCoveWp6aEaO9G2qb7?usp=sharing
 
-Chat: https://chatgpt.com/share/6a3b9296-5da8-83ea-ac11-2d456df273e7
-
 ## Git Commands
 
 Use `main` if it is the current source-of-truth branch for the class. If the facilitator specifically says to use the `module3` branch, replace `main` with `module3` in the commands below.
