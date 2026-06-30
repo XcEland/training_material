@@ -71,19 +71,26 @@ def send_or_preview_report_pack(
     if html_body:
         message.add_alternative(html_body, subtype="html")
 
+    require_pdf_attachments = config.get("output_formats", {}).get("generate_pdf", False)
     for artifact in artifacts:
-        message.add_attachment(
-            artifact.html_path.read_bytes(),
-            maintype="text",
-            subtype="html",
-            filename=artifact.html_path.name,
-        )
         if artifact.pdf_path and artifact.pdf_path.exists():
             message.add_attachment(
                 artifact.pdf_path.read_bytes(),
                 maintype="application",
                 subtype="pdf",
                 filename=artifact.pdf_path.name,
+            )
+        elif require_pdf_attachments:
+            raise FileNotFoundError(
+                f"PDF attachment is required but missing for {artifact.report_id}. "
+                "Install WeasyPrint or run with PDF generation disabled."
+            )
+        else:
+            message.add_attachment(
+                artifact.html_path.read_bytes(),
+                maintype="text",
+                subtype="html",
+                filename=artifact.html_path.name,
             )
 
     smtp_port = int(os.getenv("SMTP_PORT", "587"))

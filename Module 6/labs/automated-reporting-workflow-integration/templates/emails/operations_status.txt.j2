@@ -6,7 +6,9 @@ The automated WEO reporting job completed for {{ report_month }}.
 
 Run outputs:
 {% for report in reports %}
-- {{ report.report_id }}: {{ report.html_path }}
+- {{ report.report_id }}
+  PDF attachment: {{ report.pdf_path if report.pdf_path else report.pdf_status }}
+  HTML review copy: {{ report.html_path }}
 {% endfor %}
 
 Data release status:

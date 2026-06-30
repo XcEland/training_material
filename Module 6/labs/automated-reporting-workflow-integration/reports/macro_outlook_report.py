@@ -9,6 +9,7 @@ from sqlalchemy.engine import Engine
 
 from database.weo_repository import extract_country_macro, extract_group_indicators
 from reports.common import ReportArtifact, clean_records, format_number
+from reports.static_charts import chart_paths, save_bar_chart, save_line_chart
 from services.template_renderer import render_template
 
 
@@ -63,6 +64,23 @@ def generate_report(engine: Engine | None, dataset: dict[str, Any], config: dict
         "labels": list(top_growth["country"]) + list(bottom_growth["country"]),
         "values": [round(float(value), 2) for value in list(top_growth["gdp_growth_pct"]) + list(bottom_growth["gdp_growth_pct"])],
     }
+    growth_line_path, growth_line_image = chart_paths(config, "macro_growth_trend.png")
+    top_bottom_path, top_bottom_image = chart_paths(config, "macro_top_bottom_growth.png")
+    save_line_chart(
+        chart_years,
+        line_datasets,
+        "GDP Growth Trend by WEO Group",
+        "GDP growth (%)",
+        growth_line_path,
+    )
+    save_bar_chart(
+        top_bottom_chart["labels"],
+        top_bottom_chart["values"],
+        "Top and Bottom Country Growth Rates",
+        "GDP growth (%)",
+        top_bottom_path,
+        horizontal=True,
+    )
 
     world_growth = _lookup_group_value(group_latest, "World", "gdp_growth_pct")
     ssa_growth = _lookup_group_value(group_latest, "Sub-Saharan Africa (SSA)", "gdp_growth_pct")
@@ -94,6 +112,10 @@ def generate_report(engine: Engine | None, dataset: dict[str, Any], config: dict
             "bottom_growth_rows": clean_records(bottom_growth[["country", "economic_group", "gdp_growth_pct"]].to_dict(orient="records")),
             "growth_line_chart": {"labels": chart_years, "datasets": line_datasets},
             "top_bottom_chart": top_bottom_chart,
+            "static_charts": {
+                "growth_line": growth_line_image,
+                "top_bottom": top_bottom_image,
+            },
         },
     )
 

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ report_title }}</title>
+</head>
+<body>
+  <h1>{{ report_title }}</h1>
+
+  <ul>
+    {% for country in countries %}
+    <li>
+      {{ country.name }}: {{ country.inflation }}%
+
+      {% if country.inflation >= high_threshold %}
+        - High risk. Escalate for policy review.
+      {% elif country.inflation >= medium_threshold %}
+        - Medium risk. Monitor closely.
+      {% else %}
+        - Normal risk. Continue routine monitoring.
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+
+  <hr>
+  <p>Beginner note: if, elif, and else let the template choose what to display.</p>
+</body>
+</html>

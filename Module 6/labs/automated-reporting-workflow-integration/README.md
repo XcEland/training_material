@@ -43,6 +43,7 @@ automated-reporting-workflow-integration/
 ├── 06_monthly_reporting_pipeline.py
 ├── 07_send_monthly_report_email_trigger.py
 ├── 08_phase2_simulation_evaluation.md
+├── 09_check_monthly_reporting_tables.py
 ├── jinja-beginner-step-by-step/
 │   ├── 01_variables/
 │   ├── 02_loops/
@@ -154,6 +155,10 @@ Run the monthly report pack:
 ../../../.venv/bin/python 06_monthly_reporting_pipeline.py --report-month 2026-06 --dry-run-email
 ```
 
+The pipeline generates HTML review copies and PDF distribution copies. Email
+delivery attaches PDF reports when SMTP sending is enabled. HTML files remain in
+`outputs/html/` so the reports can be opened in a browser.
+
 Run only one report:
 
 ```bash
@@ -182,13 +187,15 @@ Send the Jinja2 monthly reporting pack to `REPORT_TO_EMAIL` using SMTP settings 
 
 The trigger lab uses SQL Server when available and refreshes the reporting tables before rendering. If SQL Server is unavailable in the local environment, the existing pipeline falls back to the WEO workbook and records the data source in the metrics output.
 
-Generate PDFs when WeasyPrint is installed on the machine:
+Generate PDFs explicitly:
 
 ```bash
 ../../../.venv/bin/python 06_monthly_reporting_pipeline.py --report-month 2026-06 --generate-pdf --dry-run-email
 ```
 
-If WeasyPrint is not installed, the pipeline still generates print-ready HTML reports and records `SkippedPdfDependencyMissing` in the metrics JSON.
+PDF generation uses WeasyPrint. If WeasyPrint is not installed, the pipeline
+records `SkippedPdfDependencyMissing` in the metrics JSON. SMTP delivery requires
+PDF attachments when PDF generation is enabled.
 
 ## SQL Server Setup
 
@@ -209,6 +216,20 @@ The report modules use T-SQL extraction from:
 - `m6.WEOCountryMacro`
 - `m6.WEOGroupIndicatorLong`
 - `m6.WEOCommodityIndicatorLong`
+
+Check the SQL Server tables and sample records created by the pipeline:
+
+```bash
+../../../.venv/bin/python 09_check_monthly_reporting_tables.py
+```
+
+The check script prints row counts for the `m6` schema and sample rows from:
+
+```text
+m6.WEOCountryMacro
+m6.WEOGroupIndicatorLong
+m6.WEOCommodityIndicatorLong
+```
 
 ## WEO Workbook Refresh
 
@@ -236,13 +257,20 @@ outputs/data/weo_release_manifest.json
 outputs/html/weo_macro_outlook_2026.html
 outputs/html/weo_inflation_risk_2026.html
 outputs/html/weo_commodity_monitoring_2026.html
-outputs/pdf/                       # optional when --generate-pdf is used
+outputs/pdf/weo_macro_outlook_2026.pdf
+outputs/pdf/weo_inflation_risk_2026.pdf
+outputs/pdf/weo_commodity_monitoring_2026.pdf
 outputs/email/weo_executive_email_preview_2026-06.txt
 outputs/email/weo_executive_email_preview_2026-06.html
 outputs/weo_monthly_metrics_2026-06.json
 outputs/phase2_pipeline_evaluation_2026-06.json
 outputs/monthly_report_run_log.jsonl
+outputs/monthly_report_stage_log.jsonl
 ```
+
+`monthly_report_stage_log.jsonl` records progressive completed operations such
+as workbook resolution, data transformation, database persistence, report
+generation, PDF generation, email delivery, and metrics writing.
 
 ## Scheduling
 

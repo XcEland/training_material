@@ -39,7 +39,7 @@ SAMPLE_IMF_JSON = LAB_DIR / "sample_data" / "imf_datamapper_weo_inflation_sample
 SAMPLE_BIS_XML = LAB_DIR / "sample_data" / "bis_cbpol_sdmx_generic_sample.xml"
 
 IMF_DATAMAPPER_URL = "https://www.imf.org/external/datamapper/api/v2/PCPIPCH/LSO/ZAF/BWA/USA"
-BIS_CBPOL_URL = "https://stats.bis.org/api/v1/data/WS_CBPOL/all/all"
+BIS_CBPOL_URL = "https://stats.bis.org/api/v1/data/BIS,WS_CBPOL,1.0/M.ZA"
 
 
 @dataclass
@@ -110,7 +110,7 @@ def fetch_bis_cbpol_sdmx(offline: bool = False) -> str:
 
     response = requests.get(
         BIS_CBPOL_URL,
-        params={"startPeriod": "2026-01", "endPeriod": "2026-03"},
+        params={"startPeriod": "2024-01", "endPeriod": "2024-12", "detail": "full"},
         headers=build_headers("application/xml"),
         timeout=30,
     )

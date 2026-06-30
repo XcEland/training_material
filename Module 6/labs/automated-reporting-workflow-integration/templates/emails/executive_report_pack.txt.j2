@@ -7,8 +7,8 @@ The {{ report_pack_title }} for {{ report_month }} has been generated.
 Executive report pack:
 {% for report in reports %}
 {{ loop.index }}. {{ report.title }} ({{ report.audience }})
-   Output: {{ report.html_path }}
-   PDF: {{ report.pdf_path if report.pdf_path else report.pdf_status }}
+   PDF attachment: {{ report.pdf_path if report.pdf_path else report.pdf_status }}
+   HTML review copy: {{ report.html_path }}
    Source: {{ report.data_source }}
 {% endfor %}
 

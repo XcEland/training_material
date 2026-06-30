@@ -9,6 +9,7 @@ from sqlalchemy.engine import Engine
 
 from database.weo_repository import extract_country_macro
 from reports.common import ReportArtifact, clean_records, format_number
+from reports.static_charts import chart_paths, save_bar_chart, save_scatter_chart
 from services.template_renderer import render_template
 
 
@@ -67,6 +68,26 @@ def generate_report(engine: Engine | None, dataset: dict[str, Any], config: dict
         f"Median country inflation is {format_number(median_inflation)}%.",
         f"{high_count} countries are at or above the {format_number(threshold)}% high-inflation monitoring threshold.",
     ]
+    distribution_chart = {
+        "labels": distribution["bucket"].tolist(),
+        "values": distribution["country_count"].astype(int).tolist(),
+    }
+    distribution_path, distribution_image = chart_paths(config, "inflation_distribution.png")
+    scatter_path, scatter_image = chart_paths(config, "inflation_vs_growth.png")
+    save_bar_chart(
+        distribution_chart["labels"],
+        distribution_chart["values"],
+        "Inflation Distribution",
+        "Countries",
+        distribution_path,
+    )
+    save_scatter_chart(
+        scatter_chart["datasets"],
+        "Inflation vs GDP Growth",
+        "Inflation (%)",
+        "GDP growth (%)",
+        scatter_path,
+    )
 
     output_path = config["paths"]["html"] / f"weo_inflation_risk_{analysis_year}.html"
     render_template(
@@ -88,11 +109,12 @@ def generate_report(engine: Engine | None, dataset: dict[str, Any], config: dict
             "median_inflation": median_inflation,
             "high_count": high_count,
             "top_inflation_rows": clean_records(top_inflation[["country", "economic_group", "inflation_pct", "gdp_growth_pct"]].to_dict(orient="records")),
-            "distribution_chart": {
-                "labels": distribution["bucket"].tolist(),
-                "values": distribution["country_count"].astype(int).tolist(),
-            },
+            "distribution_chart": distribution_chart,
             "scatter_chart": scatter_chart,
+            "static_charts": {
+                "distribution": distribution_image,
+                "scatter": scatter_image,
+            },
         },
     )
 

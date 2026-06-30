@@ -7,19 +7,19 @@ The Monthly WEO Executive Reporting Pack for 2026-06 has been generated.
 Executive report pack:
 
 1. Global Macro Outlook Executive Brief (Executive Committee and Monetary Policy)
-   Output: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_macro_outlook_2026.html
-   PDF: NotRequested
-   Source: Excel fallback
+   PDF attachment: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_macro_outlook_2026.pdf
+   HTML review copy: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_macro_outlook_2026.html
+   Source: T-SQL from m6.WEOGroupIndicatorLong
 
 2. Inflation Risk Monitoring Report (Executive Committee, Monetary Policy, and Research)
-   Output: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_inflation_risk_2026.html
-   PDF: NotRequested
-   Source: Excel fallback
+   PDF attachment: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_inflation_risk_2026.pdf
+   HTML review copy: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_inflation_risk_2026.html
+   Source: T-SQL from m6.WEOCountryMacro
 
 3. Commodity Price Monitoring Brief (Executive Committee, Markets, and Research)
-   Output: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_commodity_monitoring_2026.html
-   PDF: NotRequested
-   Source: Excel fallback
+   PDF attachment: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/pdf/weo_commodity_monitoring_2026.pdf
+   HTML review copy: /home/xceland/Desktop/Trainingcred Institute/Module 6/labs/automated-reporting-workflow-integration/outputs/html/weo_commodity_monitoring_2026.html
+   Source: T-SQL from m6.WEOCommodityIndicatorLong
 
 
 Release tracking:
@@ -33,7 +33,7 @@ Stakeholder distribution:
 
 
 Distribution mode:
-Dry run preview only
+Email sent through configured SMTP server
 
 Regards,
 Central Bank WEO Reporting Workflow

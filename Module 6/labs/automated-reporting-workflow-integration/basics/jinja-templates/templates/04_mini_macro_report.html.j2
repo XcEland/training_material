@@ -1,0 +1,50 @@
+{% extends "03_base_report.html.j2" %}
+
+{% block title %}{{ report_title }}{% endblock %}
+
+{% block content %}
+<h1>{{ report_title }}</h1>
+<p>Prepared by {{ analyst_name }} for executive review.</p>
+
+<h2>Key Metrics</h2>
+<div class="grid">
+  {% for metric in metrics %}
+    {% include "_metric_card.html.j2" %}
+  {% endfor %}
+</div>
+
+<h2>Executive Summary</h2>
+<ul>
+  {% for point in summary_points %}
+    <li>{{ point }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Country Inflation Watch</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Country</th>
+      <th>Inflation</th>
+      <th>Risk Level</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for country in countries %}
+    <tr>
+      <td>{{ country.name }}</td>
+      <td>{{ country.inflation }}%</td>
+      <td>{{ country.risk_level }}</td>
+      <td>
+        {% if country.inflation >= high_inflation_threshold %}
+          Review required
+        {% else %}
+          Routine monitoring
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -89,6 +89,8 @@ CREATE TABLE m6.MonthlyReportRunLog (
 );
 GO
 
+SELECT * FROM m6.WEOCommodityIndicatorLong
+
 CREATE TABLE m6.ReportDistributionAudit (
     AuditID INT IDENTITY(1,1) PRIMARY KEY,
     RunID INT NULL,

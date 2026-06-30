@@ -1,0 +1,19 @@
+[
+  {
+    "row":{
+      "SourceName":"IMF DataMapper",
+      "CountryCode":"",
+      "CountryName":"Bad Example",
+      "IndicatorCode":"PCPIPCH",
+      "IndicatorName":"Inflation",
+      "ObservationYear":2024,
+      "ObservationValue":9999,
+      "Unit":"Percent",
+      "Frequency":"Annual"
+    },
+    "errors":[
+      "CountryCode is missing",
+      "ObservationValue is outside the accepted range"
+    ]
+  }
+]

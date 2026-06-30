@@ -9,6 +9,7 @@ from sqlalchemy.engine import Engine
 
 from database.weo_repository import extract_commodity_indicators
 from reports.common import ReportArtifact, clean_records, format_number
+from reports.static_charts import chart_paths, save_line_chart
 from services.template_renderer import render_template
 
 
@@ -58,6 +59,14 @@ def generate_report(engine: Engine | None, dataset: dict[str, Any], config: dict
         f"Food price index movement from {prior_year} to {analysis_year}: {format_number(food_change)}%.",
         "Commodity trends are included because imported inflation and reserves management are sensitive to global price shocks.",
     ]
+    commodity_path, commodity_image = chart_paths(config, "commodity_price_trends.png")
+    save_line_chart(
+        chart_years,
+        line_datasets,
+        "Commodity Price Index Trends",
+        "Index value",
+        commodity_path,
+    )
 
     output_path = config["paths"]["html"] / f"weo_commodity_monitoring_{analysis_year}.html"
     render_template(
@@ -77,6 +86,9 @@ def generate_report(engine: Engine | None, dataset: dict[str, Any], config: dict
             "summary_points": summary_points,
             "commodity_rows": clean_records(pivot[["display_name", "current_value", "prior_value", "change_pct"]].to_dict(orient="records")),
             "commodity_line_chart": {"labels": chart_years, "datasets": line_datasets},
+            "static_charts": {
+                "commodity_line": commodity_image,
+            },
         },
     )
 

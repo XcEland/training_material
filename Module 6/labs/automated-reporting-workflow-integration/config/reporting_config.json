@@ -58,7 +58,7 @@
     }
   },
   "output_formats": {
-    "generate_pdf": false
+    "generate_pdf": true
   },
   "output_quality_thresholds": {
     "minimum_report_count": 3,

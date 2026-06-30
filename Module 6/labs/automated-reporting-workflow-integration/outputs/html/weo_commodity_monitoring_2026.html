@@ -90,6 +90,12 @@
       width: 100% !important;
       height: 300px !important;
     }
+    .static-chart {
+      display: none;
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
@@ -119,6 +125,8 @@
     @media print {
       body { margin: 18mm; }
       .chart-box { break-inside: avoid; }
+      .chart-box canvas { display: none !important; }
+      .static-chart { display: block; }
     }
   </style>
 </head>
@@ -129,7 +137,7 @@
       <div>Central Bank Training Simulation</div>
       <div>Audience: Executive Committee, Markets, and Research</div>
       <div>Reporting cycle: 2026-06 | Analysis year: 2026</div>
-      <div>Data source: Excel fallback</div>
+      <div>Data source: T-SQL from m6.WEOCommodityIndicatorLong</div>
       <div>WEO publication date: 2026-04-14T13:00:00Z</div>
     </div>
   </header>
@@ -151,6 +159,7 @@
 <section class="chart-grid">
   <div class="chart-box">
     <h3>Commodity Price Index Trends</h3>
+    <img class="static-chart" src="../charts/commodity_price_trends.png" alt="Commodity price index trends">
     <canvas id="commodityTrendChart"></canvas>
   </div>
 </section>
