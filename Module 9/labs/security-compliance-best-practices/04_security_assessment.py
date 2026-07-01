@@ -2,7 +2,7 @@
 Module 9 hands-on exercise: security assessment scanner.
 
 The scanner is deliberately simple. It does not replace professional static
-analysis tools, but it teaches students how to look for common security risks:
+analysis tools, but it shows participants how to look for common security risks:
 - unsafe dynamic SQL in .sql files
 - hardcoded passwords in Python files
 - SQL f-strings or string formatting
@@ -42,7 +42,7 @@ def load_rules(path: Path = DEFAULT_RULES_PATH) -> dict:
 def iter_target_files(root: Path) -> list[Path]:
     """Return SQL and Python files under the selected folder."""
 
-    ignored_parts = {"__pycache__", ".pytest_cache", ".venv", "outputs"}
+    ignored_parts = {"__pycache__", ".pytest_cache", ".venv", "outputs", "tests"}
     targets: list[Path] = []
 
     for file_path in root.rglob("*"):
@@ -65,6 +65,9 @@ def scan_file(file_path: Path, rules: dict) -> list[Finding]:
     lines = file_path.read_text(encoding="utf-8", errors="ignore").splitlines()
 
     for line_number, line in enumerate(lines, start=1):
+        if "security-scan: ignore" in line:
+            continue
+
         for rule in rules[rule_group]["high_risk_patterns"]:
             if re.search(rule["pattern"], line, flags=re.IGNORECASE):
                 findings.append(

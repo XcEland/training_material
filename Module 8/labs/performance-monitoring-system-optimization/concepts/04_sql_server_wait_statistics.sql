@@ -13,6 +13,6 @@ SELECT TOP 15
     signal_wait_time_ms,
     wait_time_ms - signal_wait_time_ms AS resource_wait_ms
 FROM sys.dm_os_wait_stats
--- Sleep waits are usually idle background waits, so exclude them for demos.
+-- Sleep waits are usually idle background waits
 WHERE wait_type NOT LIKE 'SLEEP%'
 ORDER BY wait_time_ms DESC;

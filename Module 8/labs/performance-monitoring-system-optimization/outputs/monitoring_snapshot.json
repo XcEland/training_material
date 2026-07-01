@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T22:56:48+00:00",
+  "generated_at": "2026-07-01T11:23:39+00:00",
   "metric_summary": {
     "total": 9,
     "normal": 9,
@@ -9,27 +9,27 @@
   "database_metrics": [
     {
       "metric_name": "Active Sessions",
-      "metric_value": 8,
+      "metric_value": 14.0,
       "alert_level": "Normal",
-      "data_source": "Fallback DMV sample"
+      "data_source": "DMV sys.dm_exec_sessions"
     },
     {
       "metric_name": "Average Query Duration Ms",
-      "metric_value": 420,
+      "metric_value": 0.0,
       "alert_level": "Normal",
-      "data_source": "Fallback Query Store sample"
+      "data_source": "Query Store placeholder; run SQL lab for details"
     },
     {
       "metric_name": "Database Size MB",
-      "metric_value": 750,
+      "metric_value": 464.0,
       "alert_level": "Normal",
-      "data_source": "Fallback sys.master_files sample"
+      "data_source": "sys.master_files"
     }
   ],
   "python_metrics": [
     {
       "metric_name": "Workflow Duration Seconds",
-      "metric_value": 0.0654,
+      "metric_value": 0.0305,
       "alert_level": "Normal",
       "data_source": "cProfile summary"
     },
