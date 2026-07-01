@@ -1,5 +1,7 @@
 """
 Python Rotating Logging Setup.
+
+Use this when a production script needs log files that do not grow forever.
 """
 
 import logging
@@ -16,7 +18,9 @@ logger.setLevel(logging.INFO)
 # RotatingFileHandler limits file size and keeps backups.
 handler = RotatingFileHandler(
     "logs/etl_monitor.log",
+    # maxBytes is the largest size of the active log file.
     maxBytes=5_000_000,
+    # backupCount is how many older log files to keep.
     backupCount=5
 )
 

@@ -1,5 +1,7 @@
 """
 Python cProfile Bottleneck Script.
+
+Use this to find which Python function is taking the most time.
 """
 
 import cProfile
@@ -41,6 +43,13 @@ main()
 profiler.disable()
 
 # Sort by cumulative time to find where time is spent.
+# cProfile output columns:
+# ncalls: how many times the function was called.
+# tottime: time spent inside the function itself, excluding child calls.
+# first percall: tottime divided by ncalls.
+# cumtime: time spent in the function plus functions it called.
+# second percall: cumtime divided by ncalls.
+# filename:lineno(function): file, line number, and function name.
 stats = pstats.Stats(profiler)
 stats.sort_stats("cumtime")
 stats.print_stats(10)

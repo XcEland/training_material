@@ -1,5 +1,7 @@
 """
 Python Metric Collection Function.
+
+Use this when a Python workflow must save metrics for a dashboard.
 """
 
 import pandas as pd
@@ -13,6 +15,9 @@ def record_metric(
     critical_threshold,
     source_system
 ):
+    # metric_name is the label shown on the dashboard.
+    # metric_value is the measured number.
+    # thresholds decide whether the metric is Normal, Warning, or Critical.
     # Decide the dashboard status using the threshold values.
     if metric_value >= critical_threshold:
         status = "Critical"

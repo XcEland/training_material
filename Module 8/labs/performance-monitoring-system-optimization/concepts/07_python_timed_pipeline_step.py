@@ -1,5 +1,7 @@
 """
 Python Timed Pipeline Step.
+
+Use this to measure how long each ETL pipeline step takes.
 """
 
 import logging
@@ -10,6 +12,8 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 
 
 def timed_step(step_name, function, *args, **kwargs):
+    # step_name is the label printed in the log.
+    # function is the pipeline step being measured.
     # Start the timer before the workflow step runs.
     start = time.perf_counter()
 

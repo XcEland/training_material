@@ -1,5 +1,6 @@
 -- Top Expensive Queries DMV Script
 -- Purpose: find cached queries with high cumulative resource usage.
+-- Use this to find queries that may need optimization.
 
 SELECT TOP 10
     -- execution_count shows how often the cached query has run.
@@ -9,6 +10,7 @@ SELECT TOP 10
     qs.total_elapsed_time / 1000 AS total_elapsed_ms,
     qs.total_logical_reads,
     qs.total_logical_writes,
+    -- max_elapsed_ms shows the slowest single execution in cache.
     qs.max_elapsed_time / 1000 AS max_elapsed_ms,
     SUBSTRING(
         st.text,
