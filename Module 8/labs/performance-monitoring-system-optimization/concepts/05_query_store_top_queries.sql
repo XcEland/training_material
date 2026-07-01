@@ -43,6 +43,7 @@ USE TrainingDB;
 GO
 
 -- That should list Query Store system views such as:
+
 SELECT TOP 10
     name,
     object_id,

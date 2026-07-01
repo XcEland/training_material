@@ -1,18 +1,50 @@
 {
   "summary": {
-    "finding_count": 4,
+    "finding_count": 8,
     "by_severity": {
-      "High": 4
+      "High": 8
     },
     "by_rule": {
-      "sql_concatenates_input": 1,
-      "dynamic_sql_exec_string": 1,
-      "hardcoded_password": 1,
-      "unsafe_sql_f_string": 1
+      "dynamic_sql_exec_string": 3,
+      "unsafe_sql_f_string": 2,
+      "hardcoded_password": 2,
+      "sql_concatenates_input": 1
     },
     "release_recommendation": "Do not release until High findings are reviewed or remediated."
   },
   "findings": [
+    {
+      "file_path": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/02_unsafe_dynamic_sql.sql",
+      "line_number": 14,
+      "rule_name": "dynamic_sql_exec_string",
+      "severity": "High",
+      "message": "Dynamic SQL executed from a string variable. Prefer sp_executesql with parameters.",
+      "evidence": "EXEC (@Sql);"
+    },
+    {
+      "file_path": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/10_unsafe_python_query.py",
+      "line_number": 7,
+      "rule_name": "unsafe_sql_f_string",
+      "severity": "High",
+      "message": "Possible SQL built with an f-string. Use bound parameters.",
+      "evidence": "query = f\"SELECT CurrencyCode, RateDate, RateToLSL FROM m2.FxRates WHERE CurrencyCode = '{currency_code}'\""
+    },
+    {
+      "file_path": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/15_lab_vulnerable_hardcoded_credentials.py",
+      "line_number": 3,
+      "rule_name": "hardcoded_password",
+      "severity": "High",
+      "message": "Possible hardcoded password. Use environment variables or a secret manager.",
+      "evidence": "password = \"AdminPassword123\""
+    },
+    {
+      "file_path": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/16_lab_vulnerable_search_fx_rates.sql",
+      "line_number": 15,
+      "rule_name": "dynamic_sql_exec_string",
+      "severity": "High",
+      "message": "Dynamic SQL executed from a string variable. Prefer sp_executesql with parameters.",
+      "evidence": "EXEC (@Sql);"
+    },
     {
       "file_path": "/home/xceland/Desktop/Trainingcred Institute/Module 9/labs/security-compliance-best-practices/sample_assessment_targets/vulnerable_dynamic_sql.sql",
       "line_number": 6,
