@@ -1,6 +1,7 @@
 -- ============================================================
--- MODULE 8 LAB
--- FILE 01: DATABASE MONITORING WITH DMVS, QUERY STORE, EXTENDED EVENTS
+-- MODULE 8 SQL MONITORING LAB
+-- DMVs, Query Store, Extended Events, and monitoring tables.
+-- Run each section in a SQL Server query window.
 -- ============================================================
 
 IF DB_ID('TrainingDB') IS NULL
@@ -12,77 +13,46 @@ GO
 USE TrainingDB;
 GO
 
-IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = 'm8')
-BEGIN
-    EXEC('CREATE SCHEMA m8');
-END;
-GO
+-- ------------------------------------------------------------
+-- 1. Tables used by the Python logging and dashboard labs.
+-- ------------------------------------------------------------
 
-IF OBJECT_ID('m8.PythonWorkflowExecutionLog', 'U') IS NULL
+IF OBJECT_ID('dbo.PythonWorkflowLog', 'U') IS NULL
 BEGIN
-    CREATE TABLE m8.PythonWorkflowExecutionLog (
+    CREATE TABLE dbo.PythonWorkflowLog (
         LogID INT IDENTITY(1,1) PRIMARY KEY,
-        CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-        WorkflowName VARCHAR(120) NOT NULL,
+        JobID VARCHAR(50) NOT NULL,
+        WorkflowName VARCHAR(100) NOT NULL,
+        StepName VARCHAR(100) NULL,
         Severity VARCHAR(20) NOT NULL,
-        StageName VARCHAR(120) NULL,
-        Message NVARCHAR(1000) NOT NULL,
-        DurationMs INT NULL,
-        RowsProcessed INT NULL
+        Message NVARCHAR(MAX) NOT NULL,
+        RowsProcessed INT NULL,
+        DurationSeconds DECIMAL(18,2) NULL,
+        LoggedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
     );
 END;
 GO
 
-IF OBJECT_ID('m8.PerformanceBaseline', 'U') IS NULL
+IF OBJECT_ID('dbo.MonitoringMetric', 'U') IS NULL
 BEGIN
-    CREATE TABLE m8.PerformanceBaseline (
-        BaselineID INT IDENTITY(1,1) PRIMARY KEY,
-        CapturedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-        MetricName VARCHAR(120) NOT NULL,
-        MeasurementTool VARCHAR(120) NOT NULL,
-        CurrentMeasuredValue DECIMAL(18,4) NULL,
-        AcceptableRange VARCHAR(120) NOT NULL,
-        AlertThreshold VARCHAR(120) NOT NULL,
-        EscalationAction NVARCHAR(500) NOT NULL
+    CREATE TABLE dbo.MonitoringMetric (
+        MetricID INT IDENTITY(1,1) PRIMARY KEY,
+        RecordedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+        MetricName VARCHAR(100) NOT NULL,
+        MetricValue DECIMAL(18,2) NOT NULL,
+        WarningThreshold DECIMAL(18,2) NULL,
+        CriticalThreshold DECIMAL(18,2) NULL,
+        Status VARCHAR(20) NOT NULL,
+        SourceSystem VARCHAR(100) NOT NULL
     );
 END;
 GO
 
-IF OBJECT_ID('m8.MonitoringDashboardSnapshot', 'U') IS NULL
-BEGIN
-    CREATE TABLE m8.MonitoringDashboardSnapshot (
-        SnapshotID INT IDENTITY(1,1) PRIMARY KEY,
-        CapturedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-        MetricName VARCHAR(120) NOT NULL,
-        MetricValue DECIMAL(18,4) NULL,
-        AlertLevel VARCHAR(20) NOT NULL,
-        DataSource VARCHAR(120) NOT NULL
-    );
-END;
-GO
+-- ------------------------------------------------------------
+-- 2. DMV: current requests.
+-- Use this when you want to know what is running now.
+-- ------------------------------------------------------------
 
--- ============================================================
--- SECTION 1: DMVs
--- DMVs are point-in-time server views. Use them for immediate diagnosis.
--- ============================================================
-
--- Current user sessions and wait status.
-SELECT
-    session_id,
-    login_name,
-    host_name,
-    program_name,
-    status,
-    cpu_time,
-    memory_usage,
-    reads,
-    writes
-FROM sys.dm_exec_sessions
-WHERE is_user_process = 1
-ORDER BY cpu_time DESC;
-GO
-
--- Currently running requests.
 SELECT
     r.session_id,
     r.status,
@@ -90,46 +60,66 @@ SELECT
     r.cpu_time,
     r.total_elapsed_time,
     r.logical_reads,
-    r.writes,
-    DB_NAME(r.database_id) AS database_name,
-    SUBSTRING(t.text, 1, 1000) AS sql_text
+    r.wait_type,
+    r.blocking_session_id,
+    t.text AS sql_text
 FROM sys.dm_exec_requests AS r
 CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) AS t
 WHERE r.session_id <> @@SPID
 ORDER BY r.total_elapsed_time DESC;
 GO
 
--- Top cached queries by total worker time.
-SELECT TOP (10)
+-- ------------------------------------------------------------
+-- 3. DMV: top expensive cached queries.
+-- Use this to find queries with high total resource usage.
+-- ------------------------------------------------------------
+
+SELECT TOP 10
     qs.execution_count,
-    qs.total_worker_time,
-    qs.total_elapsed_time,
+    qs.total_worker_time / 1000 AS total_cpu_ms,
+    qs.total_elapsed_time / 1000 AS total_elapsed_ms,
     qs.total_logical_reads,
     qs.total_logical_writes,
-    SUBSTRING(st.text, 1, 1000) AS sql_text
+    qs.max_elapsed_time / 1000 AS max_elapsed_ms,
+    SUBSTRING(
+        st.text,
+        (qs.statement_start_offset / 2) + 1,
+        (
+            (CASE qs.statement_end_offset
+                WHEN -1 THEN DATALENGTH(st.text)
+                ELSE qs.statement_end_offset
+             END - qs.statement_start_offset) / 2
+        ) + 1
+    ) AS query_text
 FROM sys.dm_exec_query_stats AS qs
 CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) AS st
-ORDER BY qs.total_worker_time DESC;
+ORDER BY qs.total_elapsed_time DESC;
 GO
 
--- Database file size and growth view.
+-- ------------------------------------------------------------
+-- 4. DMV: blocking sessions.
+-- A blocking session makes another session wait.
+-- ------------------------------------------------------------
+
 SELECT
-    DB_NAME(database_id) AS database_name,
-    type_desc,
-    name AS logical_file_name,
-    size * 8.0 / 1024 AS size_mb,
-    growth,
-    is_percent_growth
-FROM sys.master_files
-WHERE database_id = DB_ID('TrainingDB')
-ORDER BY type_desc, name;
+    blocked.session_id AS blocked_session_id,
+    blocked.blocking_session_id,
+    blocked.wait_type,
+    blocked.wait_time,
+    blocked_sql.text AS blocked_query,
+    blocker_sql.text AS blocking_query
+FROM sys.dm_exec_requests AS blocked
+OUTER APPLY sys.dm_exec_sql_text(blocked.sql_handle) AS blocked_sql
+LEFT JOIN sys.dm_exec_requests AS blocker
+    ON blocked.blocking_session_id = blocker.session_id
+OUTER APPLY sys.dm_exec_sql_text(blocker.sql_handle) AS blocker_sql
+WHERE blocked.blocking_session_id <> 0;
 GO
 
--- ============================================================
--- SECTION 2: Query Store
--- Query Store persists query performance history.
--- Use it for trend analysis and regression detection after deployments.
--- ============================================================
+-- ------------------------------------------------------------
+-- 5. Query Store setup.
+-- Query Store keeps query performance history.
+-- ------------------------------------------------------------
 
 ALTER DATABASE TrainingDB
 SET QUERY_STORE = ON;
@@ -138,92 +128,78 @@ GO
 ALTER DATABASE TrainingDB
 SET QUERY_STORE (
     OPERATION_MODE = READ_WRITE,
-    CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30),
-    DATA_FLUSH_INTERVAL_SECONDS = 900,
-    INTERVAL_LENGTH_MINUTES = 60,
-    MAX_STORAGE_SIZE_MB = 256,
-    QUERY_CAPTURE_MODE = AUTO
+    QUERY_CAPTURE_MODE = AUTO,
+    MAX_STORAGE_SIZE_MB = 256
 );
 GO
 
--- Query Store: top query texts by average duration.
-SELECT TOP (10)
+-- Query Store: top resource-consuming queries.
+SELECT TOP 10
+    q.query_id,
     qt.query_sql_text,
     rs.count_executions,
-    rs.avg_duration,
-    rs.avg_cpu_time,
-    rs.avg_logical_io_reads,
-    p.last_execution_time
+    rs.avg_duration / 1000.0 AS avg_duration_ms,
+    rs.avg_cpu_time / 1000.0 AS avg_cpu_ms,
+    rs.avg_logical_io_reads AS avg_logical_reads
 FROM sys.query_store_query_text AS qt
 JOIN sys.query_store_query AS q
-    ON q.query_text_id = qt.query_text_id
+    ON qt.query_text_id = q.query_text_id
 JOIN sys.query_store_plan AS p
-    ON p.query_id = q.query_id
+    ON q.query_id = p.query_id
 JOIN sys.query_store_runtime_stats AS rs
-    ON rs.plan_id = p.plan_id
+    ON p.plan_id = rs.plan_id
 ORDER BY rs.avg_duration DESC;
 GO
 
--- Query Store: queries with multiple plans can indicate plan instability.
-SELECT TOP (10)
-    q.query_id,
-    COUNT(DISTINCT p.plan_id) AS plan_count,
-    MIN(p.first_execution_time) AS first_execution_time,
-    MAX(p.last_execution_time) AS last_execution_time
-FROM sys.query_store_query AS q
-JOIN sys.query_store_plan AS p
-    ON p.query_id = q.query_id
-GROUP BY q.query_id
-HAVING COUNT(DISTINCT p.plan_id) > 1
-ORDER BY plan_count DESC;
-GO
+-- ------------------------------------------------------------
+-- 6. Extended Events setup.
+-- This captures SQL statements longer than 30 seconds.
+-- The slides use an event file. This lab uses a ring buffer so it can run
+-- from a query window without needing a server folder such as C:\XE.
+-- ------------------------------------------------------------
 
--- ============================================================
--- SECTION 3: Extended Events
--- Extended Events captures specific events with lower overhead than SQL Profiler.
--- This session captures slow statements in TrainingDB.
--- ============================================================
-
-IF EXISTS (SELECT 1 FROM sys.server_event_sessions WHERE name = 'm8_slow_statement_monitor')
+IF EXISTS (SELECT 1 FROM sys.server_event_sessions WHERE name = 'LongRunningQueries')
 BEGIN
-    DROP EVENT SESSION m8_slow_statement_monitor ON SERVER;
+    DROP EVENT SESSION LongRunningQueries ON SERVER;
 END;
 GO
 
-CREATE EVENT SESSION m8_slow_statement_monitor
+CREATE EVENT SESSION LongRunningQueries
 ON SERVER
-ADD EVENT sqlserver.sql_statement_completed(
-    ACTION(
-        sqlserver.database_name,
-        sqlserver.session_id,
+ADD EVENT sqlserver.sql_statement_completed
+(
+    ACTION (
         sqlserver.sql_text,
-        sqlserver.username
+        sqlserver.database_name,
+        sqlserver.username,
+        sqlserver.client_app_name
     )
-    WHERE
-        sqlserver.database_name = N'TrainingDB'
-        AND duration >= 1000000 -- microseconds; 1 second
+    WHERE duration > 30000000
 )
-ADD TARGET package0.ring_buffer
-WITH (
-    MAX_MEMORY = 4096 KB,
-    EVENT_RETENTION_MODE = ALLOW_SINGLE_EVENT_LOSS,
-    MAX_DISPATCH_LATENCY = 30 SECONDS,
-    STARTUP_STATE = OFF
-);
+ADD TARGET package0.ring_buffer;
 GO
 
-ALTER EVENT SESSION m8_slow_statement_monitor ON SERVER STATE = START;
+ALTER EVENT SESSION LongRunningQueries
+ON SERVER
+STATE = START;
 GO
 
--- Read recent Extended Events from the ring buffer target.
+-- Read captured Extended Events from the ring buffer.
 SELECT
-    CAST(t.target_data AS XML) AS ring_buffer_xml
-FROM sys.dm_xe_sessions AS s
-JOIN sys.dm_xe_session_targets AS t
-    ON s.address = t.event_session_address
-WHERE s.name = 'm8_slow_statement_monitor';
+    event_node.value('(event/@name)[1]', 'varchar(100)') AS event_name,
+    event_node.value('(event/data[@name="duration"]/value)[1]', 'bigint') / 1000 AS duration_ms,
+    event_node.value('(event/action[@name="database_name"]/value)[1]', 'varchar(100)') AS database_name,
+    event_node.value('(event/action[@name="sql_text"]/value)[1]', 'nvarchar(max)') AS sql_text
+FROM (
+    SELECT CAST(t.target_data AS XML) AS target_xml
+    FROM sys.dm_xe_sessions AS s
+    JOIN sys.dm_xe_session_targets AS t
+        ON s.address = t.event_session_address
+    WHERE s.name = 'LongRunningQueries'
+) AS x
+CROSS APPLY x.target_xml.nodes('//RingBufferTarget/event') AS n(event_node);
 GO
 
--- Stop the training session when done if you do not want it running.
--- ALTER EVENT SESSION m8_slow_statement_monitor ON SERVER STATE = STOP;
+-- Stop the training session when you finish testing it.
+-- ALTER EVENT SESSION LongRunningQueries ON SERVER STATE = STOP;
 -- GO

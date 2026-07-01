@@ -1,12 +1,14 @@
 [
   {
-    "function": "inefficient_total",
-    "current_memory_mb": 0.0023,
-    "peak_memory_mb": 0.7327
+    "step_name": "Slow transform",
+    "function": "slow_transform",
+    "current_memory_mb": 0.0,
+    "peak_memory_mb": 1.76
   },
   {
-    "function": "optimized_total",
+    "step_name": "Fast transform",
+    "function": "fast_transform",
     "current_memory_mb": 0.0,
-    "peak_memory_mb": 0.0003
+    "peak_memory_mb": 0.0
   }
 ]

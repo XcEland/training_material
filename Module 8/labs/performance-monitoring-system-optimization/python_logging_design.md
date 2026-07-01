@@ -15,6 +15,8 @@ For production ETL and automation scripts at the Central Bank, configure at mini
 
 Write logs to both a rotating file handler and a database logging table for audit trail purposes.
 
+In this lab, the database table is `dbo.PythonWorkflowLog`.
+
 ## Script Selected for Logging Design
 
 - Script name:

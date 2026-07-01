@@ -1,5 +1,4 @@
 {
-  "source": "Module 6 and Module 7 monitoring outputs",
-  "row_count_used_for_demo": 24000,
-  "note": "Rows are repeated from prior workflow observations so cProfile and tracemalloc have measurable work."
+  "row_count_used_for_demo": 50000,
+  "source": "In-script training list"
 }

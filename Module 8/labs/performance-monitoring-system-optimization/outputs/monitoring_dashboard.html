@@ -2,291 +2,495 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="refresh" content="60">
   <title>Module 8 Monitoring Dashboard</title>
   <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #d7dee8;
+      --surface: #ffffff;
+      --soft: #f5f7fa;
+      --navy: #17324d;
+      --teal: #0f766e;
+      --amber: #b45309;
+      --red: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 28px;
-      color: #172033;
+      margin: 0;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
       line-height: 1.45;
     }
-    h1, h2 {
-      color: #17324d;
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 22px 28px;
     }
-    .grid {
+
+    main {
+      padding: 22px 28px 36px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 28px;
+    }
+
+    h2 {
+      margin: 30px 0 12px;
+      color: var(--navy);
+      font-size: 19px;
+    }
+
+    .meta {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 12px;
-      margin: 18px 0;
+      margin-top: 18px;
     }
-    .card {
-      border: 1px solid #cbd5e1;
+
+    .summary-box,
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
       border-radius: 6px;
-      padding: 12px;
-      background: #f8fafc;
+      padding: 13px;
     }
-    .metric {
-      font-size: 24px;
+
+    .summary-label,
+    .source,
+    .alert {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .summary-value,
+    .metric-value {
+      margin-top: 3px;
+      font-size: 25px;
       font-weight: 700;
     }
-    .Normal { border-left: 6px solid #0f766e; }
-    .Warning { border-left: 6px solid #f59e0b; }
-    .Critical { border-left: 6px solid #dc2626; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .metric-card {
+      border-left-width: 6px;
+      min-height: 128px;
+    }
+
+    .Normal {
+      border-left-color: var(--teal);
+    }
+
+    .Warning {
+      border-left-color: var(--amber);
+    }
+
+    .Critical {
+      border-left-color: var(--red);
+    }
+
+    .metric-name {
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
     table {
-      border-collapse: collapse;
       width: 100%;
-      margin-top: 12px;
+      min-width: 760px;
+      border-collapse: collapse;
       font-size: 13px;
     }
-    th, td {
-      border: 1px solid #cbd5e1;
-      padding: 8px;
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 9px 10px;
       text-align: left;
+      vertical-align: top;
     }
+
     th {
-      background: #e8eef7;
+      background: #eef3f8;
+      color: #24364f;
+      font-weight: 700;
     }
-    .source-note {
-      color: #475569;
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status-pill {
+      display: inline-block;
+      min-width: 72px;
+      border-radius: 999px;
+      padding: 2px 9px;
+      color: #ffffff;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .pill-Normal,
+    .pill-Pass,
+    .pill-Succeeded,
+    .pill-Sent,
+    .pill-NoAlertRequired {
+      background: var(--teal);
+    }
+
+    .pill-Warning,
+    .pill-Fallback,
+    .pill-AlertRequired {
+      background: var(--amber);
+    }
+
+    .pill-Critical,
+    .pill-Fail,
+    .pill-QualityGateFailed,
+    .pill-Error {
+      background: var(--red);
+    }
+
+    .source-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
       font-size: 13px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .links a {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 860px) {
+      header,
+      main {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .summary,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Monitoring Dashboard</h1>
-  <p>Generated at: 2026-06-28T17:16:39+00:00</p>
+  <header>
+    <h1>Module 8 Monitoring Dashboard</h1>
+    <div class="meta">Generated at 2026-06-30T22:56:48+00:00. The page refreshes every 60 seconds.</div>
+    <div class="links">
+      <a href="/metrics.json">Metrics JSON</a>
+      <a href="/monitoring_snapshot.json">Rendered data JSON</a>
+    </div>
 
-  <h2>Database Performance</h2>
-  <div class="grid">
-    
-    <div class="card Normal">
-      <strong>Active Sessions</strong>
-      <div class="metric">8</div>
-      <div>Source: Fallback DMV sample</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-    <div class="card Normal">
-      <strong>Average Query Duration Ms</strong>
-      <div class="metric">420</div>
-      <div>Source: Fallback Query Store sample</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-    <div class="card Normal">
-      <strong>Database Size MB</strong>
-      <div class="metric">750</div>
-      <div>Source: Fallback sys.master_files sample</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-  </div>
+    <section class="summary" aria-label="Metric summary">
+      <div class="summary-box">
+        <div class="summary-label">Total Metrics</div>
+        <div class="summary-value">9</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Normal</div>
+        <div class="summary-value">9</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Warning</div>
+        <div class="summary-value">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-label">Critical</div>
+        <div class="summary-value">0</div>
+      </div>
+    </section>
+  </header>
 
-  <h2>Python Workflow Execution</h2>
-  <div class="grid">
-    
-    <div class="card Normal">
-      <strong>Workflow Duration Seconds</strong>
-      <div class="metric">0.0072</div>
-      <div>Source: cProfile summary</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-    <div class="card Normal">
-      <strong>Peak Memory MB</strong>
-      <div class="metric">0.7327</div>
-      <div>Source: tracemalloc summary</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-    <div class="card Normal">
-      <strong>Python Error Count</strong>
-      <div class="metric">0</div>
-      <div>Source: workflow log file</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-  </div>
+  <main>
+    <h2>Database Performance</h2>
+    <section class="metric-grid" aria-label="Database metrics">
+      
+      <article class="metric-card Normal">
+        <div class="metric-name">Active Sessions</div>
+        <div class="metric-value">8</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: Fallback DMV sample</div>
+      </article>
+      
+      <article class="metric-card Normal">
+        <div class="metric-name">Average Query Duration Ms</div>
+        <div class="metric-value">420</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: Fallback Query Store sample</div>
+      </article>
+      
+      <article class="metric-card Normal">
+        <div class="metric-name">Database Size MB</div>
+        <div class="metric-value">750</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: Fallback sys.master_files sample</div>
+      </article>
+      
+    </section>
 
-  <h2>Prior Module Workflow Metrics</h2>
-  <p class="source-note">These metrics come from the Module 6 WEO monthly reporting outputs and Module 7 IMF/BIS API integration outputs.</p>
-  <div class="grid">
-    
-    <div class="card Normal">
-      <strong>Observed Workflows</strong>
-      <div class="metric">2</div>
-      <div>Source: Module 6 and Module 7 output summaries</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-    <div class="card Normal">
-      <strong>Records Processed</strong>
-      <div class="metric">415</div>
-      <div>Source: Workflow output artifacts</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-    <div class="card Normal">
-      <strong>Quality Issue Count</strong>
-      <div class="metric">0</div>
-      <div>Source: Module 7 quality gate alert</div>
-      <div>Alert: Normal</div>
-    </div>
-    
-  </div>
+    <h2>Python Workflow Execution</h2>
+    <section class="metric-grid" aria-label="Python workflow metrics">
+      
+      <article class="metric-card Normal">
+        <div class="metric-name">Workflow Duration Seconds</div>
+        <div class="metric-value">0.0654</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: cProfile summary</div>
+      </article>
+      
+      <article class="metric-card Normal">
+        <div class="metric-name">Peak Memory MB</div>
+        <div class="metric-value">1.76</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: tracemalloc summary</div>
+      </article>
+      
+      <article class="metric-card Normal">
+        <div class="metric-name">Python Error Count</div>
+        <div class="metric-value">0</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: workflow log file</div>
+      </article>
+      
+    </section>
 
-  <h2>Workflow Run Details</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Workflow</th>
-        <th>Status</th>
-        <th>Duration Seconds</th>
-        <th>Records Processed</th>
-        <th>Quality Issues</th>
-        <th>Notification Status</th>
-      </tr>
-    </thead>
-    <tbody>
+    <h2>End-to-End Workflow Metrics</h2>
+    <ul class="source-list">
+      <li>Module 6: WEO monthly reporting run logs, report metrics, email preview status.</li>
+      <li>Module 7: IMF/BIS external integration summary and quality gate alert.</li>
+      <li>Module 8: profiling, memory, logging, SQL Server metrics, and capacity planning.</li>
+    </ul>
+    <section class="metric-grid" aria-label="Workflow rollup metrics">
       
-      <tr>
-        <td>Module 6 WEO monthly reporting</td>
-        <td>Succeeded</td>
-        <td>21.96</td>
-        <td>382</td>
-        <td>0</td>
-        <td>DryRunPreviewCreated</td>
-      </tr>
+      <article class="metric-card Normal">
+        <div class="metric-name">Observed Workflows</div>
+        <div class="metric-value">2</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: Module 6 and Module 7 output summaries</div>
+      </article>
       
-      <tr>
-        <td>Module 7 IMF/BIS external data integration</td>
-        <td>Succeeded</td>
-        <td>0.05</td>
-        <td>33</td>
-        <td>0</td>
-        <td>NoAlertRequired</td>
-      </tr>
+      <article class="metric-card Normal">
+        <div class="metric-name">Records Processed</div>
+        <div class="metric-value">415</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: Workflow output artifacts</div>
+      </article>
       
-    </tbody>
-  </table>
+      <article class="metric-card Normal">
+        <div class="metric-name">Quality Issue Count</div>
+        <div class="metric-value">0</div>
+        <div class="alert">Alert: <span class="status-pill pill-Normal">Normal</span></div>
+        <div class="source">Source: Module 7 quality gate alert</div>
+      </article>
+      
+    </section>
 
-  <h2>Capacity Projection</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Month</th>
-        <th>Projected Rows</th>
-        <th>Projected Storage MB</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      <tr>
-        <td>1</td>
-        <td>448</td>
-        <td>1.12</td>
-      </tr>
-      
-      <tr>
-        <td>2</td>
-        <td>484</td>
-        <td>1.21</td>
-      </tr>
-      
-      <tr>
-        <td>3</td>
-        <td>523</td>
-        <td>1.31</td>
-      </tr>
-      
-      <tr>
-        <td>4</td>
-        <td>565</td>
-        <td>1.41</td>
-      </tr>
-      
-      <tr>
-        <td>5</td>
-        <td>610</td>
-        <td>1.52</td>
-      </tr>
-      
-      <tr>
-        <td>6</td>
-        <td>659</td>
-        <td>1.65</td>
-      </tr>
-      
-      <tr>
-        <td>7</td>
-        <td>711</td>
-        <td>1.78</td>
-      </tr>
-      
-      <tr>
-        <td>8</td>
-        <td>768</td>
-        <td>1.92</td>
-      </tr>
-      
-      <tr>
-        <td>9</td>
-        <td>830</td>
-        <td>2.07</td>
-      </tr>
-      
-      <tr>
-        <td>10</td>
-        <td>896</td>
-        <td>2.24</td>
-      </tr>
-      
-      <tr>
-        <td>11</td>
-        <td>968</td>
-        <td>2.42</td>
-      </tr>
-      
-      <tr>
-        <td>12</td>
-        <td>1045</td>
-        <td>2.61</td>
-      </tr>
-      
-    </tbody>
-  </table>
+    <h2>Workflow Run Details</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Workflow</th>
+            <th>Status</th>
+            <th>Duration Seconds</th>
+            <th>Records Processed</th>
+            <th>Outputs</th>
+            <th>Quality Issues</th>
+            <th>Notification</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>Module 6 WEO monthly reporting</td>
+            <td><span class="status-pill pill-Succeeded">Succeeded</span></td>
+            <td>24.91</td>
+            <td>382</td>
+            <td>3</td>
+            <td>0</td>
+            <td><span class="status-pill pill-Sent">Sent</span></td>
+          </tr>
+          
+          <tr>
+            <td>Module 7 IMF/BIS external data integration</td>
+            <td><span class="status-pill pill-Succeeded">Succeeded</span></td>
+            <td>0.05</td>
+            <td>33</td>
+            <td>3</td>
+            <td>0</td>
+            <td><span class="status-pill pill-NoAlertRequired">NoAlertRequired</span></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
 
-  <h2>Operational Review</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Standard</th>
-        <th>Result</th>
-        <th>Evidence</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      <tr>
-        <td>Dashboard includes database metrics</td>
-        <td>Pass</td>
-        <td>3 database metrics rendered.</td>
-      </tr>
-      
-      <tr>
-        <td>Dashboard includes Python workflow metrics</td>
-        <td>Pass</td>
-        <td>6 Python metrics rendered.</td>
-      </tr>
-      
-      <tr>
-        <td>Alert levels are assigned</td>
-        <td>Pass</td>
-        <td>0 warnings, 0 critical alerts.</td>
-      </tr>
-      
-    </tbody>
-  </table>
+    <h2>Capacity Projection</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Projected Rows</th>
+            <th>Projected Storage MB</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>1</td>
+            <td>448</td>
+            <td>1.12</td>
+          </tr>
+          
+          <tr>
+            <td>2</td>
+            <td>484</td>
+            <td>1.21</td>
+          </tr>
+          
+          <tr>
+            <td>3</td>
+            <td>523</td>
+            <td>1.31</td>
+          </tr>
+          
+          <tr>
+            <td>4</td>
+            <td>565</td>
+            <td>1.41</td>
+          </tr>
+          
+          <tr>
+            <td>5</td>
+            <td>610</td>
+            <td>1.52</td>
+          </tr>
+          
+          <tr>
+            <td>6</td>
+            <td>659</td>
+            <td>1.65</td>
+          </tr>
+          
+          <tr>
+            <td>7</td>
+            <td>711</td>
+            <td>1.78</td>
+          </tr>
+          
+          <tr>
+            <td>8</td>
+            <td>768</td>
+            <td>1.92</td>
+          </tr>
+          
+          <tr>
+            <td>9</td>
+            <td>830</td>
+            <td>2.07</td>
+          </tr>
+          
+          <tr>
+            <td>10</td>
+            <td>896</td>
+            <td>2.24</td>
+          </tr>
+          
+          <tr>
+            <td>11</td>
+            <td>968</td>
+            <td>2.42</td>
+          </tr>
+          
+          <tr>
+            <td>12</td>
+            <td>1045</td>
+            <td>2.61</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Operational Review</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Standard</th>
+            <th>Result</th>
+            <th>Evidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>Dashboard includes database metrics</td>
+            <td><span class="status-pill pill-Pass">Pass</span></td>
+            <td>3 database metrics rendered.</td>
+          </tr>
+          
+          <tr>
+            <td>Dashboard includes Python workflow metrics</td>
+            <td><span class="status-pill pill-Pass">Pass</span></td>
+            <td>6 Python metrics rendered.</td>
+          </tr>
+          
+          <tr>
+            <td>Alert levels are assigned</td>
+            <td><span class="status-pill pill-Pass">Pass</span></td>
+            <td>0 warnings, 0 critical alerts.</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </main>
 </body>
 </html>

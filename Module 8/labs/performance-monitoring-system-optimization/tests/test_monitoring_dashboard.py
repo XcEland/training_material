@@ -58,6 +58,7 @@ def test_dashboard_renders_with_fallback_metrics(monkeypatch):
     assert len(context["database_metrics"]) >= 3
     assert len(context["python_metrics"]) >= 3
     assert len(context["workflow_metrics"]) >= 3
+    assert context["metric_summary"]["total"] >= 9
     assert len(context["workflow_observations"]) >= 2
     assert (LAB_DIR / "outputs" / "monitoring_dashboard.html").exists()
     assert (LAB_DIR / "outputs" / "monitoring_snapshot.json").exists()

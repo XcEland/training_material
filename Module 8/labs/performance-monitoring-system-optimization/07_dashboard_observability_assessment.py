@@ -9,7 +9,7 @@ Rendering a dashboard is not enough. Operations teams must also ask:
 - Are quality gate and workflow status visible?
 
 Run after `06_monitoring_dashboard.py`:
-    python 07_dashboard_observability_assessment.py
+    python3 07_dashboard_observability_assessment.py
 """
 
 from __future__ import annotations

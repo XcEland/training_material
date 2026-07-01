@@ -70,6 +70,9 @@ def main() -> None:
     rows = parse_imf_json(payload)
     frame = pd.DataFrame(rows)
 
+    # gate validtion
+    # insert into the db
+
     OUTPUT_DIR.mkdir(exist_ok=True)
     output_path = OUTPUT_DIR / "03_imf_inflation_rows.csv"
     frame.to_csv(output_path, index=False)
